@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>投研日程排期看板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@600;700&display=swap">
+<style>
+:root{
+  --bg:#F2F4F6; --surface:#FFFFFF; --surface2:#F7F8FA; --ink:#141D2B; --muted:#5B6676; --faint:#98A1AE;
+  --line:#DCE1E7; --line2:#EAEDF1; --accent:#1D4A7A; --accent-ink:#FFFFFF; --hover:#EEF2F7;
+  --s1:#2C68D6; --s2:#16936A; --s3:#D07A22; --s4:#A0673A; --s5:#7B4DC6; --s6:#56677B; --s7:#0E8791; --s8:#6F7F1E; --exp-bg:#FCEBEA; --exp-ink:#B4332B; --corp-bg:#EEF0F2; --corp-ink:#4A5462;
+  --ok:#1E8A5A; --warn:#B7791F; --off:#A3ACB8;
+  --mix:15%;
+  --serif:"Noto Serif SC","Songti SC","STSong",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0F141B; --surface:#171D26; --surface2:#1C232E; --ink:#E6EAF0; --muted:#9AA4B2; --faint:#687384;
+  --line:#2A3340; --line2:#222A35; --accent:#6FA3DA; --accent-ink:#0F141B; --hover:#1F2835;
+  --s1:#6E9BEE; --s2:#4FC49A; --s3:#EBA05A; --s4:#C99466; --s5:#A988E6; --s6:#95A5B8; --s7:#4CC3C9; --s8:#B3C45F; --exp-bg:#3A2224; --exp-ink:#F2A29B; --corp-bg:#252C36; --corp-ink:#B7C0CC;
+  --ok:#52C58D; --warn:#E3AE55; --off:#5E6978; --mix:22%;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F141B; --surface:#171D26; --surface2:#1C232E; --ink:#E6EAF0; --muted:#9AA4B2; --faint:#687384;
+  --line:#2A3340; --line2:#222A35; --accent:#6FA3DA; --accent-ink:#0F141B; --hover:#1F2835;
+  --s1:#6E9BEE; --s2:#4FC49A; --s3:#EBA05A; --s4:#C99466; --s5:#A988E6; --s6:#95A5B8; --s7:#4CC3C9; --s8:#B3C45F; --exp-bg:#3A2224; --exp-ink:#F2A29B; --corp-bg:#252C36; --corp-ink:#B7C0CC;
+  --ok:#52C58D; --warn:#E3AE55; --off:#5E6978; --mix:22%;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5}
+.wrap{max-width:1440px;margin:0 auto;padding-inline:20px;padding-block:20px 48px}
+button,input,select{font:inherit;color:inherit}
+button:focus-visible,[tabindex]:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted)}
+h1{font-family:var(--serif);font-size:26px;font-weight:700;margin:2px 0 0;letter-spacing:.02em}
+.week{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--muted);flex-wrap:wrap}
+.week b{color:var(--ink);font-weight:600}
+.tag-demo{font-family:var(--sans);font-size:12px;padding:2px 8px;border:1px dashed var(--faint);border-radius:4px;color:var(--muted)}
+.tabs{display:flex;gap:4px;margin:16px 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:4px;width:fit-content;max-width:100%;flex-wrap:wrap}
+.tab{border:0;background:transparent;padding:7px 16px;border-radius:6px;cursor:pointer;color:var(--muted);font-weight:500}
+.tab:hover{background:var(--hover);color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+
+/* shared bits */
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;line-height:1;padding:4px 7px;border-radius:4px;white-space:nowrap;
+  color:var(--c);background:color-mix(in srgb,var(--c) var(--mix),transparent);font-weight:500}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c)}
+.kw{display:inline-block;font-size:11.5px;padding:2px 6px;border:1px solid var(--line);border-radius:3px;color:var(--muted);margin:0 4px 4px 0}
+.st{display:inline-flex;align-items:center;gap:4px;font-size:12px;white-space:nowrap}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+.st.onsite{--c:var(--ok)} .st.online{--c:var(--warn)} .st.absent{--c:var(--off);color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.panel h3{margin:0 0 2px;font-size:15px;font-family:var(--serif)}
+.panel .sub{font-size:12px;color:var(--muted);margin-bottom:12px}
+.none{padding:18px 12px;color:var(--faint);font-size:12.5px}
+
+/* day picker */
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.days{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;flex:1 1 520px;max-width:760px}
+.day{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:1px}
+.day:hover{border-color:var(--accent)}
+.day .w{font-weight:600}
+.day .d{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.day .n{font-size:12px;color:var(--muted)}
+.day[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--surface))}
+.day[aria-pressed="true"] .w{color:var(--accent)}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.fbtn{border:1px solid var(--line);background:var(--surface);padding:5px 10px;border-radius:999px;font-size:12.5px;cursor:pointer;color:var(--muted)}
+.fbtn:hover{color:var(--ink)}
+.fbtn[aria-pressed="true"]{color:var(--ink);border-color:var(--ink)}
+.fbtn i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:5px}
+
+/* schedule grid */
+.gridbox{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.grid{display:grid;grid-template-columns:78px repeat(10,minmax(140px,1fr));min-width:max-content}
+.grid>div{border-right:1px solid var(--line2);border-bottom:1px solid var(--line2)}
+.gh{background:var(--surface2);padding:9px 10px;font-family:var(--mono);font-weight:600;font-size:13px;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.gh small{font-weight:400;color:var(--muted);font-size:11px}
+.gt{position:sticky;left:0;z-index:1;background:var(--surface2);padding:10px 8px;font-family:var(--mono);font-size:12.5px;display:flex;flex-direction:column;gap:2px}
+.gt span{color:var(--faint);font-size:11px}
+.corner{position:sticky;left:0;z-index:2;font-family:var(--sans);font-weight:400;color:var(--muted);font-size:12px}
+.lunch{grid-column:1/-1;background:repeating-linear-gradient(135deg,var(--surface2) 0 6px,var(--bg) 6px 12px);padding:5px 12px;font-size:12px;color:var(--muted)}
+.lunch span{position:sticky;left:12px;font-family:var(--mono)}
+.cell{padding:8px 9px;min-height:116px;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:background .12s,opacity .12s;border-left:3px solid transparent}
+.cell:hover{background:var(--hover)}
+.cell.booked{border-left-color:var(--c)}
+.cell .br{font-weight:600;font-size:13.5px}
+.cell .an{font-size:12px;color:var(--muted)}
+.cell .th{font-size:12.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cell .rg{margin-top:auto;font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+.cell .rg b{color:var(--ink);font-weight:600}
+.cell.empty{cursor:default;color:var(--faint);font-size:12px;justify-content:center;align-items:center}
+.cell.empty:hover{background:transparent}
+.cell.dim{opacity:.22}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px;font-size:12px;color:var(--muted)}
+
+/* industry view */
+.secbar{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.secbtn{border:0;border-right:1px solid var(--line2);background:transparent;padding:12px 14px 10px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;position:relative}
+.secbtn:last-child{border-right:0}
+.secbtn:hover{background:var(--hover)}
+.secbtn .nm{font-weight:600;font-size:14px;display:flex;align-items:center;gap:6px}
+.secbtn .nm i{width:8px;height:8px;border-radius:2px;background:var(--c)}
+.secbtn .ct{font-size:12px;color:var(--muted)}
+.secbtn::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:transparent}
+.secbtn[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 8%,var(--surface))}
+.secbtn[aria-pressed="true"]::after{background:var(--c)}
+.secbtn[aria-pressed="true"] .nm{color:var(--c)}
+.subbar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 2px 4px}
+.subbtn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 12px;cursor:pointer;display:inline-flex;gap:8px;align-items:baseline}
+.subbtn b{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--muted)}
+.subbtn:hover{border-color:var(--c)}
+.subbtn[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.subbtn[aria-pressed="true"] b{color:rgba(255,255,255,.85)}
+:root[data-theme="dark"] .subbtn[aria-pressed="true"]{color:#0F141B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .subbtn[aria-pressed="true"]{color:#0F141B}}
+.isum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:12px 0 14px}
+.isum>div{padding:12px 16px;border-right:1px solid var(--line2)}
+.isum>div:last-child{border-right:0}
+.isum .l{font-size:12px;color:var(--muted)}
+.isum .v{font-family:var(--mono);font-size:22px;font-weight:600;line-height:1.3}
+.isum .v small{font-size:12px;color:var(--muted);font-weight:400;margin-left:2px}
+.ibody{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start}
+.iside{display:flex;flex-direction:column;gap:14px}
+.tscroll{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+table.tbl th{font-weight:500;color:var(--muted);font-size:12px;text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface2)}
+table.tbl td{padding:9px 10px;border-bottom:1px solid var(--line2);vertical-align:top}
+table.tbl tr.row{cursor:pointer}
+table.tbl tr.row:hover td{background:var(--hover)}
+table.tbl tr.grp td{background:var(--surface2);font-weight:600;font-size:12.5px;padding:6px 10px;border-bottom:1px solid var(--line2)}
+table.tbl tr.grp td span{font-weight:400;color:var(--muted);margin-left:8px;font-family:var(--mono);font-size:12px}
+table.tbl td.r,table.tbl th.r{text-align:right}
+table.tbl .mono{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+table.tbl .sub2{font-size:12px;color:var(--muted)}
+table.tbl .nw{white-space:nowrap}
+.mini{display:flex;flex-direction:column}
+.mini .it{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:7px 0;border-bottom:1px solid var(--line2);font-size:13px;align-items:center}
+.mini .it:last-child{border-bottom:0}
+.mini .it .s2{font-size:12px;color:var(--muted)}
+.mini .it.click{cursor:pointer}
+.mini .it.click:hover{background:var(--hover)}
+.bkrow{display:grid;grid-template-columns:72px minmax(0,1fr) 22px;gap:8px;align-items:center;font-size:12.5px;padding:3px 0}
+.bkrow .track{height:10px;background:var(--line2);border-radius:2px;overflow:hidden}
+.bkrow .fill{height:100%;background:var(--c)}
+.bkrow .n{font-family:var(--mono);text-align:right;color:var(--muted)}
+
+/* stats */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi .l{font-size:12px;color:var(--muted)}
+.kpi .v{font-family:var(--mono);font-size:24px;font-weight:600;line-height:1.3;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:13px;color:var(--muted);font-weight:400;margin-left:2px}
+.kpi .s{font-size:12px;color:var(--muted)}
+.panels{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}.c4{grid-column:span 4}.c8{grid-column:span 8}.c12{grid-column:span 12}
+.hbar{display:grid;grid-template-columns:92px minmax(0,1fr) 40px;gap:8px;align-items:center;font-size:12.5px;padding:3px 0}
+.hbar .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar .track{height:14px;background:var(--line2);border-radius:3px;overflow:hidden;display:flex}
+.hbar .fill{height:100%;background:var(--c)}
+.hbar .fill.lite{background:color-mix(in srgb,var(--c) 35%,transparent)}
+.hbar .n{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.hbar.click{cursor:pointer;border-radius:4px}
+.hbar.click:hover{background:var(--hover)}
+.hgroup{font-size:11.5px;color:var(--muted);letter-spacing:.08em;margin:10px 0 2px;display:flex;align-items:center;gap:6px}
+.hgroup:first-of-type{margin-top:0}
+.hgroup i{width:8px;height:8px;border-radius:2px;background:var(--c)}
+.dual{display:grid;grid-template-columns:92px minmax(0,1fr) 84px;gap:8px;align-items:center;font-size:12.5px;padding:4px 0}
+.dual .bars{display:flex;flex-direction:column;gap:2px}
+.dual .b{height:8px;border-radius:2px}
+.dual .b.reg{background:color-mix(in srgb,var(--accent) 30%,transparent)}
+.dual .b.att{background:var(--accent)}
+.dual .n{font-family:var(--mono);font-size:12px;text-align:right;color:var(--muted)}
+.dual .n b{color:var(--ink);font-weight:600}
+.keyrow{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-bottom:8px;flex-wrap:wrap}
+.keyrow i{display:inline-block;width:10px;height:8px;border-radius:2px;margin-right:5px;vertical-align:0}
+table.heat{border-collapse:separate;border-spacing:3px;width:100%;font-size:12.5px}
+table.heat th{font-weight:500;color:var(--muted);padding:3px 6px;text-align:center;white-space:nowrap}
+table.heat th.rl{text-align:left}
+table.heat td{text-align:center;font-family:var(--mono);padding:5px 4px;border-radius:3px;min-width:44px;font-variant-numeric:tabular-nums}
+table.heat td.z{color:var(--faint)}
+.vbars{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;align-items:end;height:150px;padding-top:18px;border-bottom:1px solid var(--line)}
+.vb{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.vb .col{width:70%;max-width:38px;background:var(--accent);border-radius:3px 3px 0 0}
+.vb .n{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.vlabels{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;padding-top:4px}
+.rate{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px}
+.rate .rb{width:44px;height:6px;border-radius:3px;background:var(--line2);overflow:hidden;display:inline-block}
+.rate .rb i{display:block;height:100%;background:var(--ok)}
+.ptools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.ptools input,.ptools select{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:6px 10px;font-size:13px}
+.ptools input{flex:1 1 200px;max-width:280px}
+th.sort{cursor:pointer;user-select:none}
+th.sort:hover{color:var(--ink)}
+th.sort[aria-sort]{color:var(--ink)}
+
+/* week + period controls */
+.weekctl{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.weekctl .arrow{border:1px solid var(--line);background:var(--surface);border-radius:6px;width:32px;height:34px;cursor:pointer;font-size:15px;line-height:1}
+.weekctl .arrow:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.weekctl .arrow:disabled{opacity:.35;cursor:default}
+.weekctl select{border:1px solid var(--line);background:var(--surface);border-radius:6px;height:34px;padding:0 10px;font-family:var(--mono);font-size:13px;max-width:100%}
+.nowtag{font-size:11px;padding:2px 6px;border-radius:3px;background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.period{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;border-radius:6px;padding:5px 14px;cursor:pointer;color:var(--muted);font-size:13px}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.period select{border:1px solid var(--line);background:var(--surface);border-radius:6px;height:32px;padding:0 10px;font-size:13px}
+.period .scope{font-size:13px;color:var(--muted)}
+.period .scope b{color:var(--ink);font-family:var(--mono);font-weight:600}
+.delta{font-family:var(--mono)}
+.delta.up{color:var(--ok)} .delta.down{color:#C2453B}
+.day:disabled{cursor:default;opacity:.55;background:var(--surface2)}
+.day:disabled:hover{border-color:var(--line)}
+.st.pending{--c:var(--accent)}
+
+
+/* session types */
+.cell.expert{background:var(--exp-bg);border-left-color:var(--exp-ink)}
+.cell.corp{background:var(--corp-bg);border-left-color:var(--corp-ink)}
+.cell.expert:hover,.cell.corp:hover{filter:brightness(.97)}
+.ttag{display:inline-block;font-size:11.5px;line-height:1;padding:4px 7px;border-radius:4px;font-weight:600;white-space:nowrap}
+.ttag.expert{color:var(--exp-ink);background:color-mix(in srgb,var(--exp-ink) 14%,transparent)}
+.ttag.corp{color:var(--corp-ink);background:color-mix(in srgb,var(--corp-ink) 16%,transparent)}
+.ttag.road{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.gh.online{background:color-mix(in srgb,var(--accent) 9%,var(--surface2))}
+.gh .rt{font-family:var(--sans);font-size:11px;font-weight:500;color:var(--accent)}
+.swatch{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;border-left:3px solid var(--k)}
+.pts{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.bio{font-size:13.5px;line-height:1.65;background:var(--surface2);border-radius:8px;padding:10px 12px}
+.leaders{display:flex;flex-direction:column;gap:6px}
+.leaders div{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding:7px 10px;background:var(--surface2);border-radius:6px}
+.leaders span{color:var(--muted);font-size:12px}
+.fgroup{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fgroup .sep{width:1px;height:20px;background:var(--line);margin:0 4px}
+
+
+/* v5 additions */
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:52px;height:52px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex:none;padding:0}
+.logo img{width:100%;height:100%;object-fit:contain}
+.logo .mono-mark{font-family:var(--serif);font-weight:700;font-size:13px;line-height:1.15;color:var(--accent);text-align:center;letter-spacing:.05em}
+.logo:hover{border-color:var(--accent)}
+.frow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.frow .flabel{font-size:12px;color:var(--muted);width:56px;flex:none}
+.filters2{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.gt.lunchrow,.cell.lunchslot{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--warn) 7%,var(--surface)) 0 6px,var(--surface) 6px 12px)}
+.gt.lunchrow{color:var(--warn)}
+.cell.lunchslot.booked{background:color-mix(in srgb,var(--warn) 8%,var(--surface))}
+.ltag{display:inline-block;font-size:11px;line-height:1;padding:3px 6px;border-radius:3px;color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent);font-weight:600;margin-left:4px}
+.cell.blank{cursor:default}
+.cell.blank:hover{background:transparent}
+.cell .org{font-size:12px;color:var(--ink)}
+.cell .org b{font-weight:600}
+.award{display:inline-block;font-size:11px;padding:2px 6px;border-radius:3px;border:1px solid var(--line);color:var(--muted);margin:0 4px 4px 0;white-space:nowrap}
+.award.s{border-color:color-mix(in srgb,var(--accent) 40%,var(--line));color:var(--accent)}
+.award.j{border-color:color-mix(in srgb,var(--warn) 45%,var(--line));color:var(--warn)}
+.teamrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;padding:7px 6px;border-bottom:1px solid var(--line2);cursor:pointer;border-radius:4px}
+.teamrow:hover{background:var(--hover)}
+.teamrow[aria-pressed="true"]{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.teamrow .tn{font-size:13px}
+.teamrow .tn span{color:var(--muted);font-size:12px}
+.teamrow .ct{font-family:var(--mono);font-size:12px;color:var(--muted);align-self:center}
+.brief{font-size:13.5px;line-height:1.7}
+
+
+.cell{position:relative}
+.roombadge{position:absolute;top:6px;right:9px;font-family:var(--mono);font-size:19px;font-weight:600;line-height:1;color:var(--ink);opacity:.8}
+.roombadge.on{font-family:var(--sans);font-size:15px;color:var(--accent);opacity:1}
+.cell.packed>div:nth-child(2){padding-right:58px}
+/* detail sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,15,22,.38);z-index:20}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);z-index:21;border-left:1px solid var(--line);
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 20px calc(env(safe-area-inset-bottom,0px) + 20px);overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.sheet .x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 12px);right:12px;border:1px solid var(--line);background:var(--surface);border-radius:6px;width:32px;height:32px;cursor:pointer;font-size:16px;line-height:1}
+.sheet h2{font-family:var(--serif);font-size:20px;margin:0;line-height:1.4;padding-right:36px}
+.sheet dl{display:grid;grid-template-columns:72px 1fr;gap:8px 12px;margin:0;font-size:13.5px}
+.sheet dt{color:var(--muted)}
+.sheet dd{margin:0}
+.sheet .mono{font-family:var(--mono)}
+.sheet h4{margin:6px 0 0;font-size:13px;color:var(--muted);font-weight:500;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.sheet .box{border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.sheet table.tbl td,.sheet table.tbl th{padding:7px 10px}
+.linkbtn{border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:6px;padding:8px 12px;cursor:pointer;font-weight:500}
+.linkbtn:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.foot{margin-top:22px;font-size:12px;color:var(--faint);max-width:90ch}
+
+@media (max-width:1180px){.secbar{grid-template-columns:repeat(4,minmax(0,1fr))}.secbtn{border-bottom:1px solid var(--line2)}.ibody{grid-template-columns:1fr}.iside{display:grid;grid-template-columns:1fr 1fr}}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.c7,.c5,.c6,.c4,.c8{grid-column:span 12}}
+@media (max-width:700px){.isum{grid-template-columns:repeat(3,minmax(0,1fr))}.isum>div{border-bottom:1px solid var(--line2)}.iside{grid-template-columns:1fr}.secbar{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.wrap{padding-inline:16px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.days{gap:4px}.day{padding:6px}.day .n{display:none}h1{font-size:22px}.hbar{grid-template-columns:72px minmax(0,1fr) 40px}.dual{grid-template-columns:72px minmax(0,1fr) 72px}.isum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div>
+        <div class="eyebrow">投资研究部 · 卖方路演 / 专家交流 / 上市公司反路演</div>
+        <h1>投研日程排期看板</h1>
+      </div>
+    </div>
+    <div class="weekctl">
+      <button class="arrow" id="wkPrev" aria-label="上一周">‹</button>
+      <select id="wkSel" aria-label="选择周"></select>
+      <button class="arrow" id="wkNext" aria-label="下一周">›</button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="视图">
+    <button class="tab" role="tab" id="tab-date" data-view="date">日期视图</button>
+    <button class="tab" role="tab" id="tab-industry" data-view="industry">行业视图</button>
+    <button class="tab" role="tab" id="tab-people" data-view="people">报名情况</button>
+    <button class="tab" role="tab" id="tab-stats" data-view="stats">行业统计</button>
+  </nav>
+
+  <section id="view-date" hidden>
+    <div class="bar"><div class="days" id="days"></div></div>
+    <div class="filters2">
+      <div class="frow" id="typeFilters"></div>
+      <div class="frow" id="modeFilters"></div>
+      <div class="frow" id="sectorFilters"></div>
+      <div class="frow" id="subFilters" hidden></div>
+      <div class="frow" id="layoutFilters"></div>
+    </div>
+    <div class="gridbox"><div class="grid" id="grid"></div></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section id="view-industry" hidden>
+    <div class="secbar" id="secbar"></div>
+    <div class="subbar" id="subbar"></div>
+    <div id="ipanel"></div>
+  </section>
+
+  <section id="view-people" hidden><div class="period" id="periodP"></div><div id="peopleBody"></div></section>
+  <section id="view-stats" hidden><div class="period" id="periodS"></div><div id="statsBody"></div></section>
+
+  <p class="foot">101—106 为现场会议室，线上会议按线上1—线上5依次安排；每场 1 小时（上午 8:00—12:00，下午 13:30—17:30），12:00—13:30 为午餐路演时段（现场会议室）。9月25日中秋节放假。页面为演示用示例数据，分析师、专家与内部人员姓名均为虚构，日程安排不代表真实预约。</p>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></aside>
+
+<script>
+(function(){
+/* ---------- reference data ---------- */
+const SECTORS=[
+  {id:'mac',name:'宏观策略',c:'--s6'},{id:'tmt',name:'科技TMT',c:'--s1'},{id:'hc',name:'医药消费',c:'--s2'},{id:'mfg',name:'高端制造',c:'--s3'},{id:'cyc',name:'周期资源',c:'--s4'},
+  {id:'infra',name:'基建公用',c:'--s8'},{id:'fin',name:'金融地产',c:'--s5'},{id:'fx',name:'固收·金工·海外',c:'--s7'}
+];
+const T=(t,k)=>({t,k});
+const I=(n,s,w,th)=>({n,s,w,th});
+const INDUSTRIES=[
+  I('电子','tmt',1.6,[T('AI算力链：PCB与高速覆铜板景气',['PCB','CCL']),T('半导体设备与材料国产化',['刻蚀','薄膜沉积']),T('存储涨价周期与HBM',['DRAM','HBM']),T('AI端侧与消费电子创新',['AI眼镜','折叠屏']),T('先进封装与Chiplet',['CoWoS','封测'])]),
+  I('计算机','tmt',1.3,[T('AI应用商业化与Agent落地',['Agent','订阅收入']),T('国产算力与信创',['国产GPU','服务器']),T('数据要素与公共数据运营',['数据资产','授权运营']),T('金融科技：稳定币与跨境支付',['稳定币','跨境支付'])]),
+  I('通信','tmt',1.2,[T('光模块与CPO：1.6T放量节奏',['1.6T','硅光']),T('卫星互联网与低轨组网',['低轨卫星','手机直连']),T('液冷与算力中心建设',['液冷','IDC']),T('运营商高股息与资本开支',['分红','算力网络'])]),
+  I('传播与文化','tmt',.9,[T('AI+游戏与内容生产',['版号','AI陪伴']),T('IP潮玩与谷子经济',['潮玩','IP授权']),T('短剧与影视内容周期',['短剧','院线'])]),
+  I('医药生物','hc',1.4,[T('创新药出海与License-out',['BD交易','ADC']),T('CXO订单景气修复',['CDMO','海外订单']),T('GLP-1减重药产业链',['GLP-1','原料药']),T('医疗器械集采与出海',['集采','出海'])]),
+  I('食品饮料','hc',1.1,[T('白酒去库存与底部信号',['批价','动销']),T('新消费：零食量贩与现制饮品',['量贩零食','新茶饮']),T('大众品成本红利',['乳制品','啤酒'])]),
+  I('家电','hc',.8,[T('以旧换新政策退坡影响',['国补','排产']),T('白电出海与关税扰动',['海外产能','关税']),T('清洁电器与新品类',['扫地机','洗地机'])]),
+  I('农林牧渔','hc',.6,[T('生猪产能调控与猪周期',['能繁母猪','猪价']),T('宠物食品国产替代',['宠物','品牌化'])]),
+  I('批零和社会服务','hc',.7,[T('即时零售与平台竞争',['外卖','即时零售']),T('免税与出入境旅游',['免税','出境游']),T('黄金珠宝消费新趋势',['古法金','品牌'])]),
+  I('轻工和纺织服装','hc',.6,[T('新型烟草与出海',['HNB','出海']),T('运动品牌与代工订单',['品牌','代工']),T('家居以旧换新',['定制家居'])]),
+  I('新能源和电力设备','mfg',1.4,[T('固态电池产业化进度',['硫化物','中试线']),T('储能出海与大储需求',['大储','中东']),T('光伏反内卷与供给侧改革',['多晶硅','限产']),T('海风与电网投资',['海风','特高压'])]),
+  I('汽车和汽车零部件','mfg',1.1,[T('智能驾驶L3与Robotaxi',['L3','Robotaxi']),T('整车出海与价格竞争',['出海','反内卷']),T('汽零跨界人形机器人',['执行器','传感器'])]),
+  I('机械','mfg',1.2,[T('人形机器人量产与核心零部件',['丝杠','灵巧手']),T('工程机械出海与国内周期',['挖机','出口']),T('半导体与锂电设备订单',['前道设备','固态设备'])]),
+  I('国防军工','mfg',.9,[T('商业航天与低空经济',['火箭','eVTOL']),T('十五五军工订单展望',['订单','装备升级']),T('军贸出海新机遇',['军贸'])]),
+  I('化工','cyc',.8,[T('反内卷下的化工品价格修复',['供给侧','涨价']),T('制冷剂配额与氟化工',['R32','配额']),T('新材料国产替代',['电子化学品'])]),
+  I('能源开采','cyc',.6,[T('煤价底部与高股息价值',['动力煤','分红']),T('油价与油服资本开支',['油价','油服']),T('产能核查与供给收缩',['超产核查'])]),
+  I('金属和金属新材料','cyc',1.0,[T('黄金定价与央行购金',['金价','央行购金']),T('铜铝供需与价格中枢',['铜','电解铝']),T('稀土与战略小金属',['稀土','钨'])]),
+  I('非金属类建材','cyc',.5,[T('水泥错峰与反内卷',['水泥','错峰']),T('玻纤电子布景气',['电子布']),T('消费建材渠道变革',['防水','涂料'])]),
+  I('建筑和工程','infra',.6,[T('化债与基建实物工作量',['专项债','实物量']),T('重大水利水电工程机会',['水电工程']),T('建筑央企市值管理与出海',['央企','出海'])]),
+  I('交通运输仓储','infra',.7,[T('航空供给约束与票价',['航空','票价']),T('快递反内卷与价格',['快递']),T('油运集运运价展望',['油运','集运']),T('公路港口高股息',['公路','港口'])]),
+  I('公用事业','infra',.7,[T('电价市场化与火电盈利',['电价','火电']),T('水电核电的高股息价值',['水电','核电']),T('新能源入市与绿电消纳',['绿电','消纳'])]),
+  I('环保','infra',.4,[T('垃圾焚烧现金流改善与分红',['固废','分红']),T('水务价格改革',['水价'])]),
+  I('银行','fin',.9,[T('高股息配置与息差企稳',['净息差','分红']),T('化债进展与资产质量',['化债','不良'])]),
+  I('非银行金融','fin',1.0,[T('券商并购重组与财富管理',['并购','ETF']),T('保险资负两端与分红险',['分红险','权益配置']),T('公募费改后的行业格局',['费率'])]),
+  I('房地产','fin',.6,[T('城市更新与止跌回稳',['城中村','收储']),T('销售数据与政策节奏',['销售','政策'])]),
+  I('宏观经济','mac',1.0,[T('四季度经济展望与政策发力',['增量政策','财政']),T('美联储降息周期与人民币汇率',['降息','汇率']),T('十五五规划前瞻',['新质生产力'])]),
+  I('策略研究','mac',1.2,[T('四季度A股配置策略',['行业轮动','科技成长']),T('增量资金：险资与ETF入市',['险资','ETF']),T('红利与成长的风格切换',['红利','风格'])]),
+  I('固定收益','fx',.9,[T('四季度债市利率展望',['10Y国债','货币政策']),T('可转债估值与条款博弈',['转债','估值']),T('信用债配置与城投化债',['城投','信用利差'])]),
+  I('金融工程','fx',.7,[T('量化选股因子失效与重构',['因子','拥挤度']),T('指数增强与ETF产品布局',['指增','ETF']),T('资金流与市场情绪监测',['资金流','情绪'])]),
+  I('海外市场','fx',.8,[T('港股科技与南向资金',['恒生科技','南向']),T('美股AI巨头资本开支周期',['Capex','云厂商']),T('全球资产配置与美元走势',['美元','黄金'])])
+];
+
+const RAW={
+'宏观经济':'广发证券 分析师 S1J2;华创证券 分析师 S2J6;浙商证券 分析师 S3J1;东吴证券 分析师 S4J3;长江证券 分析师 S5J5;东方证券 分析师 J4;国盛证券 分析师 J7;申万宏源证券 分析师 J8',
+'策略研究':'广发证券 分析师 S1J1;申万宏源证券 分析师 S2J2;国联民生证券 分析师 S3J3;兴业证券 分析师 S4J5;天风证券 分析师 S5J4;浙商证券 分析师 J6;招商证券 分析师 J7;长江证券 分析师 J8',
+'固定收益':'华泰证券 分析师 S1;华西证券 分析师 S2J5;申万宏源证券 分析师 S3J6;华创证券 分析师 S4J2;浙商证券 分析师 S5J1;兴业证券 分析师 J3;财通证券 分析师 J4;长江证券 分析师 J8',
+'金融工程':'兴业证券 分析师 S1J2;国盛证券 分析师 S2J6;长江证券 分析师 S3J5;国信证券 分析师 S4J1;招商证券 分析师 S5J3;广发证券 分析师 J4;申万宏源证券 分析师 J7',
+'海外市场':'兴业证券 分析师 S1J1;天风证券 分析师 S2J3;国海证券 分析师 S3J4;光大证券 分析师 S4J2;中信建投证券 分析师 S5;国信证券 分析师 J5;国泰海通证券 分析师 J6',
+'银行':'浙商证券 分析师 S1J1;中泰证券 分析师 S2J2;中信建投证券 分析师 S3;国海证券 分析师 S4;长江证券 分析师 S5J4;东方证券 分析师 J3;国信证券 分析师 J5;招商证券 分析师 J6',
+'非银行金融':'国泰海通证券 分析师 S1;广发证券 分析师 S2;东吴证券 分析师 S3;华创证券 分析师 S4;国金证券 分析师 S5;中信建投证券 分析师 Q1;申万宏源证券 分析师 Q2;浙商证券 分析师 Q3;西部证券 分析师 Q4;方正证券 分析师 Q5',
+'房地产':'广发证券 分析师 S1J1;长江证券 分析师 S2J2;兴业证券 分析师 S3J5;申万宏源证券 分析师 S4J4;中信建投证券 分析师 S5J7;招商证券 分析师 J3;国泰海通证券 分析师 J6',
+'电子':'中泰证券 分析师 S1J1;长江证券 分析师 S2J2;广发证券 分析师 S3J3;国盛证券 分析师 S4J5;华创证券 分析师 S5J8;国金证券 分析师 J4;中信建投证券 分析师 J6;浙商证券 分析师 J7;东方证券 分析师 J9',
+'计算机':'国盛证券 分析师 S1J1;兴业证券 分析师 S2J4;申万宏源证券 分析师 S3;天风证券 分析师 S4J6;长江证券 分析师 S5J3;广发证券 分析师 J2;国信证券 分析师 J5;浙商证券 分析师 J8',
+'传播与文化':'广发证券 分析师 S1J1;东吴证券 分析师 S2J4;国海证券 分析师 S3J2;申万宏源证券 分析师 S4J3;华创证券 分析师 S5J6;长江证券 分析师 J5;国泰海通证券 分析师 J7',
+'通信':'天风证券 分析师 S1;国盛证券 分析师 S2J1;广发证券 分析师 S3J3;长江证券 分析师 S4J2;国泰海通证券 分析师 S5J5;中信建投证券 分析师 J6',
+'化工':'申万宏源证券 分析师 S1J2;长江证券 分析师 S2J1;国海证券 分析师 S3J4;华创证券 分析师 S4J6;国泰海通证券 分析师 S5J8;天风证券 分析师 J3;浙商证券 分析师 J5;国联民生证券 分析师 J7',
+'公用事业':'华源证券 分析师 S1;长江证券 分析师 S2;广发证券 分析师 S3;兴业证券 分析师 S4Q1;天风证券 分析师 S5;国信证券 分析师 Q2;中信建投证券 分析师 Q3;长城证券 分析师 Q4',
+'能源开采':'长江证券 分析师 S1;国盛证券 分析师 S2;广发证券 分析师 S3;民生证券 分析师 S4;天风证券 分析师 S5;信达证券 分析师 Q1;中泰证券 分析师 Q2;国海证券 分析师 Q3;国信证券 分析师 Q4;浙商证券 分析师 Q5',
+'金属和金属新材料':'长江证券 分析师 S1J1;民生证券 分析师 S2J3;中信建投证券 分析师 S3J2;国泰海通证券 分析师 S4J6;华源证券 分析师 S5J7;国信证券 分析师 J4;国盛证券 分析师 J5;天风证券 分析师 J8',
+'非金属类建材':'长江证券 分析师 S1J1;国泰海通证券 分析师 S2J4;国金证券 分析师 S3J8;中泰证券 分析师 S4J6;华源证券 分析师 S5;广发证券 分析师 J2',
+'建筑和工程':'国盛证券 分析师 S1J3;长江证券 分析师 S2;广发证券 分析师 S3;天风证券 分析师 S4J5;财通证券 分析师 S5J7',
+'交通运输仓储':'长江证券 分析师 S1J1;申万宏源证券 分析师 S2J2;华创证券 分析师 S3J3;广发证券 分析师 S4J4;华源证券 分析师 S5;浙商证券 分析师 J5;国泰海通证券 分析师 J6;兴业证券 分析师 J7',
+'环保':'广发证券 分析师 S1J1;东吴证券 分析师 S2J2;长江证券 分析师 S3J3;国泰海通证券 分析师 J4',
+'食品饮料':'国泰海通证券 分析师 S1J1;华创证券 分析师 S2J4;广发证券 分析师 S3J2;长江证券 分析师 S4J3;浙商证券 分析师 J5;华西证券 分析师 J6;东吴证券 分析师 J7;申万宏源证券 分析师 J8;天风证券 分析师 J9',
+'医药生物':'兴业证券 分析师 S1J1;中信建投证券 分析师 S2;国泰海通证券 分析师 S3J3;华创证券 分析师 S4J7;东吴证券 分析师 S5J5;天风证券 分析师 J4;国盛证券 分析师 J6;广发证券 分析师 J8;长江证券 分析师 J9',
+'批零和社会服务':'长江证券 分析师 S1J1;国泰海通证券 分析师 S2J3;广发证券 分析师 S3J2;兴业证券 分析师 S4J4;国海证券 分析师 S5;东吴证券 分析师 J5;浙商证券 分析师 J6;天风证券 分析师 J7',
+'家电':'国联民生证券 分析师 S1J1;长江证券 分析师 S2J2;兴业证券 分析师 S3;国泰海通证券 分析师 S4J6;开源证券 分析师 S5J3;中信建投证券 分析师 J4;浙商证券 分析师 J5',
+'农林牧渔':'长江证券 分析师 S1J1;广发证券 分析师 S2J2;浙商证券 分析师 S3J3;华源证券 分析师 S4J5;天风证券 分析师 S5',
+'轻工和纺织服装':'申万宏源证券 分析师 S1;浙商证券 分析师 S2;长江证券 分析师 S3;国信证券 分析师 Q1;信达证券 分析师 Q2;国盛证券 分析师 Q3;东方财富证券 分析师 Q4;国投证券 分析师 Q5',
+'新能源和电力设备':'长江证券 分析师 S1J1;东吴证券 分析师 S2J2;中信建投证券 分析师 S3J4;民生证券 分析师 S4J7;国金证券 分析师 S5;天风证券 分析师 J3;兴业证券 分析师 J5;广发证券 分析师 J6;国海证券 分析师 J8',
+'汽车和汽车零部件':'东吴证券 分析师 S1J2;长江证券 分析师 S2;民生证券 分析师 S3J3;国联民生证券 分析师 S4J4;中泰证券 分析师 S5J6;广发证券 分析师 J5;国信证券 分析师 J7;中信建投证券 分析师 J8',
+'机械':'长江证券 分析师 S1J2;广发证券 分析师 S2J1;浙商证券 分析师 S3J3;东吴证券 分析师 S4J4;国泰海通证券 分析师 J5;国金证券 分析师 J6;天风证券 分析师 J7;国盛证券 分析师 J8;申万宏源证券 分析师 J9',
+'国防军工':'兴业证券 分析师 S1J2;广发证券 分析师 S2J1;长江证券 分析师 S3J3;申万宏源证券 分析师 S4J5;中信建投证券 分析师 J4;天风证券 分析师 J6'
+};
+const FILL=['中信证券','中金公司','华泰证券','招商证券','国泰海通证券','中信建投证券','广发证券','申万宏源证券','兴业证券','长江证券','国投证券','东吴证券','天风证券','国金证券','浙商证券','国信证券','华创证券','光大证券'];
+const AWD={S:['s',''],J:['j',''],Q:['j','']};
+const hash=s=>{let h=2166136261;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0};
+const SUR='王李张刘陈杨赵黄周吴徐孙胡朱高林何郭马罗梁宋郑谢韩唐冯于董程曹袁邓许傅沈曾彭吕苏卢蒋蔡贾丁魏薛叶余潘杜戴夏钟汪田任姜范方石姚谭廖邹熊金陆孔白崔康邱秦江史顾侯邵孟段雷钱汤尹黎易常武乔贺龚文';
+const GIV='俊哲思远晨宇嘉怡雨婷博文凯翔欣然佳颖立新志泽楠明轩若琳亦帆铭睿鸣舒航可心昊晓峰静瑶彦君宁越涛蕾亮斌';
+const mkName=h=>SUR[h%SUR.length]+GIV[(h>>>7)%GIV.length]+((h>>>13)%3?GIV[(h>>>17)%GIV.length]:'');
+const TEAMS={};
+INDUSTRIES.forEach(ind=>{
+  const list=RAW[ind.n].split(';').map(x=>{const [broker,name,code]=x.trim().split(' ');const aw=[...code.matchAll(/([SJQ])(\d+)/g)].map(m=>({k:m[1],r:+m[2]}));return {broker,name,aw}});
+  for(const b of FILL){if(list.length>=10)break;if(!list.some(t=>t.broker===b))list.push({broker:b,name:null,aw:[]})}
+  list.forEach((t,i)=>{if(t.name)t.name=mkName(hash('anon|'+t.broker+'|'+ind.n));t.ind=ind.n;t.id=ind.n+'|'+i;const best=t.aw.length?Math.min(...t.aw.map(a=>a.r)):9;t.w=t.name?1.5-best*.08:.55});
+  TEAMS[ind.n]=list;
+});
+const TITLE_SPECIAL={'宏观经济':'首席经济学家','策略研究':'首席策略分析师','固定收益':'首席固收分析师','金融工程':'首席金工分析师','海外市场':'首席海外分析师'};
+const titleOf=t=>t.name?(TITLE_SPECIAL[t.ind]||'首席分析师'):'';
+const whoT=t=>t.name?`${t.name} · ${titleOf(t)}`:'研究团队';
+const who=t=>t.name||'研究团队';
+const awardTags=t=>t.aw.length?t.aw.map(a=>`<span class="award ${AWD[a.k][0]}">${AWD[a.k][1]} 第${a.r}名</span>`).join(''):'<span class="award">未列入上述评选前列</span>';
+
+const E=(ind,theme,who,bg,pts)=>({ind,theme,who,bg,pts});
+const EXPERTS=[
+  E('通信','1.6T光模块供需与硅光方案渗透','陈先生','某头部光模块厂商前产品线总监，光通信从业15年，负责过400G/800G产品导入北美云厂商。',['2026—2027年1.6T需求节奏与主要客户份额','EML与硅光方案成本对比、光芯片供给瓶颈','CPO量产时间表及对可插拔模块的影响']),
+  E('电子','HBM与国产存储扩产节奏','刘女士','某存储晶圆厂前工艺整合经理，从事DRAM制程十余年。',['DRAM/NAND合约价走势与库存水位','HBM良率爬坡与国产替代进度','扩产设备采购节奏与国产设备份额']),
+  E('电子','AI眼镜供应链与出货预期','苏先生','某消费电子ODM企业前产品总监，参与多款智能穿戴产品量产。',['主要品牌AI眼镜出货节奏','光波导、微显示等核心零部件成本','ODM与零部件厂商的份额格局']),
+  E('新能源和电力设备','固态电池中试线良率与设备选型','王先生','某动力电池企业研究院前负责人，主导过硫化物电解质中试项目。',['硫化物/氧化物路线的产业化瓶颈','中试线良率、成本与装车时间预期','干法电极、等静压等关键设备国产化']),
+  E('新能源和电力设备','多晶硅收储与光伏产能出清','钱先生','光伏行业协会前研究员，长期跟踪硅料与组件产能。',['多晶硅收储方案与执行难点','各环节开工率、价格与库存','产能出清时间表与盈利修复判断']),
+  E('医药生物','GLP-1口服小分子临床进展与竞争格局','赵医生','某三甲医院内分泌科主任医师，参与多项减重药物临床试验。',['口服小分子与注射剂的疗效、依从性比较','国内外在研管线读出节点','医保与自费市场的放量路径']),
+  E('医药生物','创新药对外授权交易条款拆解','孙女士','某跨国药企中国区前BD总监，参与过多笔十亿美元级授权交易。',['首付款、里程碑与销售分成的定价逻辑','跨国药企当前关注的靶点与技术平台','交易后里程碑兑现的风险点']),
+  E('医药生物','ADC药物的临床差异化与定价','任医生','某肿瘤专科医院临床研究中心专家，长期参与抗肿瘤新药临床试验。',['主要ADC靶点的疗效与安全性对比','联合用药方案的临床进展','国内定价与医保谈判预期']),
+  E('机械','人形机器人灵巧手方案与降本路径','周先生','某机器人公司前硬件负责人，曾主导灵巧手与关节模组研发。',['腱绳、连杆、直驱等灵巧手方案对比','行星滚柱丝杠、减速器成本与国产化','2026年量产规模与落地场景判断']),
+  E('食品饮料','白酒渠道库存与中秋国庆动销','李先生','某名酒企业前大区销售经理，渠道管理经验超过12年。',['主要单品批价与经销商库存水位','双节备货与宴席需求跟踪','酒企控货稳价政策的执行情况']),
+  E('食品饮料','现制茶饮开店与单店模型','胡先生','某连锁茶饮品牌前拓展总监，负责过千店规模的区域拓展。',['加盟商回本周期与单店模型','外卖补贴对门店收入结构的影响','下沉市场开店空间']),
+  E('计算机','AI Agent在企业端的落地与付费意愿','吴先生','某云厂商前行业解决方案总监，负责金融与政务客户大模型项目。',['企业部署Agent的主要场景与投入产出','按调用量与按席位收费模式对比','算力成本下降对应用渗透的影响']),
+  E('计算机','国产GPU生态与服务器交付','马先生','某服务器厂商前产品线负责人，负责AI服务器方案与交付。',['国产GPU训练与推理性能对比','软件栈适配与生态建设','智算中心招标与交付节奏']),
+  E('传播与文化','AI陪伴类应用的用户与付费','林女士','某互联网内容平台前产品负责人，负责AI社交产品。',['用户留存与使用时长','付费模式与ARPU','监管与内容安全要求']),
+  E('国防军工','低轨卫星组网与商业发射节奏','郑先生','某商业航天公司前总体设计师，参与过低轨星座卫星平台研制。',['国内低轨星座发射计划与组网进度','可回收火箭技术成熟度与发射成本','卫星载荷与地面终端的产业链机会']),
+  E('金属和金属新材料','稀土出口管制与海外供应链重构','冯先生','某稀土集团前国际贸易部负责人。',['出口许可审批节奏与海外库存','海外分离产能建设进度','氧化镨钕价格中枢判断']),
+  E('固定收益','化债进展与城投平台转型','何先生','某地方金融研究机构资深专家，长期研究地方政府债务。',['特殊再融资债发行与置换进度','城投退平台与经营性转型案例','信用利差与区域分化展望']),
+  E('汽车和汽车零部件','智能驾驶L3落地与法规进展','许先生','某整车企业前智驾中心产品负责人。',['L3准入试点的责任划分与法规','端到端方案与数据闭环能力比较','高阶智驾渗透率与车型成本']),
+  E('非银行金融','分红险转型与保险资金权益配置','韩女士','某大型寿险公司前资产负债管理部负责人。',['预定利率下调后的产品结构变化','新会计准则下的权益配置偏好','长期股票投资试点进展']),
+  E('化工','反内卷背景下的化工品供给侧变化','蒋先生','化工行业协会前产业研究专家。',['重点子行业老旧装置淘汰计划','开工率与价格弹性较大的品种','龙头企业资本开支变化']),
+  E('海外市场','美股AI巨头资本开支的持续性','杨先生','某海外科技基金前研究总监，覆盖北美云计算与半导体。',['云厂商资本开支指引与投入产出','推理需求增长与ASIC替代','对A股、港股算力链的传导']),
+  E('家电','以旧换新补贴退坡后的终端零售','唐先生','某家电连锁企业前采购总监。',['各品类终端销量与价格变化','渠道库存与厂商排产','高端化与出海对冲']),
+  E('农林牧渔','生猪产能调控政策与养殖成本','曹先生','某大型养殖集团前生产总监。',['能繁母猪调减的执行情况','完全成本与行业分化','四季度猪价判断']),
+  E('批零和社会服务','即时零售的履约成本与平台补贴','邓先生','某即时零售平台前运营总监。',['单均履约成本拆解','平台补贴力度与持续性','商家与品牌的渠道选择']),
+  E('轻工和纺织服装','运动品牌代工订单与东南亚产能','彭先生','某鞋服代工企业前供应链总监。',['主要品牌订单能见度','越南、印尼产能与关税影响','代工企业毛利率变化']),
+  E('能源开采','煤矿超产核查与供给弹性','贾先生','某煤炭集团前生产技术部负责人。',['超产核查范围与执行力度','主产区产量与库存','冬储需求与煤价判断']),
+  E('非金属类建材','电子布与低介电玻纤供需','丁先生','某玻纤企业前技术总监。',['低介电电子布的技术门槛','AI服务器需求拉动','扩产计划与价格走势']),
+  E('建筑和工程','重大水电工程建设进度与设备招标','魏先生','某水电工程设计院前高级工程师。',['工程分标段推进节奏','主要设备与材料招标','对建筑、建材、机械的需求拉动']),
+  E('交通运输仓储','快递价格竞争与网点经营','叶先生','某快递企业前区域总经理。',['反内卷政策下的价格变化','加盟网点盈利状况','行业集中度趋势']),
+  E('公用事业','电力现货市场与电价形成','潘先生','某省电力交易中心前交易员。',['现货市场价格波动特征','新能源入市对电价的影响','火电容量电价与盈利']),
+  E('环保','垃圾焚烧运营与供热改造','杜先生','某环保运营企业前运营总监。',['吨垃圾发电量与运营效率','供热改造的收益测算','应收账款回收进展']),
+  E('银行','存款利率调整与银行负债成本','戴女士','某股份制银行前资产负债管理部负责人。',['存款定价与期限结构变化','负债成本下行空间','息差企稳的时间判断']),
+  E('房地产','城中村改造资金与推进节奏','夏先生','某城投平台前项目负责人。',['专项借款与货币化安置','项目推进与拆迁进度','对销售与投资的拉动']),
+  E('宏观经济','出口订单与关税影响的一线调研','钟先生','某外贸综合服务平台前总经理。',['主要市场订单变化','转口与产能外迁','四季度出口展望']),
+  E('策略研究','险资权益配置与长期资金入市','汪女士','某保险资管公司前权益投资负责人。',['险资权益仓位与配置偏好','考核机制变化的影响','增量资金的节奏']),
+  E('金融工程','AI模型在量化选股中的应用','田先生','某量化私募前研究总监。',['机器学习因子的有效性','另类数据的应用','模型过拟合与风险控制'])
+];
+const C=(name,code,ind,pts,leaders)=>({name,code,ind,pts,leaders:leaders||['董事会秘书','投资者关系负责人']});
+const CORPS=[
+  C('中际旭创','300308.SZ','通信',['800G/1.6T出货结构与产能规划','硅光方案进展与光芯片保障','海外产能布局与关税影响'],['董事会秘书','证券事务代表']),
+  C('中国移动','600941.SH','通信',['算力网络投资与资本开支','分红政策','AI应用与云业务增长']),
+  C('宁德时代','300750.SZ','新能源和电力设备',['动力与储能出货展望','海外工厂建设进度','钠离子与固态电池研发节奏'],['董事会秘书','投资者关系总监']),
+  C('阳光电源','300274.SZ','新能源和电力设备',['储能订单与海外市场','逆变器竞争格局','AIDC电源新业务']),
+  C('长江电力','600900.SH','公用事业',['来水情况与发电量展望','长期分红承诺与现金流安排','抽水蓄能与新能源项目规划'],['董事会秘书','财务部负责人']),
+  C('中国神华','601088.SH','能源开采',['长协煤价与销量结构','资产注入进展','分红比例与资本开支']),
+  C('招商银行','600036.SH','银行',['息差走势与负债成本管控','零售资产质量','财富管理手续费修复']),
+  C('中国平安','601318.SH','非银行金融',['新业务价值增长驱动','高股息资产配置策略','综合金融协同'],['投资者关系负责人','董事会办公室负责人']),
+  C('美的集团','000333.SZ','家电',['以旧换新退坡后的内销节奏','海外自有品牌与产能布局','楼宇科技与机器人自动化业务'],['投资者关系总监','财务部负责人']),
+  C('格力电器','000651.SZ','家电',['空调内销与渠道库存','多元化业务进展','分红与回购']),
+  C('恒瑞医药','600276.SH','医药生物',['核心管线临床读出时间表','对外授权交易进展','创新药收入占比变化']),
+  C('迈瑞医疗','300760.SZ','医药生物',['国内招标恢复节奏','海外高端客户突破','体外诊断业务增长'],['董事会秘书','投资者关系总监']),
+  C('紫金矿业','601899.SH','金属和金属新材料',['铜、金产量指引','海外矿山项目进展','成本控制与资本开支']),
+  C('洛阳钼业','603993.SH','金属和金属新材料',['铜钴产量与成本','刚果（金）项目进展','钴出口政策影响']),
+  C('汇川技术','300124.SZ','机械',['通用自动化订单跟踪','新能源车电控业务','人形机器人关节与伺服布局'],['董事会秘书','财务总监']),
+  C('三一重工','600031.SH','机械',['国内挖机销量与更新需求','海外收入占比与盈利能力','电动化产品推广']),
+  C('比亚迪','002594.SZ','汽车和汽车零部件',['国内外销量结构与海外工厂','智驾平台搭载节奏','价格竞争与单车盈利'],['投资者关系负责人','证券事务代表']),
+  C('伊利股份','600887.SH','食品饮料',['原奶价格与成本红利','液奶与奶粉份额变化','分红与回购安排']),
+  C('五粮液','000858.SZ','食品饮料',['批价与渠道库存','中秋国庆动销','渠道改革进展']),
+  C('万华化学','600309.SH','化工',['MDI/TDI供需与价格','新材料项目投产进度','资本开支节奏']),
+  C('海康威视','002415.SZ','电子',['主业需求与海外业务','视觉大模型产品化进展','创新业务发展与盈利']),
+  C('工业富联','601138.SH','电子',['AI服务器出货与客户结构','液冷机柜与交换机','毛利率变化']),
+  C('立讯精密','002475.SZ','电子',['消费电子新品周期','通信与数据中心业务','汽车业务进展']),
+  C('科大讯飞','002230.SZ','计算机',['大模型商业化进展','教育与医疗业务','现金流改善']),
+  C('分众传媒','002027.SZ','传播与文化',['广告主投放意愿','点位扩张与价格','分红政策']),
+  C('牧原股份','002714.SZ','农林牧渔',['出栏量与完全成本','产能调控响应','屠宰与海外业务']),
+  C('中国中免','601888.SH','批零和社会服务',['离岛免税销售','市内免税店进展','毛利率与费用率']),
+  C('中航沈飞','600760.SH','国防军工',['主力型号交付节奏','军贸与民机业务','产能建设']),
+  C('海螺水泥','600585.SH','非金属类建材',['水泥价格与错峰生产','海外项目','分红与资本开支']),
+  C('中国建筑','601668.SH','建筑和工程',['新签订单结构','地产业务与应收款','分红与市值管理']),
+  C('顺丰控股','002352.SZ','交通运输仓储',['件量与单票收入','国际业务','资本开支与分红']),
+  C('瀚蓝环境','600323.SH','环保',['固废运营与供热','粤丰环保整合','分红预期']),
+  C('保利发展','600048.SH','房地产',['销售与拿地节奏','库存去化与减值','融资成本']),
+  C('晨光股份','603899.SH','轻工和纺织服装',['传统文具渠道','零售大店与IP产品','办公直销业务'])
+];
+const TYPES={road:'卖方路演',expert:'专家交流',corp:'上市公司反路演'};
+
+const WD=['周一','周二','周三','周四','周五'];
+const pad=n=>String(n).padStart(2,'0');
+const TODAY='2026-09-24';
+const HOLIDAY={'2026-09-25':'中秋节'};
+const WEEKS=[],DAYS=[];
+for(let w=0;w<13;w++){
+  const wk={i:w,no:27+w,days:[]};
+  for(let k=0;k<5;k++){
+    const dt=new Date(2026,5,29+w*7+k);
+    const d=`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
+    const day={i:DAYS.length,d,w:WD[k],k,s:`${pad(dt.getMonth()+1)}/${pad(dt.getDate())}`,wk:w,m:dt.getMonth()+1,hol:HOLIDAY[d]||null};
+    DAYS.push(day);wk.days.push(day.i);
+  }
+  wk.label=`第${wk.no}周 · ${DAYS[wk.days[0]].s}—${DAYS[wk.days[4]].s}`;
+  wk.current=wk.days.some(i=>DAYS[i].d===TODAY);
+  WEEKS.push(wk);
+}
+const workDays=days=>days.filter(i=>!DAYS[i].hol);
+const SLOTS=[['08:00','09:00'],['09:00','10:00'],['10:00','11:00'],['11:00','12:00'],['12:00','13:30'],['13:30','14:30'],['14:30','15:30'],['15:30','16:30'],['16:30','17:30']];
+const LUNCH=4;
+const ROOMS=[101,102,103,104,105,106,201,202,203,204,205];
+const ONSITE=ROOMS.filter(r=>r<200), ONLINE=ROOMS.filter(r=>r>=200);
+const isOnlineRoom=r=>r>=200;
+const rlabel=r=>isOnlineRoom(r)?`线上${r-200}`:String(r);
+const roomName=r=>isOnlineRoom(r)?'线上':`${r} 室`;
+const DAYCAP=8*ROOMS.length+ONSITE.length;
+const roomCap=r=>8+(isOnlineRoom(r)?0:1);
+const secOf=id=>SECTORS.find(s=>s.id===id);
+const indOf=n=>INDUSTRIES.find(x=>x.n===n);
+const colorOf=n=>'var('+secOf(indOf(n).s).c+')';
+
+/* ---------- schedule generator ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd=mulberry32(20260914);
+const ri=n=>Math.floor(rnd()*n);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const wpickN=(arr,n)=>{const pool=arr.slice(),out=[];while(out.length<n&&pool.length){const tot=pool.reduce((s,x)=>s+x.w,0);let r=rnd()*tot,i=0;for(;i<pool.length;i++){r-=pool[i].w;if(r<=0)break}out.push(pool.splice(Math.min(i,pool.length-1),1)[0])}return out};
+
+const S=[];
+const occ=new Map();
+const busy=(d,sl,r)=>occ.get(d*10+sl)?.has(r);
+const take=(d,sl,r)=>{const k=d*10+sl;if(!occ.has(k))occ.set(k,new Set());occ.get(k).add(r)};
+const teamBusy=new Set(); // team|day|slot  and team|day
+function place(days,rooms,slots,team){
+  for(let t=0;t<60;t++){
+    const d=days[ri(days.length)],sl=slots[ri(slots.length)],r=rooms[ri(rooms.length)];
+    if(busy(d,sl,r))continue;
+    if(team&&teamBusy.has(team.broker+'|'+d+'|'+sl))continue;
+    take(d,sl,r);if(team)teamBusy.add(team.broker+'|'+d+'|'+sl);
+    return {d,sl,r};
+  }
+  return null;
+}
+const REG=[0,1,2,3,5,6,7,8];
+const weekF=WEEKS.map(()=>.88+rnd()*.12);
+function add(o){S.push({sec:indOf(o.ind).s,regs:[],done:DAYS[o.day].d<TODAY,online:isOnlineRoom(o.room),lunch:o.slot===LUNCH,...o})}
+const orgFor=ind=>wpickN(TEAMS[ind].filter(t=>t.name),1)[0]||TEAMS[ind][0];
+WEEKS.forEach(w=>{
+  const wd=workDays(w.days);
+  shuffle(CORPS).slice(0,12+ri(6)).forEach(co=>{const t=orgFor(co.ind);const p=place(wd,ONSITE,[1,2,6,7,1,2,5,6,7],t);if(p)add({type:'corp',day:p.d,slot:p.sl,room:p.r,ind:co.ind,co,team:t})});
+  shuffle(EXPERTS).slice(0,20+ri(8)).forEach(ex=>{const t=orgFor(ex.ind);const p=place(wd,rnd()<.7?ONLINE:ONSITE,REG,t);if(p)add({type:'expert',day:p.d,slot:p.sl,room:p.r,ind:ex.ind,theme:ex.theme,ex,team:t})});
+  wd.forEach(d=>{ // lunch roadshows
+    const n=3+ri(3);
+    for(let k=0;k<n;k++){const ind=INDUSTRIES[ri(INDUSTRIES.length)];const t=wpickN(TEAMS[ind.n],1)[0];const p=place([d],ONSITE,[LUNCH],t);if(p){const th=ind.th[ri(ind.th.length)];add({type:'road',day:p.d,slot:p.sl,room:p.r,ind:ind.n,theme:th.t,kw:th.k,team:t})}}
+  });
+  INDUSTRIES.forEach(ind=>{
+    const n=Math.min(15,Math.round((ind.w*7+rnd()*2.5)*weekF[w.i]));
+    const teams=wpickN(TEAMS[ind.n],Math.min(10,n)).concat(n>10?wpickN(TEAMS[ind.n],n-10):[]), themes=shuffle(ind.th);
+    teams.forEach((t,k)=>{
+      const p=place(wd,rnd()<.62?ONSITE:ONLINE,REG,t); if(!p)return;
+      const th=themes[k%themes.length];
+      add({type:'road',day:p.d,slot:p.sl,room:p.r,ind:ind.n,theme:th.t,kw:th.k,team:t});
+    });
+  });
+});
+{const g=new Map();S.filter(s=>isOnlineRoom(s.room)).forEach(s=>{const k=s.day*10+s.slot;if(!g.has(k))g.set(k,[]);g.get(k).push(s)});g.forEach(l=>l.forEach((s,i)=>s.room=ONLINE[i]))}
+S.sort((a,b)=>a.day-b.day||a.slot-b.slot||a.room-b.room);S.forEach((s,i)=>s.id=i);
+
+/* ---------- internal roster ---------- */
+const sectorMates=n=>INDUSTRIES.filter(i=>i.s===indOf(n).s&&i.n!==n).map(i=>i.n);
+const R=(dept,role,pri,sec)=>({dept,role,pri,sec});
+const ROSTER=[
+  R('权益投资部','投资总监',[],'ALL'),
+  R('权益投资部','基金经理',['策略研究'],['电子','计算机','通信','传播与文化']),
+  R('权益投资部','基金经理',['策略研究'],['电子','通信','机械','汽车和汽车零部件']),
+  R('权益投资部','基金经理',['策略研究'],['医药生物','食品饮料','家电','批零和社会服务']),
+  R('权益投资部','基金经理',['策略研究'],['新能源和电力设备','汽车和汽车零部件','机械','国防军工']),
+  R('权益投资部','基金经理',['策略研究'],['金属和金属新材料','化工','能源开采','银行']),
+  R('权益投资部','基金经理',['宏观经济'],['策略研究','非银行金融','银行','公用事业']),
+  R('权益投资部','基金经理',['策略研究'],['医药生物','计算机','传播与文化','海外市场']),
+  R('权益投资部','基金经理助理',['电子'],['计算机','通信','策略研究']),
+  R('研究部','研究总监',[],'ALL'),
+  ...[['电子'],['电子'],['计算机'],['通信'],['传播与文化'],['医药生物'],['医药生物'],['食品饮料'],['家电','农林牧渔'],['批零和社会服务','轻工和纺织服装'],
+     ['新能源和电力设备'],['新能源和电力设备'],['汽车和汽车零部件'],['机械'],['国防军工'],['金属和金属新材料'],['化工','非金属类建材'],['能源开采'],
+     ['公用事业','环保'],['交通运输仓储','建筑和工程'],['非银行金融'],['银行'],['房地产'],['宏观经济'],['策略研究']].map(p=>R('研究部','行业研究员',p,null)),
+  R('固定收益部','固收投资总监',['固定收益'],['宏观经济','策略研究']),
+  R('固定收益部','基金经理',['固定收益'],['宏观经济','银行']),
+  R('固定收益部','基金经理',['固定收益'],['宏观经济','策略研究','海外市场']),
+  R('固定收益部','信用研究员',['固定收益'],['房地产','银行','能源开采','建筑和工程']),
+  R('固定收益部','信用研究员',['固定收益','房地产'],['化工','宏观经济','公用事业']),
+  R('固定收益部','转债研究员',['固定收益'],['策略研究','电子','新能源和电力设备','金融工程']),
+  R('量化投资部','投资经理',['金融工程'],['策略研究','宏观经济']),
+  R('量化投资部','投资经理',['金融工程'],['策略研究','固定收益']),
+  R('量化投资部','量化研究员',['金融工程'],['计算机']),
+  R('量化投资部','量化研究员',['金融工程'],['策略研究']),
+  R('海外投资部','投资经理',['海外市场'],['宏观经济','电子','传播与文化']),
+  R('海外投资部','投资经理',['海外市场'],['医药生物','食品饮料']),
+  R('海外投资部','研究员',['海外市场'],['计算机','通信']),
+  R('海外投资部','研究员',['海外市场','宏观经济'],['金属和金属新材料']),
+  R('年金专户部','投资经理',['策略研究'],['宏观经济','银行','非银行金融','固定收益','公用事业']),
+  R('年金专户部','投资经理',['策略研究'],['宏观经济','能源开采','金属和金属新材料','交通运输仓储']),
+  R('年金专户部','投资经理',['宏观经济'],['策略研究','固定收益','食品饮料'])
+];
+ROSTER.push(...ROSTER.filter(r=>!/总监/.test(r.role)).map(r=>({...r})));
+const DEPTS=['权益投资部','研究部','固定收益部','量化投资部','海外投资部','年金专户部'];
+const usedNames=new Set();
+const P=ROSTER.map((r,i)=>{
+  let h=hash('staff'+i), name=mkName(h), k=0;
+  while(usedNames.has(name)){h=hash('staff'+i+'_'+(++k));name=mkName(h)}
+  usedNames.add(name);
+  let role=r.role; if(role==='行业研究员'&&(h>>>9)%3===0)role='高级研究员';
+  const all=r.sec==='ALL';
+  const sec=all?[]:(r.sec||[...new Set(r.pri.flatMap(sectorMates))].filter(x=>!r.pri.includes(x)));
+  return {id:i,name,dept:r.dept,role,pri:r.pri,sec,all,cover:all?'全行业':r.pri.join('、')};
+});
+const isRes=p=>/研究员/.test(p.role);
+const interest=(p,s)=>{const b=(p.pri.includes(s.ind)?.5:p.sec.includes(s.ind)?.16:p.all?.08:.008)*(isRes(p)?1:.8);return Math.min(.9,b*(s.type==='expert'?1.3:s.type==='corp'?1.2:1))};
+const dayCap=p=>isRes(p)?4:3;
+const rr=mulberry32(918);
+const byDaySlot=new Map();
+S.forEach(s=>{const k=s.day*10+s.slot;if(!byDaySlot.has(k))byDaySlot.set(k,[]);byDaySlot.get(k).push(s)});
+DAYS.forEach(d=>{if(d.hol)return;const dc=new Map();SLOTS.forEach((_,si)=>{
+  const ss=byDaySlot.get(d.i*10+si)||[];
+  P.forEach(p=>{
+    if((dc.get(p.id)||0)>=dayCap(p))return;
+    const c=[];ss.forEach(s=>{const pr=interest(p,s);if(rr()<pr)c.push([s,pr+rr()*.05])});
+    if(!c.length)return;
+    c.sort((a,b)=>b[1]-a[1]);c[0][0].regs.push(p.id);dc.set(p.id,(dc.get(p.id)||0)+1);
+  });
+})});
+const regN=list=>list.reduce((a,s)=>a+s.regs.length,0);
+
+/* ---------- text helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const chip=ind=>`<span class="chip" style="--c:${colorOf(ind)}">${esc(ind)}</span>`;
+const ttag=t=>`<span class="ttag ${t}">${TYPES[t]}</span>`;
+const countBy=(arr,f)=>{const m=new Map();arr.forEach(x=>{const k=f(x);m.set(k,(m.get(k)||0)+1)});return m};
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const inDays=days=>{const set=new Set(days);return S.filter(x=>set.has(x.day))};
+const teamLabel=t=>`${t.broker} ${who(t)}`;
+const headline=s=>s.type==='corp'?`${s.co.name}反路演`:s.theme;
+const timeTxt=s=>`${SLOTS[s.slot][0]}–${SLOTS[s.slot][1]}`;
+function brief(s){
+  const t=s.team, org=`${t.broker}${t.name?t.name+'（'+s.ind+titleOf(t)+'）':s.ind+'研究团队'}`;
+  if(s.type==='road')return `${org}围绕“${s.theme}”进行${s.lunch?'午餐路演':'路演'}，重点讨论${s.kw.join('、')}等方面的最新变化、产业链跟踪与投资机会，并就买方关注的问题交流。`;
+  if(s.type==='expert')return `由${org}组织，邀请${s.ex.who}（${s.ex.bg.replace(/。$/,'')}）就“${s.theme}”分享一线观察，内容包括${s.ex.pts.join('；')}。`;
+  return `${s.co.name}（${s.co.code}）由${org}组织来访，公司${s.co.leaders.join('、')}出席，主要交流${s.co.pts.join('；')}等经营情况。`;
+}
+
+/* ---------- state ---------- */
+const DEFAULT_WK=WEEKS.findIndex(w=>DAYS[w.days[0]].d==='2026-09-14');
+const st={view:'date',wk:DEFAULT_WK,day:WEEKS[DEFAULT_WK].days[0],tf:'all',mode:'all',layout:'expand',sector:'all',sub:'all',isec:'mac',ind:'宏观经济',team:null,period:'week',month:9,pdept:'all',pq:'',psort:'reg',pdir:-1};
+const weekOf=()=>WEEKS[st.wk];
+
+/* ---------- period scope ---------- */
+function monthDays(m){return DAYS.filter(d=>d.m===m).map(d=>d.i)}
+function weekBuckets(days){const set=new Set(days);return WEEKS.filter(w=>w.days.some(i=>set.has(i))).map(w=>{const ds=w.days.filter(i=>set.has(i));return {l:`W${w.no}`,l2:DAYS[ds[0]].s,days:ds}})}
+function scope(){
+  let sc;
+  if(st.period==='week'){const w=weekOf();const b=w.days.map(i=>({l:DAYS[i].w,l2:DAYS[i].hol||DAYS[i].s,days:[i]}));sc={kind:'周',days:w.days,heat:b,trend:b,unit:'日',prev:st.wk>0?{days:WEEKS[st.wk-1].days,l:'上周'}:null,title:w.label}}
+  else if(st.period==='month'){const days=monthDays(st.month),b=weekBuckets(days);sc={kind:'月',days,heat:b,trend:b,unit:'周',prev:st.month>7?{days:monthDays(st.month-1),l:'上月'}:null,title:`2026年${st.month}月`}}
+  else{const days=DAYS.filter(d=>d.m>=7&&d.m<=9).map(d=>d.i);sc={kind:'季',days,heat:[7,8,9].map(m=>({l:m+'月',l2:'',days:monthDays(m)})),trend:weekBuckets(days),unit:'月',prev:null,title:'2026年三季度'}}
+  sc.list=inDays(sc.days);sc.work=workDays(sc.days);
+  sc.first=DAYS[sc.work[0]].s;sc.last=DAYS[sc.work[sc.work.length-1]].s;
+  sc.open=sc.days.some(i=>DAYS[i].d>=TODAY);
+  return sc;
+}
+function periodHTML(sc){
+  return `<div class="seg" role="group" aria-label="统计周期">${[['week','周度'],['month','月度'],['quarter','季度']].map(([k,l])=>`<button data-period="${k}" aria-pressed="${st.period===k}">${l}</button>`).join('')}</div>`+
+    (st.period==='month'?`<select class="monthSel" aria-label="选择月份">${[7,8,9].map(m=>`<option value="${m}"${st.month===m?' selected':''}>2026年${m}月</option>`).join('')}</select>`:'')+
+    `<span class="scope">统计区间：<b>${sc.title}</b>（${sc.first}—${sc.last}，${sc.work.length} 个工作日）${sc.open?' · 含待召开日程':''}${st.period==='week'?' · 切换周请用右上角':''}</span>`;
+}
+function delta(cur,prev,l){if(prev==null)return '';const d=prev?(cur-prev)/prev*100:0;return ` · 较${l} <span class="delta ${d>=0?'up':'down'}">${d>=0?'+':''}${d.toFixed(1)}%</span>`}
+
+/* ---------- views ---------- */
+function setView(v){
+  st.view=v;
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.view===v));
+  ['date','industry','stats','people'].forEach(k=>$('#view-'+k).hidden=k!==v);
+  try{history.replaceState(null,'','#'+v)}catch(e){}
+  render();
+}
+function render(){
+  $('#wkSel').innerHTML=WEEKS.map(w=>`<option value="${w.i}"${w.i===st.wk?' selected':''}>${w.label}${w.current?'（本周）':''}</option>`).join('');
+  $('#wkPrev').disabled=st.wk===0;$('#wkNext').disabled=st.wk===WEEKS.length-1;
+  ({date:renderDate,industry:renderIndustry,stats:renderStats,people:renderPeople})[st.view]();
+}
+function setWeek(i){
+  const k=DAYS[st.day].k;
+  st.wk=Math.max(0,Math.min(WEEKS.length-1,i));
+  const w=weekOf();
+  st.day=w.days.find(d=>DAYS[d].k===k&&!DAYS[d].hol)??workDays(w.days)[0];
+  st.month=Math.min(9,Math.max(7,DAYS[w.days[2]].m));
+  render();
+}
+
+function cellHTML(x,badge){
+  const shown=(st.tf==='all'||x.type===st.tf)&&(st.mode==='all'||(st.mode==='online')===x.online)&&(st.sector==='all'||x.sec===st.sector)&&(st.sub==='all'||x.ind===st.sub);
+  const lc=x.lunch?' lunchslot':'';
+  if(!shown)return `<div class="cell blank${lc}"></div>`;
+  const foot=`<div class="rg">报名 <b>${x.regs.length}</b>${x.done?'':' · 待召开'}</div>`;
+  const t=x.team, org=`<div class="org"><b>${esc(t.broker)}</b> ${esc(who(t))}</div>`;
+  const rb=badge?`<span class="roombadge${isOnlineRoom(x.room)?' on':''}">${isOnlineRoom(x.room)?'线上':x.room}</span>`:'', pk=badge?' packed':'';
+  if(x.type==='road')return `<div class="cell booked${lc}${pk}" style="--c:${colorOf(x.ind)}" tabindex="0" data-id="${x.id}">${rb}
+    <div>${chip(x.ind)}${x.lunch?'<span class="ltag">午餐路演</span>':''}</div><div class="br">${esc(t.broker)}</div><div class="an">${esc(whoT(t))}</div><div class="th">${esc(x.theme)}</div>${foot}</div>`;
+  if(x.type==='expert')return `<div class="cell expert${pk}" tabindex="0" data-id="${x.id}">${rb}
+    <div>${chip(x.ind)}</div><div class="br">${esc(x.theme)}</div>${org}<div class="an">${esc(x.ex.who)} · ${esc(x.ex.bg.split('，')[0])}</div>${foot}</div>`;
+  return `<div class="cell corp${pk}" tabindex="0" data-id="${x.id}">${rb}
+    <div>${chip(x.ind)}</div><div class="an" style="font-family:var(--mono)">${x.co.code}</div><div class="br">${esc(x.co.name)}反路演</div>${org}${foot}</div>`;
+}
+function renderDate(){
+  const w=weekOf();
+  $('#days').innerHTML=w.days.map(i=>{
+    const d=DAYS[i];
+    if(d.hol)return `<button class="day" disabled><span class="w">${d.w}</span><span class="d">${d.s}</span><span class="n">${d.hol}放假</span></button>`;
+    const ds=S.filter(x=>x.day===i), c=countBy(ds,x=>x.type);
+    return `<button class="day" aria-pressed="${st.day===i}" data-day="${i}"><span class="w">${d.w}${d.d===TODAY?' <span class="nowtag">今天</span>':''}</span><span class="d">${d.s} · ${ds.length} 场</span><span class="n">路演${c.get('road')||0}·专家${c.get('expert')||0}·反路演${c.get('corp')||0}</span></button>`;
+  }).join('');
+  const dayS=S.filter(x=>x.day===st.day), tc=countBy(dayS,x=>x.type);
+  $('#typeFilters').innerHTML=`<span class="flabel">日程类型</span>`+[['all','全部日程',dayS.length],['road','卖方路演',tc.get('road')||0],['expert','专家交流',tc.get('expert')||0],['corp','上市公司反路演',tc.get('corp')||0]].map(([k,l,n])=>
+    `<button class="fbtn" aria-pressed="${st.tf===k}" data-tf="${k}">${k==='expert'?'<span class="swatch" style="background:var(--exp-bg);--k:var(--exp-ink)"></span>':k==='corp'?'<span class="swatch" style="background:var(--corp-bg);--k:var(--corp-ink)"></span>':''}${l} <span class="num" style="color:var(--muted)">${n}</span></button>`).join('');
+  $('#layoutFilters').innerHTML=`<span class="flabel">排列</span>`+[['expand','展开'],['compact','紧凑']].map(([k,l])=>`<button class="fbtn" aria-pressed="${st.layout===k}" data-layout="${k}">${l}</button>`).join('');
+  const byT0=dayS.filter(x=>st.tf==='all'||x.type===st.tf);
+  $('#modeFilters').innerHTML=`<span class="flabel">形式</span>`+[['all','全部形式',byT0.length],['offline','线下',byT0.filter(x=>!x.online).length],['online','线上',byT0.filter(x=>x.online).length]].map(([k,l,n])=>
+    `<button class="fbtn" aria-pressed="${st.mode===k}" data-mode="${k}">${l} <span class="num" style="color:var(--muted)">${n}</span></button>`).join('');
+  const byT=byT0.filter(x=>st.mode==='all'||(st.mode==='online')===x.online);
+  $('#sectorFilters').innerHTML=`<span class="flabel">行业</span>`+[{id:'all',name:'全部行业'}].concat(SECTORS).map(s=>
+    `<button class="fbtn" aria-pressed="${st.sector===s.id}" data-sector="${s.id}">${s.c?`<i style="--c:var(${s.c})"></i>`:''}${s.name} <span class="num" style="color:var(--muted)">${s.id==='all'?byT.length:byT.filter(x=>x.sec===s.id).length}</span></button>`).join('');
+  const subEl=$('#subFilters');
+  if(st.sector==='all'){subEl.hidden=true;subEl.innerHTML=''}
+  else{
+    const sc0=secOf(st.sector), inS=byT.filter(x=>x.sec===st.sector);
+    subEl.hidden=false;
+    subEl.innerHTML=`<span class="flabel">细分行业</span>`+[{n:'all',label:'全部'}].concat(INDUSTRIES.filter(i=>i.s===st.sector).map(i=>({n:i.n,label:i.n}))).map(o=>
+      `<button class="fbtn" aria-pressed="${st.sub===o.n}" data-sub="${esc(o.n)}"><i style="--c:var(${sc0.c})"></i>${esc(o.label)} <span class="num" style="color:var(--muted)">${o.n==='all'?inS.length:inS.filter(x=>x.ind===o.n).length}</span></button>`).join('');
+  }
+  $('#legend').innerHTML=`<span><span class="swatch" style="background:var(--surface);--k:var(--s1)"></span>卖方路演（左侧色条为行业大类）</span><span><span class="swatch" style="background:var(--exp-bg);--k:var(--exp-ink)"></span>专家交流</span><span><span class="swatch" style="background:var(--corp-bg);--k:var(--corp-ink)"></span>上市公司反路演</span><span><span class="ltag" style="margin:0 4px 0 0">午餐路演</span>12:00—13:30，现场会议室</span><span>101—106 现场会议室 · 线上1—线上5 线上会议（从线上1起依次安排）</span>`;
+  const isShown=x=>(st.tf==='all'||x.type===st.tf)&&(st.mode==='all'||(st.mode==='online')===x.online)&&(st.sector==='all'||x.sec===st.sector)&&(st.sub==='all'||x.ind===st.sub);
+  const filtered=st.tf!=='all'||st.mode!=='all'||st.sector!=='all';
+  if(st.layout==='compact'){
+    const rows=SLOTS.map((_,si)=>dayS.filter(x=>x.slot===si&&isShown(x)).sort((a,b)=>a.room-b.room));
+    const n=Math.max(0,...rows.map(r=>r.length));
+    $('#grid').style.gridTemplateColumns=`78px repeat(${Math.max(n,1)},minmax(180px,250px))`;
+    if(!n){$('#grid').innerHTML=`<div class="none" style="grid-column:1/-1;padding:28px 16px">当日没有符合筛选条件的日程</div>`;return}
+    let h=`<div class="gh corner">时段</div>`;
+    for(let i=0;i<n;i++)h+=`<div class="gh"><span>${i+1}</span></div>`;
+    SLOTS.forEach((sl,si)=>{
+      const L=si===LUNCH;
+      h+=`<div class="gt${L?' lunchrow':''}">${sl[0]}<span>– ${sl[1]}${L?'<br>午餐路演':''}</span></div>`;
+      for(let i=0;i<n;i++){const x=rows[si][i];h+=x?cellHTML(x,true):`<div class="cell empty${L?' lunchslot':''}"></div>`}
+    });
+    $('#grid').innerHTML=h;return;
+  }
+  const VR=filtered?ROOMS.filter(r=>dayS.some(x=>x.room===r&&isShown(x))):ROOMS;
+  $('#grid').style.gridTemplateColumns=`78px repeat(${Math.max(VR.length,1)},minmax(140px,1fr))`;
+  if(!VR.length){$('#grid').innerHTML=`<div class="none" style="grid-column:1/-1;padding:28px 16px">当日没有符合筛选条件的日程</div>`;return}
+  let h=`<div class="gh corner">时段</div>`;
+  VR.forEach(r=>{const n=dayS.filter(x=>x.room===r&&isShown(x)).length;h+=`<div class="gh${isOnlineRoom(r)?' online':''}"><span>${rlabel(r)}</span><small>${n}/${roomCap(r)}</small></div>`});
+  SLOTS.forEach((sl,si)=>{
+    const L=si===LUNCH;
+    h+=`<div class="gt${L?' lunchrow':''}">${sl[0]}<span>– ${sl[1]}${L?'<br>午餐路演':''}</span></div>`;
+    VR.forEach(r=>{
+      const x=dayS.find(s=>s.slot===si&&s.room===r);
+      if(x)h+=cellHTML(x);
+      else h+=`<div class="cell empty${L?' lunchslot':''}"></div>`;
+    });
+  });
+  $('#grid').innerHTML=h;
+}
+
+function renderIndustry(){
+  const w=weekOf(), wAll=inDays(w.days), wl=wAll.filter(x=>x.type==='road');
+  $('#secbar').innerHTML=SECTORS.map(s=>{const l=wl.filter(x=>x.sec===s.id);return `<button class="secbtn" style="--c:var(${s.c})" aria-pressed="${st.isec===s.id}" data-isec="${s.id}"><span class="nm"><i></i>${s.name}</span><span class="ct">${INDUSTRIES.filter(i=>i.s===s.id).length} 个行业 · ${l.length} 场路演</span></button>`}).join('');
+  const sec=secOf(st.isec), inds=INDUSTRIES.filter(i=>i.s===st.isec);
+  if(!inds.some(i=>i.n===st.ind)){st.ind=inds[0].n;st.team=null}
+  $('#subbar').innerHTML=inds.map(i=>`<button class="subbtn" style="--c:var(${sec.c})" aria-pressed="${st.ind===i.n}" data-ind="${esc(i.n)}">${esc(i.n)}<b>${wl.filter(x=>x.ind===i.n).length}</b></button>`).join('');
+  const teams=TEAMS[st.ind];
+  const all=wl.filter(x=>x.ind===st.ind);
+  const list=st.team?all.filter(x=>x.team.id===st.team):all;
+  const tm=st.team?teams.find(t=>t.id===st.team):null;
+  const spec=wAll.filter(x=>x.type!=='road'&&x.ind===st.ind);
+  const activeTeams=new Set(all.map(x=>x.team.id)).size;
+  let h=`<div class="card isum">
+    <div><div class="l">研究团队</div><div class="v">${teams.length}<small>个 · 本周来访 ${activeTeams}</small></div></div>
+    <div><div class="l">${w.label.split(' · ')[0]}路演</div><div class="v">${all.length}<small>场</small></div></div>
+    <div><div class="l">专家 / 反路演</div><div class="v">${spec.filter(x=>x.type==='expert').length} / ${spec.filter(x=>x.type==='corp').length}</div></div>
+    <div><div class="l">路演报名人次</div><div class="v">${regN(all)}</div></div>
+    <div><div class="l">场均报名</div><div class="v">${all.length?(regN(all)/all.length).toFixed(1):'—'}<small>人</small></div></div>
+  </div><div class="ibody"><div class="card tscroll">
+    ${tm?`<div style="padding:10px 12px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px"><span>仅看：<b>${esc(teamLabel(tm))}</b></span><button class="linkbtn" style="padding:3px 10px" data-team="">显示全部团队</button></div>`:''}
+    <table class="tbl"><thead><tr><th>时间</th><th>会议室</th><th>卖方券商 / 分析师</th><th>交流主题</th><th class="r">报名</th></tr></thead><tbody>`;
+  w.days.forEach(i=>{
+    const d=DAYS[i], dl=list.filter(x=>x.day===i);
+    h+=`<tr class="grp"><td colspan="5">${d.w} ${d.s}<span>${d.hol?d.hol+'放假':dl.length?dl.length+' 场':'无安排'}</span></td></tr>`;
+    dl.forEach(x=>{h+=`<tr class="row" tabindex="0" data-id="${x.id}"><td class="mono">${timeTxt(x)}${x.lunch?'<div><span class="ltag" style="margin:0">午餐</span></div>':''}</td><td class="mono">${roomName(x.room)}</td>
+      <td class="nw"><b>${esc(x.team.broker)}</b><div class="sub2">${esc(whoT(x.team))}</div></td><td>${esc(x.theme)}</td><td class="r mono">${x.regs.length}${x.done?'':'<div class="sub2">待召开</div>'}</td></tr>`});
+  });
+  h+=`</tbody></table></div><div class="iside">`;
+  h+=`<div class="panel"><h3>${esc(st.ind)}研究团队</h3><div class="sub">点击查看该团队本周路演</div>`+
+    teams.map(t=>[t,all.filter(x=>x.team.id===t.id).length]).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`<div class="teamrow" tabindex="0" data-team="${esc(t.id)}" aria-pressed="${st.team===t.id}"><div class="tn"><b>${esc(t.broker)}</b> ${esc(who(t))}</div><span class="ct">${n} 场</span></div>`).join('')+`</div>`;
+  h+=`<div class="panel"><h3>本周专家交流与反路演</h3><div class="sub">同属${esc(st.ind)}，不计入路演场次</div><div class="mini">`+
+    (spec.length?spec.map(x=>`<div class="it click" tabindex="0" data-id="${x.id}"><div>${ttag(x.type)} ${esc(headline(x))}<div class="s2">${DAYS[x.day].w} ${SLOTS[x.slot][0]} · ${esc(teamLabel(x.team))}</div></div><span class="num s2">${x.regs.length}人</span></div>`).join(''):'<div class="none">本周无相关安排</div>')+`</div></div>`;
+  const pc=countBy(all.flatMap(s=>s.regs),x=>x);
+  const top=[...pc].sort((a,b)=>b[1]-a[1]).slice(0,8);
+  h+=`<div class="panel"><h3>主要报名人</h3><div class="sub">本周本行业路演报名最多的内部人员</div><div class="mini">`+
+    (top.length?top.map(([id,n])=>{const p=P[id];return `<div class="it click" tabindex="0" data-pid="${id}"><div>${esc(p.name)} <span class="s2">${esc(p.dept)} · ${esc(p.role)}</span></div><span class="num s2">${n} 场</span></div>`}).join(''):'<div class="none">暂无报名</div>')+`</div></div></div></div>`;
+  $('#ipanel').innerHTML=h;
+}
+
+function renderStats(){
+  const sc=scope(), L=sc.list, Rd=L.filter(x=>x.type==='road');
+  $('#periodS').innerHTML=periodHTML(sc);
+  const total=L.length, cap=sc.work.length*DAYCAP, tc=countBy(L,x=>x.type);
+  const byInd=new Map(INDUSTRIES.map(i=>[i.n,Rd.filter(x=>x.ind===i.n).length]));
+  const indSorted=[...byInd].sort((a,b)=>b[1]-a[1]);
+  const byTeam=[...countBy(Rd,x=>x.team.id)].map(([id,n])=>{const [ind]=id.split('|');return [TEAMS[ind].find(t=>t.id===id),n]}).sort((a,b)=>b[1]-a[1]);
+  const byBroker=[...countBy(L,x=>x.team.broker)].sort((a,b)=>b[1]-a[1]);
+  const bySlot=SLOTS.map((_,i)=>L.filter(x=>x.slot===i).length);
+  const bySec=SECTORS.map(s=>[s,Rd.filter(x=>x.sec===s.id).length]);
+  const hb=sc.heat.map(b=>{const set=new Set(b.days);return L.filter(x=>set.has(x.day)).length});
+  const bi=hb.indexOf(Math.max(...hb));
+  const maxI=Math.max(1,indSorted[0][1]);
+  const prevN=sc.prev?inDays(sc.prev.days).length:null;
+  const onl=L.filter(x=>x.online).length, lun=L.filter(x=>x.lunch).length;
+  let h=`<div class="kpis">
+    <div class="kpi"><div class="l">日程总数</div><div class="v">${total}<small>场</small></div><div class="s">日均 ${(total/sc.work.length).toFixed(1)} 场${delta(total,prevN,sc.prev?.l)}</div></div>
+    <div class="kpi"><div class="l">路演 / 专家 / 反路演</div><div class="v" style="font-size:18px;line-height:1.8">${tc.get('road')||0} / ${tc.get('expert')||0} / ${tc.get('corp')||0}</div><div class="s">其中午餐路演 ${lun} 场</div></div>
+    <div class="kpi"><div class="l">会议室使用率</div><div class="v">${pct(total,cap)}<small>%</small></div><div class="s">线上会议 ${onl} 场 · 占 ${pct(onl,total)}%</div></div>
+    <div class="kpi"><div class="l">来访券商</div><div class="v">${byBroker.length}<small>家</small></div><div class="s">${esc(byBroker[0][0])} 最多 ${byBroker[0][1]} 场</div></div>
+    <div class="kpi"><div class="l">来访研究团队</div><div class="v">${byTeam.length}<small>个</small></div><div class="s">共 ${INDUSTRIES.length*10} 个团队</div></div>
+    <div class="kpi"><div class="l">路演最多行业</div><div class="v" style="font-family:var(--sans)">${esc(indSorted[0][0])}</div><div class="s">${indSorted[0][1]} 场 · 占路演 ${pct(indSorted[0][1],Rd.length)}%</div></div>
+  </div><div class="panels">`;
+  if(sc.kind!=='周'){
+    const tv=sc.trend.map(b=>inDays(b.days)), mx=Math.max(...tv.map(t=>t.length));
+    h+=`<div class="panel c12"><h3>日程走势</h3><div class="sub">按周统计，柱内分为卖方路演 / 专家交流 / 反路演；柱下为该周报名人次</div>
+      <div class="keyrow"><span><i style="background:var(--accent)"></i>卖方路演</span><span><i style="background:var(--exp-ink)"></i>专家交流</span><span><i style="background:var(--corp-ink)"></i>上市公司反路演</span></div>
+      <div class="vbars" style="grid-template-columns:repeat(${tv.length},minmax(0,1fr))">${tv.map(t=>{const c=countBy(t,x=>x.type);const seg=(k,bg)=>{const v=c.get(k)||0;return v?`<span style="display:block;height:${v/t.length*100}%;background:${bg}"></span>`:''};return `<div class="vb"><span class="n">${t.length}</span><span class="col" style="height:${t.length/mx*85}%;display:flex;flex-direction:column-reverse;background:transparent;overflow:hidden">${seg('road','var(--accent)')}${seg('expert','var(--exp-ink)')}${seg('corp','var(--corp-ink)')}</span></div>`}).join('')}</div>
+      <div class="vlabels" style="grid-template-columns:repeat(${tv.length},minmax(0,1fr))">${sc.trend.map((b,i)=>`<span>${b.l}<br>${b.l2}<br><span style="color:var(--ink)">${regN(tv[i])}</span></span>`).join('')}</div></div>`;
+  }
+  h+=`<div class="panel c7"><h3>行业卖方路演场次</h3><div class="sub">按行业大类分组；点击查看该行业所选周明细</div>`+
+    SECTORS.map(s=>`<div class="hgroup" style="--c:var(${s.c})"><i></i>${s.name}</div>`+
+      INDUSTRIES.filter(i=>i.s===s.id).sort((a,b)=>byInd.get(b.n)-byInd.get(a.n)).map(i=>{const v=byInd.get(i.n);
+        return `<div class="hbar click" data-goind="${esc(i.n)}" tabindex="0" style="grid-template-columns:118px minmax(0,1fr) 34px"><span class="t">${esc(i.n)}</span><span class="track"><span class="fill" style="width:${v/maxI*100}%;--c:var(${s.c})"></span></span><span class="n">${v}</span></div>`}).join('')).join('')+`</div>`;
+  const maxTc=Math.max(1,...['road','expert','corp'].map(t=>tc.get(t)||0)), maxSec=Math.max(1,...bySec.map(e=>e[1])), maxT=byTeam.length?byTeam[0][1]:1;
+  const slotCap=i=>sc.work.length*(i===LUNCH?ONSITE.length:ROOMS.length);
+  h+=`<div class="panel c5"><h3>日程类型构成</h3><div class="sub">场次与报名人次</div>`+
+    ['road','expert','corp'].map(t=>{const l=L.filter(x=>x.type===t);return `<div class="hbar" style="grid-template-columns:110px minmax(0,1fr) 40px"><span class="t">${ttag(t)}</span><span class="track"><span class="fill" style="width:${l.length/maxTc*100}%;--c:${t==='road'?'var(--accent)':t==='expert'?'var(--exp-ink)':'var(--corp-ink)'}"></span></span><span class="n">${l.length}</span></div><div class="sub" style="margin:0 0 6px 118px">报名 ${regN(l)} 人次 · 场均 ${(regN(l)/(l.length||1)).toFixed(1)} 人</div>`}).join('')+
+    `<h3 style="margin-top:14px">路演大类分布</h3><div class="sub">八大类卖方路演占比</div>`+
+    `<div style="display:flex;height:16px;border-radius:4px;overflow:hidden;margin-bottom:10px">${bySec.map(([s,v])=>`<span title="${s.name} ${v}" style="width:${v/(Rd.length||1)*100}%;background:var(${s.c})"></span>`).join('')}</div>`+
+    bySec.map(([s,v])=>`<div class="hbar"><span class="t">${s.name}</span><span class="track"><span class="fill" style="width:${v/maxSec*100}%;--c:var(${s.c})"></span></span><span class="n">${pct(v,Rd.length)}%</span></div>`).join('')+
+    `<h3 style="margin-top:18px">研究团队路演 Top 10</h3><div class="sub">来访路演场次最多的卖方研究团队</div>`+
+    byTeam.slice(0,10).map(([t,v])=>`<div class="hbar" style="grid-template-columns:150px minmax(0,1fr) 30px"><span class="t" title="${esc(t.ind)}">${esc(teamLabel(t))}</span><span class="track"><span class="fill" style="width:${v/maxT*100}%;--c:var(--accent)"></span></span><span class="n">${v}</span></div>`).join('')+
+    `<h3 style="margin-top:18px">时段热度</h3><div class="sub">各时段已排日程占可用会议室的比例</div>`+
+    `<div class="vbars" style="grid-template-columns:repeat(9,minmax(0,1fr))">${bySlot.map((v,i)=>`<div class="vb"><span class="n">${pct(v,slotCap(i))}%</span><span class="col" style="height:${v/slotCap(i)*85}%;${i===LUNCH?'background:var(--warn)':''}"></span></div>`).join('')}</div>`+
+    `<div class="vlabels" style="grid-template-columns:repeat(9,minmax(0,1fr))">${SLOTS.map((s,i)=>`<span>${i===LUNCH?'午餐':s[0]}</span>`).join('')}</div></div>`;
+  const cells=INDUSTRIES.map(i=>sc.heat.map(b=>{const set=new Set(b.days);return Rd.filter(x=>x.ind===i.n&&set.has(x.day)).length}));
+  const maxCell=Math.max(1,...cells.flat());
+  const hdr=sc.heat.map(b=>`<th>${b.l}${b.l2?`<br><span style="font-family:var(--mono);font-size:11px">${b.l2}</span>`:''}</th>`).join('');
+  h+=`<div class="panel c12"><h3>行业 × ${sc.unit}</h3><div class="sub">各行业卖方路演场次，颜色越深场次越多</div><div class="tscroll"><table class="heat"><thead><tr><th class="rl">大类</th><th class="rl">行业</th><th class="rl">来访团队</th>${hdr}<th>合计</th></tr></thead><tbody>`+
+    SECTORS.map(s=>{const inds=INDUSTRIES.filter(i=>i.s===s.id);return inds.map((i,k)=>{const row=cells[INDUSTRIES.indexOf(i)];const nt=new Set(Rd.filter(x=>x.ind===i.n).map(x=>x.team.id)).size;return `<tr>${k===0?`<th class="rl" rowspan="${inds.length}" style="vertical-align:top;color:var(${s.c})">${s.name}</th>`:''}<th class="rl">${esc(i.n)}</th><td class="z" style="font-family:var(--mono)">${nt}/10</td>${row.map(v=>v?`<td style="background:color-mix(in srgb,var(${s.c}) ${Math.round(12+v/maxCell*55)}%,transparent)">${v}</td>`:`<td class="z">·</td>`).join('')}<td><b>${byInd.get(i.n)}</b></td></tr>`}).join('')}).join('')+
+    `</tbody></table></div></div>`;
+  h+=`<div class="panel c12"><h3>会议室 × ${sc.unit}使用率</h3><div class="sub">已排日程 ÷ 可用时段（现场会议室每日 9 个时段含午餐，线上会议室每日 8 个）</div><div class="tscroll"><table class="heat"><thead><tr><th class="rl">${sc.unit==='日'?'日期':sc.unit}</th>${ROOMS.map(r=>`<th>${rlabel(r)}<br><span style="font-size:11px;${isOnlineRoom(r)?'color:var(--accent)':''}">${isOnlineRoom(r)?'线上':'现场'}</span></th>`).join('')}<th>合计</th></tr></thead><tbody>`+
+    sc.heat.map((b,k)=>{const wd=workDays(b.days).length,set=new Set(b.days);
+      if(!wd)return `<tr><th class="rl">${b.l} ${b.l2}</th><td colspan="${ROOMS.length+1}" class="z">放假</td></tr>`;
+      return `<tr><th class="rl">${b.l} ${b.l2}</th>${ROOMS.map(r=>{const v=L.filter(x=>set.has(x.day)&&x.room===r).length/(wd*roomCap(r));return `<td style="background:color-mix(in srgb,var(--accent) ${Math.round(6+v*50)}%,transparent)">${Math.round(v*100)}%</td>`}).join('')}<td><b>${pct(hb[k],wd*DAYCAP)}%</b></td></tr>`}).join('')+
+    `</tbody></table></div></div></div>`;
+  $('#statsBody').innerHTML=h;
+}
+
+function personStats(L){
+  const m=new Map(P.map(p=>[p.id,{p,reg:0,pend:0,ind:new Map(),types:{road:0,expert:0,corp:0}}]));
+  L.forEach(s=>s.regs.forEach(pid=>{const o=m.get(pid);o.reg++;if(!s.done)o.pend++;o.types[s.type]++;o.ind.set(s.ind,(o.ind.get(s.ind)||0)+1)}));
+  return [...m.values()].map(o=>({...o,inds:[...o.ind].sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0])}));
+}
+function renderPeople(){
+  const sc=scope(), L=sc.list, total=regN(L);
+  $('#periodP').innerHTML=periodHTML(sc);
+  const ps=personStats(L), active=ps.filter(x=>x.reg>0).length;
+  const pend=regN(L.filter(s=>!s.done)), zero=L.filter(s=>!s.regs.length).length;
+  const prevR=sc.prev?regN(inDays(sc.prev.days)):null;
+  const indR=INDUSTRIES.map(i=>[i,L.filter(x=>x.ind===i.n)]).map(([i,l])=>[i,regN(l),l.length]);
+  const topInd=indR.slice().sort((a,b)=>b[1]-a[1])[0];
+  const hot=L.slice().sort((a,b)=>b.regs.length-a.regs.length).slice(0,10);
+  let h=`<div class="kpis">
+    <div class="kpi"><div class="l">报名人次</div><div class="v">${total}</div><div class="s">${L.length} 场日程${delta(total,prevR,sc.prev?.l)}</div></div>
+    <div class="kpi"><div class="l">场均报名</div><div class="v">${(total/(L.length||1)).toFixed(1)}<small>人</small></div><div class="s">零报名日程 ${zero} 场</div></div>
+    <div class="kpi"><div class="l">报名人数（去重）</div><div class="v">${active}<small>/ ${P.length}</small></div><div class="s">覆盖 ${DEPTS.length} 个部门</div></div>
+    <div class="kpi"><div class="l">人均报名</div><div class="v">${active?(total/active).toFixed(1):'—'}<small>场</small></div><div class="s">按有报名的人员计</div></div>
+    <div class="kpi"><div class="l">报名最多行业</div><div class="v" style="font-family:var(--sans)">${esc(topInd[0].n)}</div><div class="s">${topInd[1]} 人次 · ${topInd[2]} 场</div></div>
+    <div class="kpi"><div class="l">待召开日程报名</div><div class="v">${pend}</div><div class="s">${L.filter(s=>!s.done).length} 场尚未召开</div></div>
+  </div><div class="panels">`;
+  const maxIR=Math.max(1,...indR.map(e=>e[1]));
+  h+=`<div class="panel c6"><h3>各行业报名人次</h3><div class="sub">含该行业的卖方路演、专家交流与上市公司反路演；右侧为 报名人次 / 场次</div>`+
+    SECTORS.map(s=>`<div class="hgroup" style="--c:var(${s.c})"><i></i>${s.name}</div>`+indR.filter(e=>e[0].s===s.id).map(([i,r,n])=>
+      `<div class="hbar click" data-goind="${esc(i.n)}" tabindex="0" style="grid-template-columns:118px minmax(0,1fr) 72px"><span class="t">${esc(i.n)}</span><span class="track"><span class="fill" style="width:${r/maxIR*100}%;--c:var(${s.c})"></span></span><span class="n">${r} / ${n}</span></div>`).join('')).join('')+`</div>`;
+  const tA=['road','expert','corp'].map(t=>{const l=L.filter(x=>x.type===t);return [t,regN(l),l.length]}), maxTR=Math.max(1,...tA.map(e=>e[1]));
+  h+=`<div class="panel c6"><h3>各类型报名</h3><div class="sub">报名人次与场均报名</div>`+
+    tA.map(([t,r,n])=>`<div class="hbar" style="grid-template-columns:110px minmax(0,1fr) 72px"><span class="t">${ttag(t)}</span><span class="track"><span class="fill" style="width:${r/maxTR*100}%;--c:${t==='road'?'var(--accent)':t==='expert'?'var(--exp-ink)':'var(--corp-ink)'}"></span></span><span class="n">${r}<br><span style="font-size:11px">场均 ${(r/(n||1)).toFixed(1)}</span></span></div>`).join('');
+  const dstat=DEPTS.map(d=>[d,ps.filter(x=>x.p.dept===d).reduce((a,x)=>a+x.reg,0),P.filter(p=>p.dept===d).length]), maxD=Math.max(1,...dstat.map(e=>e[1]));
+  h+=`<h3 style="margin-top:18px">各部门报名</h3><div class="sub">报名人次与人均报名</div>`+
+    dstat.map(([d,r,n])=>`<div class="hbar" style="grid-template-columns:92px minmax(0,1fr) 72px"><span class="t">${d}</span><span class="track"><span class="fill" style="width:${r/maxD*100}%;--c:var(--accent)"></span></span><span class="n">${r}<br><span style="font-size:11px">人均 ${(r/n).toFixed(1)}</span></span></div>`).join('');
+  h+=`<h3 style="margin-top:18px">按${sc.unit}报名</h3><div class="sub">${sc.title}</div><div class="tscroll"><table class="tbl"><thead><tr><th>${sc.unit==='日'?'日期':sc.unit}</th><th class="r">日程</th><th class="r">报名人次</th><th class="r">场均</th></tr></thead><tbody>`+
+    sc.heat.map(b=>{const l=inDays(b.days),r=regN(l),wd=workDays(b.days).length;return `<tr><td class="nw">${b.l} ${b.l2}</td>${wd?`<td class="r mono">${l.length}</td><td class="r mono">${r}</td><td class="r mono">${(r/(l.length||1)).toFixed(1)}</td>`:'<td colspan="3" class="sub2">放假</td>'}</tr>`}).join('')+`</tbody></table></div>`;
+  h+=`<h3 style="margin-top:18px">报名最多的日程</h3><div class="sub">点击查看报名名单</div><div class="mini">`+
+    hot.map(s=>`<div class="it click" tabindex="0" data-id="${s.id}"><div>${s.type==='road'?chip(s.ind):ttag(s.type)} ${esc(headline(s))}<div class="s2">${esc(teamLabel(s.team))} · ${DAYS[s.day].s} ${DAYS[s.day].w} ${SLOTS[s.slot][0]} · ${roomName(s.room)}</div></div><span class="num s2">${s.regs.length}人</span></div>`).join('')+`</div></div>`;
+  h+=`<div class="panel c12"><h3>报名人明细</h3><div class="sub">${sc.title}每位内部人员的报名情况；点击姓名查看其报名日程</div>
+    <div class="ptools"><input id="pq" type="search" placeholder="搜索姓名或覆盖行业" value="${esc(st.pq)}" aria-label="搜索报名人">
+    <select id="pdept" aria-label="部门筛选"><option value="all">全部部门</option>${DEPTS.map(d=>`<option value="${d}"${st.pdept===d?' selected':''}>${d}</option>`).join('')}</select></div>
+    <div class="tscroll" id="ptable"></div></div></div>`;
+  $('#peopleBody').innerHTML=h;
+  renderPTable();
+}
+function renderPTable(){
+  const sc=scope();
+  let ps=personStats(sc.list).filter(x=>(st.pdept==='all'||x.p.dept===st.pdept)&&(!st.pq||x.p.name.includes(st.pq)||x.p.cover.includes(st.pq)||x.inds.some(i=>i.includes(st.pq))));
+  const key={name:x=>x.p.name,reg:x=>x.reg}[st.psort];
+  ps.sort((a,b)=>{const va=key(a),vb=key(b);return (va>vb?1:va<vb?-1:0)*st.pdir||b.reg-a.reg});
+  const th=(k,l,cls='')=>`<th class="sort ${cls}" data-psort="${k}"${st.psort===k?` aria-sort="${st.pdir<0?'descending':'ascending'}"`:''}>${l}${st.psort===k?(st.pdir<0?' ↓':' ↑'):''}</th>`;
+  $('#ptable').innerHTML=`<table class="tbl"><thead><tr>${th('name','姓名')}<th>部门</th><th>职务</th><th>覆盖方向</th>${th('reg','报名','r')}<th class="r">路演 / 专家 / 反路演</th><th class="r">待召开</th><th>主要报名行业</th></tr></thead><tbody>`+
+    (ps.length?ps.map(x=>`<tr class="row" tabindex="0" data-pid="${x.p.id}"><td class="nw"><b>${esc(x.p.name)}</b></td><td class="nw">${x.p.dept}</td><td class="nw">${x.p.role}</td><td>${esc(x.p.cover)}</td>
+      <td class="r mono">${x.reg}</td><td class="r mono">${x.types.road} / ${x.types.expert} / ${x.types.corp}</td><td class="r mono">${x.pend||'—'}</td><td>${x.inds.map(chip).join(' ')||'<span class="sub2">—</span>'}</td></tr>`).join(''):`<tr><td colspan="8" class="none">没有符合条件的人员</td></tr>`)+`</tbody></table>`;
+}
+
+/* ---------- detail sheets ---------- */
+let lastFocus=null;
+function openSheet(html){lastFocus=document.activeElement;$('#sheet').innerHTML=`<button class="x" id="closeSheet" aria-label="关闭">×</button>`+html;$('#sheet').hidden=false;$('#scrim').hidden=false;$('#sheet').scrollTop=0;$('#closeSheet').focus()}
+function regsBlock(x){
+  const regs=x.regs.slice().sort((a,b)=>DEPTS.indexOf(P[a].dept)-DEPTS.indexOf(P[b].dept));
+  return `<h4><span>报名名单（${regs.length}）</span><span>${x.done?'已召开':'待召开'}</span></h4>
+    <div class="box">${regs.length?`<table class="tbl"><thead><tr><th>姓名</th><th>部门</th><th>职务 / 覆盖</th></tr></thead><tbody>`+
+      regs.map(pid=>{const p=P[pid];return `<tr class="row" tabindex="0" data-pid="${p.id}"><td class="nw"><b>${esc(p.name)}</b></td><td class="nw">${p.dept}</td><td>${p.role}<div class="sub2">${esc(p.cover)}</div></td></tr>`}).join('')+`</tbody></table>`:'<div class="none">本场暂无报名</div>'}</div>`;
+}
+function whenRows(x){
+  return `<dt>日期</dt><dd class="mono">${DAYS[x.day].d}（${DAYS[x.day].w}）</dd>
+    <dt>时间</dt><dd class="mono">${timeTxt(x)}${x.lunch?' <span class="ltag">午餐路演</span>':''}</dd>
+    <dt>会议室</dt><dd>${x.online?`${rlabel(x.room)}（线上会议）`:`<span class="mono">${x.room}</span> 现场会议室`}</dd>`;
+}
+function orgRows(x,label){
+  const t=x.team;
+  return `<dt>${label}</dt><dd><b>${esc(t.broker)}</b> ${esc(who(t))}${t.name?'（'+esc(x.ind)+esc(titleOf(t))+'）':''}</dd>`;
+}
+function openDetail(id){
+  const x=S[id];
+  if(x.type==='road'){
+    openSheet(`<div>${ttag('road')} ${chip(x.ind)}</div><h2 id="sheetTitle">${esc(x.theme)}</h2>
+      <dl>${whenRows(x)}${orgRows(x,'卖方团队')}<dt>行业</dt><dd>${secOf(x.sec).name} › ${esc(x.ind)}</dd><dt>关键词</dt><dd>${x.kw.map(k=>`<span class="kw">${esc(k)}</span>`).join('')}</dd></dl>
+      <h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>
+      ${regsBlock(x)}
+      <button class="linkbtn" data-goind="${esc(x.ind)}" data-gowk="${DAYS[x.day].wk}">查看${esc(x.ind)}当周全部路演 →</button>`);
+  }else if(x.type==='expert'){
+    openSheet(`<div>${chip(x.ind)} ${ttag('expert')}</div><h2 id="sheetTitle">${esc(x.theme)}</h2>
+      <dl>${whenRows(x)}${orgRows(x,'组织券商')}<dt>出席专家</dt><dd><b>${esc(x.ex.who)}</b></dd></dl>
+      <h4><span>专家背景</span></h4><div class="bio">${esc(x.ex.bg)}</div>
+      <h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>
+      <h4><span>核心交流内容</span></h4><ol class="pts">${x.ex.pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ol>
+      ${regsBlock(x)}`);
+  }else{
+    openSheet(`<div>${chip(x.ind)} ${ttag('corp')}</div><h2 id="sheetTitle">${esc(x.co.name)}反路演</h2>
+      <dl>${whenRows(x)}<dt>公司</dt><dd><b>${esc(x.co.name)}</b> <span class="mono">${x.co.code}</span></dd>${orgRows(x,'组织券商')}</dl>
+      <h4><span>公司出席领导</span><span>以公司最终确认为准</span></h4>
+      <div class="leaders">${x.co.leaders.map(l=>`<div><b>${esc(l)}</b><span>${esc(x.co.name)}</span></div>`).join('')}</div>
+      <h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>
+      ${regsBlock(x)}`);
+  }
+}
+function openPerson(pid){
+  const p=P[pid], sc=scope();
+  const rs=sc.list.filter(s=>s.regs.includes(pid));
+  openSheet(`<div style="font-size:12px;color:var(--muted)">${p.dept}</div><h2 id="sheetTitle">${esc(p.name)}</h2>
+    <dl><dt>职务</dt><dd>${p.role}</dd><dt>覆盖方向</dt><dd>${esc(p.cover)}</dd><dt>区间报名</dt><dd class="mono">${rs.length} 场（${sc.title}）</dd></dl>
+    <h4><span>报名日程</span></h4>
+    <div class="box">${rs.length?`<table class="tbl"><thead><tr><th>时间</th><th>日程</th></tr></thead><tbody>`+
+      rs.map(s=>`<tr class="row" tabindex="0" data-id="${s.id}"><td class="mono">${DAYS[s.day].s} ${DAYS[s.day].w}<div class="sub2">${SLOTS[s.slot][0]} · ${roomName(s.room)}</div></td><td>${s.type==='road'?chip(s.ind):ttag(s.type)} <b>${esc(headline(s))}</b><div class="sub2">${esc(teamLabel(s.team))}${s.done?'':' · 待召开'}</div></td></tr>`).join('')+`</tbody></table>`:'<div class="none">该区间未报名</div>'}</div>`);
+}
+function closeDetail(){$('#sheet').hidden=true;$('#scrim').hidden=true;if(lastFocus&&lastFocus.focus&&document.contains(lastFocus))lastFocus.focus()}
+
+
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-view],[data-day],[data-tf],[data-sector],[data-sub],[data-mode],[data-layout],[data-isec],[data-ind],[data-team],[data-id],[data-pid],[data-goind],[data-psort],[data-period],#closeSheet,#scrim,#wkPrev,#wkNext');
+  if(!t||t.disabled)return;
+  const d=t.dataset;
+  if(t.id==='closeSheet'||t.id==='scrim')return closeDetail();
+  if(t.id==='wkPrev')return setWeek(st.wk-1);
+  if(t.id==='wkNext')return setWeek(st.wk+1);
+  if(d.view)return setView(d.view);
+  if(d.period){st.period=d.period;return render()}
+  if(d.day!=null){st.day=+d.day;return renderDate()}
+  if(d.tf){st.tf=d.tf;return renderDate()}
+  if(d.sector){st.sector=d.sector;st.sub='all';return renderDate()}
+  if(d.sub){st.sub=d.sub;return renderDate()}
+  if(d.mode){st.mode=d.mode;return renderDate()}
+  if(d.layout){st.layout=d.layout;return renderDate()}
+  if(d.isec){st.isec=d.isec;st.team=null;return renderIndustry()}
+  if(d.ind){st.ind=d.ind;st.team=null;return renderIndustry()}
+  if(d.team!=null){st.team=d.team&&st.team!==d.team?d.team:null;return renderIndustry()}
+  if(d.goind){st.ind=d.goind;st.isec=indOf(d.goind).s;st.team=null;if(d.gowk!=null&&+d.gowk!==st.wk){st.wk=+d.gowk;st.day=workDays(weekOf().days)[0]}closeDetail();return setView('industry')}
+  if(d.psort){if(st.psort===d.psort)st.pdir*=-1;else{st.psort=d.psort;st.pdir=d.psort==='name'?1:-1}return renderPTable()}
+  if(d.pid!=null)return openPerson(+d.pid);
+  if(d.id!=null)return openDetail(+d.id);
+});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='pq'){st.pq=t.value.trim();renderPTable()}
+  else if(t.id==='pdept'){st.pdept=t.value;renderPTable()}
+  else if(t.id==='wkSel'){setWeek(+t.value)}
+  else if(t.classList.contains('monthSel')){st.month=+t.value;render()}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!$('#sheet').hidden)return closeDetail();
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-id],[data-pid],[data-team],.hbar[data-goind]')){e.preventDefault();e.target.click()}
+});
+const h0=(location.hash||'').slice(1);
+setView(['date','industry','stats','people'].includes(h0)?h0:'date');
+})();
+</script>
+
+</body>
+</html>
