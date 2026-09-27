@@ -713,7 +713,7 @@ INDUSTRIES.forEach(ind=>{
   TEAMS[ind.n]=list;
 });
 const TITLE_SPECIAL={'宏观经济':'首席经济学家','策略研究':'首席策略分析师','固定收益':'首席固收分析师','金融工程':'首席金工分析师','海外市场':'首席海外分析师'};
-const titleOf=t=>t.name?(TITLE_SPECIAL[t.ind]||'首席分析师'):'';
+const titleOf=t=>t.name?(t.title||TITLE_SPECIAL[t.ind]||'首席分析师'):'';
 const whoT=t=>t.name?`${t.name} · ${titleOf(t)}`:'研究团队';
 const who=t=>t.name||'研究团队';
 const awardTags=t=>t.aw.length?t.aw.map(a=>`<span class="award ${AWD[a.k][0]}">${AWD[a.k][1]} 第${a.r}名</span>`).join(''):'<span class="award">未列入上述评选前列</span>';
@@ -837,18 +837,19 @@ const ri=n=>Math.floor(rnd()*n);
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=ri(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 const wpickN=(arr,n)=>{const pool=arr.slice(),out=[];while(out.length<n&&pool.length){const tot=pool.reduce((s,x)=>s+x.w,0);let r=rnd()*tot,i=0;for(;i<pool.length;i++){r-=pool[i].w;if(r<=0)break}out.push(pool.splice(Math.min(i,pool.length-1),1)[0])}return out};
 
-/* ---------- 国投证券研究所：按公开研报署名整理的各行业分析师 ---------- */
+/* ---------- 国投证券研究所：按2026年公开晨会/周报署名整理的各行业分析师（未检索到公开署名的行业仅标注研究团队） ---------- */
 const GT_BROKER='国投证券';
-const GT={'策略研究':'x','固定收益':'x','金融工程':'x','非银行金融':'x','电子':'x','计算机':'x','医药生物':'x','食品饮料':'x','家电':'x','轻工和纺织服装':'x','农林牧渔':'x','化工':'x','金属和金属新材料':'x','机械':'x','国防军工':'x','公用事业':'x','环保':'x','建筑和工程':'x','非金属类建材':'x','房地产':'x'};
+const GT={'策略研究':'x','固定收益':'x','金融工程':'x','非银行金融':'x','电子':'x','计算机':'x','医药生物':'x','食品饮料':'x','家电':'x','轻工和纺织服装':'x','农林牧渔':'x','化工':'x','金属和金属新材料':'x','机械':'x','国防军工':'x','公用事业':'x','环保':'x','建筑和工程':'x','非金属类建材':'x','房地产':'x','能源开采':'x','新能源和电力设备':'x'};
+const GT_TITLE={'策略研究':'首席策略分析师','金融工程':'首席金工分析师','固定收益':'首席固收分析师','电子':'联席首席分析师','计算机':'首席分析师','医药生物':'首席分析师','金属和金属新材料':'首席分析师','建筑和工程':'首席分析师','非金属类建材':'首席分析师','房地产':'首席分析师','化工':'首席分析师','农林牧渔':'首席分析师','公用事业':'首席分析师','环保':'首席分析师'};
 Object.entries(GT).forEach(([ind,name])=>{const L=TEAMS[ind];let t=L.find(x=>x.broker===GT_BROKER);
   if(!t){t=L.find(x=>!x.name);if(t)t.broker=GT_BROKER;else{t={broker:GT_BROKER,aw:[],ind,id:ind+'|'+L.length};L.push(t)}}
-  t.name=mkName(hash('anon|'+GT_BROKER+'|'+ind));t.w=1.1;t.gt=true});
+  t.name=mkName(hash('anon|'+GT_BROKER+'|'+ind));t.w=1.1;t.gt=true;t.title=GT_TITLE[ind]||'行业分析师'});
 const GT_TH={
  '策略研究':[T('A股抓主线方法论：趋势、抱团与切换',['主线','抱团']),T('科技投资四阶段与高切低',['科技','高切低'])],
  '固定收益':[T('资本回报率视角下的利率中枢',['资本回报率','利率中枢'])],
  '金融工程':[T('A股调整阶段的均衡配置与量化择时',['择时','均衡配置'])],
  '非银行金融':[T('险企权益增配与分红水平展望',['寿险价值','权益配置']),T('券商自营与财富管理生态',['自营','财富管理'])],
- '电子':[T('AI算力硬件：硅光引擎与数据中心电源',['硅光','AIDC电源']),T('SiC产线重启与功率半导体',['SiC','功率半导体'])],
+ '电子':[T('AI算力硬件：光芯片与CPO',['光芯片','CPO']),T('载板涨价与数据中心电源',['载板','AIDC电源'])],
  '计算机':[T('国家算力网与国产算力',['算力网','国产算力']),T('工业AI与AI编程商业化',['工业AI','AI编程'])],
  '医药生物':[T('创新药业绩拐点与ASCO数据前瞻',['创新药','ASCO']),T('CXO与生命科学服务业绩改善',['CXO','生命科学'])],
  '食品饮料':[T('白酒筑底与渠道调整',['白酒','渠道']),T('乳品与饮料企业经营改革',['乳制品','饮料'])],
@@ -863,7 +864,9 @@ const GT_TH={
  '环保':[T('北交所深化改革与环保公用配置',['北交所','配置价值'])],
  '建筑和工程':[T('建筑央企现金流改善与分红',['现金流','分红']),T('洁净室与煤化工工程机会',['洁净室','煤化工'])],
  '非金属类建材':[T('消费建材涨价与格局优化',['涨价','C端'])],
- '房地产':[T('城市更新与产业地产',['城市更新','产业投资'])]
+ '房地产':[T('城市更新与产业地产',['城市更新','产业投资']),T('龙头房企经营韧性',['销售','拿地'])],
+ '能源开采':[T('电改深化与煤电一体化成本优势',['煤电一体化','电改'])],
+ '新能源和电力设备':[T('风电盈利修复与太空光伏布局',['风电','太空光伏'])]
 };
 const GT_CORPS=[
   C('三一重工','600031.SH','机械',['国内外挖机需求共振','海外收入占比与利润率','经营质量与现金流'],['董事会秘书','投资者关系负责人']),
@@ -1034,7 +1037,7 @@ function brief(s){
 
 /* ---------- state ---------- */
 const DEFAULT_WK=Math.max(0,WEEKS.findIndex(w=>w.days.some(i=>DAYS[i].d>=TODAY&&!DAYS[i].hol&&!DAYS[i].we)));
-const st={view:'date',wk:DEFAULT_WK,day:workDays(WEEKS[DEFAULT_WK].days)[0]??WEEKS[DEFAULT_WK].days[0],tf:'all',mode:'all',layout:'expand',sector:'all',sub:'all',isec:'all',ind:'all',team:null,pending:null,entryMode:'add',form:null,editKey:null,delKey:null,etf:'all',logU:'all',logA:'all',formMsg:'',period:'week',month:9,q:3,pdept:'all',pq:'',psort:'reg',pdir:-1};
+const st={view:'date',wk:DEFAULT_WK,day:workDays(WEEKS[DEFAULT_WK].days)[0]??WEEKS[DEFAULT_WK].days[0],tf:'all',mode:'all',layout:'expand',sector:'all',sub:'all',isec:'all',ind:'all',team:null,pending:null,entryMode:'add',form:null,editKey:null,delKey:null,etf:'all',logU:'all',logA:'all',formMsg:'',period:'week',month:9,q:3,ssb:'all',pdept:'all',pq:'',psort:'reg',pdir:-1};
 const weekOf=()=>WEEKS[st.wk];
 
 /* ---------- period scope ---------- */
@@ -1314,7 +1317,7 @@ const USERS=[
   {key:'sale',u:'Sale',alias:['sales'],pw:'Sale',label:'卖方销售',name:'国投证券机构销售',dept:'卖方',title:'机构销售',broker:'国投证券',desc:'录入修改 · 周度安排 · 服务统计'}
 ];
 USERS.forEach(u=>{u.pid=P.length;P.push({id:P.length,name:u.name,dept:u.dept,role:u.title,pri:[],sec:[],all:false,cover:u.broker||'—',isUser:true,hide:u.key==='sale'})});
-const ROLE_TABS={manager:['date','industry','people','stats','mine'],admin:['date','industry','people','stats','entry','log','mine'],analyst:['date','industry','mine'],sale:['entry','saleweek','salestats']};
+const ROLE_TABS={manager:['date','industry','mine','people','stats','salestats'],admin:['date','industry','mine','people','stats','salestats','entry','log'],analyst:['date','industry','mine'],sale:['entry','saleweek','salestats']};
 const TAB_LABEL={date:'日期视图',industry:'行业视图',people:'报名情况',stats:'行业统计',entry:'录入管理',log:'活动日志',mine:'我的报名',saleweek:'周度安排',salestats:'服务统计'};
 const VIEWS=['date','industry','people','stats','entry','log','mine','saleweek','salestats'];
 const LEADERS=['董事长','总经理','董事会秘书','财务总监','投资者关系负责人','证券事务代表'];
@@ -1688,10 +1691,11 @@ function colChart(buckets,keys,cols,labels,unit){ // buckets:[{l,l2,v:{k:n}}]
 }
 function hbarRows(rows,mx,unit,col,extra){return rows.map(r=>`<div class="hb2" data-tip="${esc(r.l)}：${r.v}${unit}${r.tip?' · '+esc(r.tip):''}"><span class="t">${esc(r.l)}</span><span class="track"><span class="fill" style="width:${Math.max(r.v?2:0,r.v/mx*100)}%;background:${r.c||col}"></span></span><span class="n">${r.v}</span>${extra?`<span class="n2">${esc(r.x||'')}</span>`:''}</div>`).join('')}
 function renderSaleStats(){
-  const sc=scope(), L=sc.list.filter(s=>s.team.broker===ME.broker);
-  $('#periodSS').innerHTML=periodHTML(sc);
+  const sc=scope(), BR=ME.key==='sale'?ME.broker:(st.ssb||'all'), inB=s=>BR==='all'||s.team.broker===BR, L=sc.list.filter(inB), BRL=BR==='all'?'全部券商':BR;
+  const brokers=[...new Set(sc.list.map(s=>s.team.broker))].sort((a,b)=>a.localeCompare(b,'zh'));
+  $('#periodSS').innerHTML=(ME.key==='sale'?'':`<select id="ssb" aria-label="选择券商"><option value="all">全部券商</option>${brokers.map(b=>`<option value="${esc(b)}"${BR===b?' selected':''}>${esc(b)}</option>`).join('')}</select>`)+periodHTML(sc);
   const regs=regN(L), clients=new Set(L.flatMap(s=>s.regs)), tc=countBy(L,x=>x.type);
-  const prevL=sc.prev?inDays(sc.prev.days).filter(s=>s.team.broker===ME.broker):null;
+  const prevL=sc.prev?inDays(sc.prev.days).filter(inB):null;
   let h=`<div class="kpis">
     <div class="kpi"><div class="l">服务场次</div><div class="v">${L.length}<small>场</small></div><div class="s">路演 ${tc.get('road')||0} · 专家 ${tc.get('expert')||0} · 反路演 ${tc.get('corp')||0}${delta(L.length,prevL?prevL.length:null,sc.prev?.l)}</div></div>
     <div class="kpi"><div class="l">客户报名</div><div class="v">${regs}<small>人次</small></div><div class="s">场均 ${(regs/(L.length||1)).toFixed(1)} 人${delta(regs,prevL?regN(prevL):null,sc.prev?.l)}</div></div>
@@ -1699,7 +1703,7 @@ function renderSaleStats(){
     <div class="kpi"><div class="l">覆盖行业</div><div class="v">${new Set(L.map(s=>s.ind)).size}<small>个</small></div><div class="s">${SECTORS.filter(se=>L.some(s=>s.sec===se.id)).length} 个板块</div></div>
     <div class="kpi"><div class="l">线上占比</div><div class="v">${pct(L.filter(s=>s.online).length,L.length)}<small>%</small></div><div class="s">线上 ${L.filter(s=>s.online).length} · 线下 ${L.filter(s=>!s.online).length}</div></div>
     <div class="kpi"><div class="l">待召开</div><div class="v">${L.filter(s=>!s.done).length}<small>场</small></div><div class="s">可继续邀约客户</div></div></div>`;
-  if(!L.length){$('#ssBody').innerHTML=h+`<div class="card"><div class="none">本统计区间暂无 ${esc(ME.broker)} 组织的安排。</div></div>`;return}
+  if(!L.length){$('#ssBody').innerHTML=h+`<div class="card"><div class="none">本统计区间暂无 ${esc(BRL)} 组织的安排。</div></div>`;return}
   // 1 service form
   const tparts=Object.keys(TYPES).map(k=>({l:TYPES[k],v:tc.get(k)||0,c:TCOL[k],u:' 场'}));
   const formRow=k=>{const l=L.filter(s=>s.type===k),on=l.filter(s=>s.online).length,off=l.length-on;return `<div class="sb"><span class="t">${TYPES[k]}</span><span class="bar">${off?`<span style="flex:${off};background:${FCOL.off}" data-tip="${TYPES[k]} · 线下：${off} 场"></span>`:''}${on?`<span style="flex:${on};background:${FCOL.on}" data-tip="${TYPES[k]} · 线上：${on} 场"></span>`:''}${!l.length?'<span style="flex:1;background:var(--line2)"></span>':''}</span><span class="n">线下 ${off} · 线上 ${on}</span></div>`};
@@ -1709,6 +1713,8 @@ function renderSaleStats(){
   const bk=sc.trend.map(b=>{const set=new Set(b.days),l=L.filter(s=>set.has(s.day));const v={};Object.keys(TYPES).forEach(k=>v[k]=l.filter(s=>s.type===k).length);return {l:b.l,l2:b.l2,v,r:regN(l)}});
   h+=`<div class="panel c7"><h3>服务场次趋势</h3><div class="sub">按${sc.kind==='周'?'日':'周'}统计 · 堆叠显示三类服务</div><div class="lgd row">${Object.keys(TYPES).map(k=>`<div class="li"><i style="background:${TCOL[k]}"></i><span class="t">${TYPES[k]}</span></div>`).join('')}</div>${colChart(bk,Object.keys(TYPES),TCOL,TYPES,' 场')}
     <h3>客户报名趋势</h3><div class="sub">报名人次</div>${colChart(bk.map(b=>({l:b.l,l2:b.l2,v:{r:b.r}})),['r'],{r:'#2A5BA8'},{r:'报名'},' 人次')}</div>`;
+  if(BR==='all'){const bb=brokers.map(b=>{const l=L.filter(s=>s.team.broker===b);return {l:b,v:l.length,x:regN(l)+'',tip:'报名 '+regN(l)+' 人次'}}).filter(r=>r.v).sort((a,b)=>b.v-a.v).slice(0,15);
+    h+=`<div class="panel c12"><h3>券商服务排名</h3><div class="sub">各券商服务场次（前 15）· 右列为报名人次 · 可在左上角选择单个券商查看</div><div class="hbhead"><span></span><span></span><span>场次</span><span>报名</span></div>${hbarRows(bb,Math.max(1,...bb.map(r=>r.v)),' 场','#2A5BA8',true)}</div>`}
   // 3 industry
   const inds=INDUSTRIES.map(i=>{const l=L.filter(s=>s.ind===i.n);return {l:i.n,v:l.length,r:regN(l),c:colorOf(i.n)}}).filter(r=>r.v).sort((a,b)=>b.v-a.v||b.r-a.r);
   const mxI=Math.max(1,...inds.map(r=>r.v));
@@ -1822,6 +1828,7 @@ document.addEventListener('change',e=>{
   const t=e.target;
   if(t.form&&t.form.id==='entryForm'&&!(t.type==='text'||t.tagName==='TEXTAREA')){readForm();st.formMsg='';renderEntry();return}
   if(t.id==='etf'){st.etf=t.value;return renderEntry()}
+  if(t.id==='ssb'){st.ssb=t.value;return renderSaleStats()}
   if(t.id==='logU'){st.logU=t.value;return renderLog()}
   if(t.id==='logA'){st.logA=t.value;return renderLog()}
 });
