@@ -842,6 +842,26 @@ button.mcal-n em{font-style:normal;font-family:var(--mono);font-size:10.5px;colo
 .mg-c .mg-i{padding-right:34px}
 .mg-ok,.mg-n{top:auto!important;bottom:5px;right:6px}
 .mg-c{padding-bottom:18px}
+
+.mbx{background:#fff;border:1px solid var(--line2);border-radius:12px;padding:8px 0 10px;margin-bottom:10px}
+.mbx .mbsec-h{margin:2px 12px 8px}
+.mbx .mbsec-h i{width:8px;height:8px;border-radius:50%}
+.mbx-row{display:flex;gap:8px;overflow-x:auto;padding:0 12px 2px;scrollbar-width:none}
+.mbx-row::-webkit-scrollbar{display:none}
+.mbx-c{flex:0 0 172px;text-align:left;border:1px solid var(--line2);border-left:3px solid #B23A48;background:#FDF6F7;border-radius:10px;padding:8px 9px;display:flex;flex-direction:column;gap:3px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.mbx-corp .mbx-c{border-left-color:#A8822E;background:#FBF8F1}
+.mbx-d{font-family:var(--mono);font-size:11px;color:var(--navy);font-weight:600}
+.mbx-d i{font-style:normal;color:#2E7D5B}
+.mbx-c b{font-size:12.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mbx-c em{font-style:normal;font-size:11px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mbx-c small{font-size:10.5px;color:var(--muted)}
+.mbx-none{font-size:12px;color:var(--faint);padding:4px 12px}
+.mbx-title{font-size:13px;font-weight:600;color:var(--navy);margin:14px 2px 8px;padding-left:8px;border-left:3px solid var(--gold)}
+
+.mbt-h{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.mbgrid.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mbgrid.g2 .mbtile b{font-size:13.5px}
 </style>
 </head>
 <body>
@@ -2123,6 +2143,10 @@ function mBoard(wl){
   const mx=Math.max(1,...INDUSTRIES.map(i=>wl.filter(s=>s.ind===i.n).length));
   const tot=wl.length, tc=countBy(wl,x=>x.type);
   let h=`<div class="mbsum"><div><b>${tot}</b><span>本周日程</span></div><div><b>${tc.get('road')||0}</b><span>卖方路演</span></div><div><b>${tc.get('expert')||0}</b><span>专家交流</span></div><div><b>${tc.get('corp')||0}</b><span>反路演</span></div></div>`;
+  {const ts=[['expert','专家交流','#B23A48'],['corp','上市公司反路演','#A8822E']],cnt=ts.map(([t])=>wl.filter(s=>s.type===t).length),mx2=Math.max(1,...cnt);
+    h+=`<div class="mbsec"><div class="mbsec-h"><i style="background:var(--gold)"></i><b>专家交流 · 反路演</b><span>${cnt[0]+cnt[1]} 场</span></div><div class="mbgrid g2">`+ts.map(([t,lab,col],i)=>{const g=wl.filter(s=>s.type===t),mine=ME&&canReg()?g.filter(s=>s.regs.includes(ME.pid)).length:0;
+      return `<button class="mbtile" data-m="ttile" data-a="${t}|all" style="--c:${col};--k:${Math.round(10+cnt[i]/mx2*26)}%"><b>${lab}</b><em>${g.length}<small>场</small></em><span>涉及 ${new Set(g.map(s=>s.ind)).size} 个行业</span>${AGG()?`<span>报名 ${regN(g)} 人次</span>`:mine?`<span class="okm">我已报名 ${mine}</span>`:''}</button>`}).join('')+`</div></div>`;}
+  h+=`<div class="mbx-title">各行业日程（全部类型）</div>`;
   SECTORS.forEach(se=>{const inds=INDUSTRIES.filter(i=>i.s===se.id),n=wl.filter(s=>s.sec===se.id).length;
     h+=`<div class="mbsec"><div class="mbsec-h"><i style="background:var(${se.c})"></i><b>${se.name}</b><span>${inds.length} 个行业 · ${n} 场</span></div><div class="mbgrid">`+
       inds.map(i=>{const l=wl.filter(s=>s.ind===i.n),c=countBy(l,x=>x.type),k=l.length/mx,mine=ME&&canReg()?l.filter(s=>s.regs.includes(ME.pid)).length:0;
@@ -2157,7 +2181,8 @@ function mInd(){
   h+=`<div class="mchips">${[{id:'all',name:'全部板块'}].concat(SECTORS).map(s=>`<button class="mchip${M.isec===s.id?' on':''}" data-m="isec" data-a="${s.id}">${s.name}</button>`).join('')}</div>`;
   const inds=INDUSTRIES.filter(i=>M.isec==='all'||i.s===M.isec);
   h+=`<div class="mchips sub">${[{n:'all'}].concat(inds).map(i=>{const n=i.n==='all'?wl.filter(s=>M.isec==='all'||s.sec===M.isec).length:wl.filter(s=>s.ind===i.n).length;return `<button class="mchip${M.ind===i.n?' on':''}" data-m="ind" data-a="${esc(i.n)}">${i.n==='all'?'全部行业':esc(i.n)} <i>${n}</i></button>`}).join('')}</div>`;
-  const l=wl.filter(s=>(M.isec==='all'||s.sec===M.isec)&&(M.ind==='all'||s.ind===M.ind));
+  const l=wl.filter(s=>(M.isec==='all'||s.sec===M.isec)&&(M.ind==='all'||s.ind===M.ind)&&(!M.itype||s.type===M.itype));
+  if(M.itype)h+=`<div class="mbar"><span>仅显示：<b>${TYPES[M.itype]}</b></span><button class="mfbtn on" data-m="itype0">显示全部类型</button></div>`;
   if(!l.length)return h+`<div class="mempty">本周该范围暂无日程</div>`;
   mWeekDays().forEach(i=>{const g=l.filter(s=>s.day===i);if(!g.length)return;h+=`<div class="mgrp" data-dg="${i}">${DAYS[i].w} ${DAYS[i].s}<span>${g.length} 场</span></div>`+g.map(x=>mCard(x)).join('')});
   return h;
@@ -2309,8 +2334,7 @@ function mAdmin(){
   h+=`<div class="mpanel"><h3>活动日志（最近 30 条）</h3>${L.map(x=>`<div class="mlog"><span>${fmtT(x.t)}</span><b>${esc(x.u)}</b><em>${esc(x.act)}</em><p>${esc(x.detail||'—')}</p></div>`).join('')||'<div class="mempty">暂无记录</div>'}</div>`;
   return h+`<button class="mbtn ghost block" data-m="logout" style="margin-top:8px">退出登录</button>`;
 }
-function mMe(){const all=myRegs();return `<div class="mprof"><div class="av">${esc(ME.name.slice(0,1))}</div><div><b>${esc(ME.name)}</b><span>${esc(ME.label)} · ${esc(ME.u)}</span></div></div>
-  ${canReg()?`<div class="mkpis"><div><span>累计报名</span><b>${all.length}</b></div><div><span>待召开</span><b>${all.filter(s=>!s.done).length}</b></div><div><span>时间冲突</span><b>${all.filter(s=>conflictsOf(s).length).length}</b></div></div>`:''}
+function mMe(){return `<div class="mprof"><div class="av">${esc(ME.name.slice(0,1))}</div><div><b>${esc(ME.name)}</b><span>${esc(ME.label)} · ${esc(ME.u)}</span></div></div>
   <div class="mpanel"><h3>关于</h3><p class="hint">手机版原型 · 数据与电脑版共用，保存在当前浏览器。会议链接为演示生成。</p></div>
   <button class="mbtn ghost block" data-m="logout">退出登录</button>`}
 /* ---- shell ---- */
@@ -2349,7 +2373,9 @@ document.addEventListener('click',e=>{
     case 'lay':M.lay=a;return mMain();
     case 'dcell':{const [d,k]=a.split('|');M.day=+d;M.lay='expand';mMain();const g=document.querySelector(`[data-sg="${k}"]`);if(g)g.scrollIntoView({block:'start'});return}
     case 'cell':{const [n,d]=a.split('|');M.ind=n;M.isec=indOf(n).s;M.imode='list';M.jump=+d;window.scrollTo(0,0);mMain();const g=document.querySelector(`[data-dg="${d}"]`);if(g)g.scrollIntoView({block:'start'});return}
-    case 'tile':{M.ind=a;M.isec=indOf(a).s;M.imode='list';window.scrollTo(0,0);return mMain()}
+    case 'ttile':{const [t,n]=a.split('|');M.itype=t;M.ind=n;M.isec=n==='all'?'all':indOf(n).s;M.imode='list';window.scrollTo(0,0);return mMain()}
+    case 'itype0':M.itype=null;return mMain();
+    case 'tile':{M.itype=null;M.ind=a;M.isec=indOf(a).s;M.imode='list';window.scrollTo(0,0);return mMain()}
     case 'reg':return mReg(+a,false);
     case 'regforce':return mReg(+a,true);
     case 'pendno':M.pend=null;M.sheet.keep=true;return mSheet();
