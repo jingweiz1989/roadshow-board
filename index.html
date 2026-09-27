@@ -451,6 +451,11 @@ table.tbl tr.cf td{background:#FBEFF1!important}
 .ctip{position:fixed;z-index:90;background:#1C2A40;color:#fff;font-size:12px;padding:6px 9px;border-radius:2px;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.18);max-width:320px;line-height:1.5}
 @media (max-width:560px){.dn{grid-template-columns:1fr}.donut{margin:0 auto}.hb2,.hbhead,.hb2:has(.n2){grid-template-columns:84px minmax(0,1fr) 32px 36px}.cols{gap:3px}}
 
+.weektools{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 16px;margin-bottom:14px;border-left:3px solid var(--gold,#B8943C)}
+.weektools>div:first-child{display:flex;flex-direction:column;gap:3px}
+.weektools b{color:var(--navy,#1C4885);font-size:14px}
+.wt-btns{display:flex;gap:8px;flex-wrap:wrap}
+
 /* ===== client identity layer ===== */
 body{background:var(--bg);color:var(--ink);letter-spacing:.01em}
 .wrap{padding-block:0 56px}
@@ -801,7 +806,7 @@ const pad=n=>String(n).padStart(2,'0');
 const TODAY='2026-09-27';
 const HOLIDAY={'2026-09-25':'中秋节','2026-09-26':'中秋节','2026-09-27':'中秋节','2026-10-01':'国庆节','2026-10-02':'国庆节','2026-10-03':'国庆节','2026-10-04':'国庆节','2026-10-05':'国庆节','2026-10-06':'国庆节','2026-10-07':'国庆节'};
 const WEEKS=[],DAYS=[];
-for(let w=0;w<16;w++){
+function mkWeek(w){
   const wk={i:w,no:27+w,days:[]};
   for(let k=0;k<7;k++){
     const dt=new Date(2026,5,29+w*7+k);
@@ -813,6 +818,7 @@ for(let w=0;w<16;w++){
   wk.current=wk.days.some(i=>DAYS[i].d===TODAY);
   WEEKS.push(wk);
 }
+for(let w=0;w<16;w++)mkWeek(w);
 const workDays=days=>days.filter(i=>!DAYS[i].hol&&!DAYS[i].we);
 const openDays=days=>days.filter(i=>!DAYS[i].hol);
 const SLOTS=[['08:00','09:00'],['09:00','10:00'],['10:00','11:00'],['11:00','12:00'],['12:00','13:30'],['13:30','14:30'],['14:30','15:30'],['15:30','16:30'],['16:30','17:30']];
@@ -1047,7 +1053,7 @@ function scope(){
   let sc;
   if(st.period==='week'){const w=weekOf();const b=w.days.map(i=>({l:DAYS[i].w,l2:DAYS[i].hol||DAYS[i].s,days:[i]}));sc={kind:'周',days:w.days,heat:b,trend:b,unit:'日',prev:st.wk>0?{days:WEEKS[st.wk-1].days,l:'上周'}:null,title:w.label}}
   else if(st.period==='month'){const days=monthDays(st.month),b=weekBuckets(days);sc={kind:'月',days,heat:b,trend:b,unit:'周',prev:st.month>7?{days:monthDays(st.month-1),l:'上月'}:null,title:`2026年${st.month}月`}}
-  else{const qm=st.q===4?[10,11,12]:[7,8,9];const days=DAYS.filter(d=>qm.includes(d.m)).map(d=>d.i);sc={kind:'季',days,heat:qm.filter(m=>monthDays(m).length).map(m=>({l:m+'月',l2:'',days:monthDays(m)})),trend:weekBuckets(days),unit:'月',prev:st.q===4?{days:DAYS.filter(d=>d.m>=7&&d.m<=9).map(d=>d.i),l:'上季'}:null,title:`2026年${st.q===4?'四':'三'}季度${st.q===4?'（截至10月数据）':''}`}}
+  else{const qm=st.q===4?[10,11,12]:[7,8,9];const days=DAYS.filter(d=>qm.includes(d.m)).map(d=>d.i);sc={kind:'季',days,heat:qm.filter(m=>monthDays(m).length).map(m=>({l:m+'月',l2:'',days:monthDays(m)})),trend:weekBuckets(days),unit:'月',prev:st.q===4?{days:DAYS.filter(d=>d.m>=7&&d.m<=9).map(d=>d.i),l:'上季'}:null,title:`2026年${st.q===4?'四':'三'}季度${st.q===4?`（排期截至 ${DAYS[DAYS.length-1].s}）`:''}`}}
   sc.list=inDays(sc.days);sc.work=workDays(sc.days);
   sc.first=DAYS[sc.work[0]].s;sc.last=DAYS[sc.work[sc.work.length-1]].s;
   sc.open=sc.days.some(i=>DAYS[i].d>=TODAY);
@@ -1056,7 +1062,7 @@ function scope(){
 function periodHTML(sc){
   return `<div class="seg" role="group" aria-label="统计周期">${[['week','周度'],['month','月度'],['quarter','季度']].map(([k,l])=>`<button data-period="${k}" aria-pressed="${st.period===k}">${l}</button>`).join('')}</div>`+
     (st.period==='quarter'?`<select class="qSel" aria-label="选择季度">${[[3,'2026年三季度'],[4,'2026年四季度']].map(([q,l])=>`<option value="${q}"${st.q===q?' selected':''}>${l}</option>`).join('')}</select>`:'')+
-    (st.period==='month'?`<select class="monthSel" aria-label="选择月份">${[7,8,9,10].map(m=>`<option value="${m}"${st.month===m?' selected':''}>2026年${m}月</option>`).join('')}</select>`:'')+
+    (st.period==='month'?`<select class="monthSel" aria-label="选择月份">${[...new Set(DAYS.map(d=>d.m))].filter(m=>m>=7).map(m=>`<option value="${m}"${st.month===m?' selected':''}>2026年${m}月</option>`).join('')}</select>`:'')+
     `<span class="scope">统计区间：<b>${sc.title}</b>（${sc.first}—${sc.last}，${sc.work.length} 个工作日，周末仅线上）${sc.open?' · 含待召开日程':''}${st.period==='week'?' · 切换周请用右上角':''}</span>`;
 }
 function delta(cur,prev,l){if(prev==null)return '';const d=prev?(cur-prev)/prev*100:0;return ` · 较${l} <span class="delta ${d>=0?'up':'down'}">${d>=0?'+':''}${d.toFixed(1)}%</span>`}
@@ -1321,12 +1327,13 @@ const ROLE_TABS={manager:['date','industry','mine','people','stats','salestats']
 const TAB_LABEL={date:'日期视图',industry:'行业视图',people:'报名情况',stats:'行业统计',entry:'录入管理',log:'活动日志',mine:'我的报名',saleweek:'周度安排',salestats:'服务统计'};
 const VIEWS=['date','industry','people','stats','entry','log','mine','saleweek','salestats'];
 const LEADERS=['董事长','总经理','董事会秘书','财务总监','投资者关系负责人','证券事务代表'];
-const ACTS=['登录','退出','报名','取消报名','新增安排','修改安排','删除安排'];
+const ACTS=['登录','退出','报名','取消报名','新增安排','修改安排','删除安排','新增周次'];
 let ME=null;
 const AGG=()=>!!ME&&ME.key!=='analyst';
 const STORE_KEY='rsb-store-v2';
 let store={regs:{},ops:[],log:[],seq:0,seeded:false};
 try{const j=JSON.parse(localStorage.getItem(STORE_KEY)||'null');if(j&&typeof j==='object')store=Object.assign(store,j)}catch(e){}
+for(let i=0;i<(+store.extraWeeks||0)&&i<52;i++)mkWeek(WEEKS.length);
 function saveStore(){try{localStorage.setItem(STORE_KEY,JSON.stringify(store))}catch(e){}}
 S.forEach(s=>s.key='g'+s.id);
 const byKey=k=>S.find(s=>s.key===k);
@@ -1544,7 +1551,7 @@ function renderEntry(){
   if(!st.form)st.form=newForm();
   const f=st.form, isAdmin=ME.key==='admin', editing=st.editKey?byKey(st.editKey):null;
   const seg=`<div class="period"><div class="seg" role="group" aria-label="录入模式"><button data-emode="add" aria-pressed="${st.entryMode==='add'}">${editing?'修改安排':'新增安排'}</button><button data-emode="edit" aria-pressed="${st.entryMode==='edit'}">修改调整</button></div>
-    <span class="scope">${isAdmin?'券联账号：可管理全部券商的安排':`卖方账号：仅可录入和修改 <b>${esc(ME.broker)}</b> 的安排`}</span></div>`;
+    <span class="scope">${isAdmin?'券联账号：可管理全部券商的安排':`卖方账号：仅可录入和修改 <b>${esc(ME.broker)}</b> 的安排`}</span></div>`+(isAdmin?weekTools():'');
   if(st.entryMode==='edit'){$('#entryBody').innerHTML=seg+entryList();return}
   const days=DAYS.filter(d=>d.d>=TODAY&&!d.hol);
   if(!days.some(d=>d.d===f.date)&&days.length)f.date=days[0].d;
@@ -1588,6 +1595,20 @@ function renderEntry(){
     <div class="it"><div>午餐路演<div class="s2">12:00—13:30，仅限线下卖方路演</div></div></div>
     <div class="it"><div>${isAdmin?'本周全部安排':'本周本券商安排'}<div class="s2">${weekOf().label}</div></div><span class="num s2">${wkList.length} 场</span></div></div></div>`;
   $('#entryBody').innerHTML=seg+`<div class="entry"><div class="card">${h}</div>${side}</div>`;
+}
+function weekTools(){const last=WEEKS[WEEKS.length-1], nd=new Date(DAYS[last.days[0]].d+'T00:00:00');nd.setDate(nd.getDate()+7);
+  const nl=`第${last.no+1}周 · ${pad(nd.getMonth()+1)}/${pad(nd.getDate())} 起`, cur=inDays(weekOf().days).length;
+  return `<div class="card weektools"><div><b>新一周日程</b><span class="hint">当前排期至 ${esc(last.label)}；新增后即可在该周录入安排</span></div>
+    <div class="wt-btns"><button type="button" class="btn ghost" data-addweek="blank">＋ 添加新一周（${esc(nl)}）</button><button type="button" class="btn" data-addweek="copy"${cur?'':' disabled'}>复制本周安排到新一周（${cur} 场）</button></div></div>`}
+function sessData(s,date){return {type:s.type,date,slot:s.slot,online:s.online,room:s.online?101:s.room,ind:s.ind,broker:s.team.broker,analyst:s.team.name||'',theme:s.type==='corp'?'':s.theme,kw:(s.kw||[]).slice(),
+  who:s.ex?s.ex.who:'',bg:s.ex?s.ex.bg:'',pts:(s.ex?s.ex.pts:s.co?s.co.pts:[]).slice(),co:s.co?s.co.name:'',leaders:s.co?s.co.leaders.slice():[],link:'',by:ME.u}}
+function addWeek(mode){
+  const src=weekOf(), srcList=mode==='copy'?inDays(src.days):[];
+  store.extraWeeks=(+store.extraWeeks||0)+1;mkWeek(WEEKS.length);const nw=WEEKS[WEEKS.length-1];let n=0;
+  srcList.forEach(s=>{const k=DAYS[s.day].k, t=DAYS[nw.days[k]];if(t.hol)return;const key='n'+(++store.seq);const op={op:'add',key,data:sessData(s,t.d)};store.ops.push(op);applyOp(op);n++});
+  reindex();saveStore();logAct('新增周次',`${nw.label}${mode==='copy'?` · 复制${src.label.split(' · ')[0]}安排 ${n} 场`:' · 空白周'}`);
+  st.wk=nw.i;st.day=workDays(nw.days)[0]??nw.days[0];st.form=null;st.entryMode=mode==='copy'?'edit':'add';
+  toast(mode==='copy'?`已新增${nw.label.split(' · ')[0]}，并复制 ${n} 场安排`:`已新增${nw.label.split(' · ')[0]}`);render();
 }
 function entryList(){
   const isAdmin=ME.key==='admin';
@@ -1637,11 +1658,10 @@ function renderLog(){
   const L=store.log, users=USERS.map(u=>u.u);
   const cnt=(u,a)=>L.filter(x=>x.u===u&&(!a||x.act===a)).length;
   const last=u=>{const l=L.filter(x=>x.u===u);return l.length?fmtT(l[l.length-1].t):'—'};
-  let h=`<div class="kpis">${USERS.map(u=>`<div class="kpi"><div class="l">${u.label} · ${u.u}</div><div class="v">${cnt(u.u)}<small>次</small></div><div class="s">最近活动 ${last(u.u)}</div></div>`).join('')}
+  let h=`<div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div class="kpi"><div class="l">活动记录</div><div class="v">${L.length}<small>条</small></div><div class="s">数据保存在本浏览器</div></div>
     <div class="kpi"><div class="l">报名 / 取消</div><div class="v">${L.filter(x=>x.act==='报名').length} / ${L.filter(x=>x.act==='取消报名').length}</div><div class="s">全部用户</div></div>
     <div class="kpi"><div class="l">录入变更</div><div class="v">${L.filter(x=>/安排/.test(x.act)).length}<small>次</small></div><div class="s">新增 / 修改 / 删除</div></div></div>`;
-  h+=`<div class="panels"><div class="panel c12"><h3>各用户活动统计</h3><div class="sub">按操作类型汇总（数据保存在本浏览器）</div><div class="tscroll"><table class="tbl"><thead><tr><th>用户</th>${ACTS.map(a=>`<th class="r">${a}</th>`).join('')}<th class="r">合计</th></tr></thead><tbody>`+
-    USERS.map(u=>`<tr><td class="nw"><b>${u.u}</b><div class="sub2">${u.label}</div></td>${ACTS.map(a=>`<td class="r mono">${cnt(u.u,a)||'·'}</td>`).join('')}<td class="r mono"><b>${cnt(u.u)}</b></td></tr>`).join('')+`</tbody></table></div></div>`;
+  h+=`<div class="panels">`;
   const F=L.filter(x=>(st.logU==='all'||x.u===st.logU)&&(st.logA==='all'||x.act===st.logA)).slice().reverse().slice(0,300);
   h+=`<div class="panel c12"><h3>活动明细</h3><div class="sub">最近 ${F.length} 条</div>
     <div class="ptools"><select id="logU" aria-label="按用户筛选"><option value="all">全部用户</option>${users.map(u=>`<option value="${u}"${st.logU===u?' selected':''}>${u}</option>`).join('')}</select>
@@ -1782,7 +1802,7 @@ function logout(){if(ME)logAct('退出','');try{localStorage.removeItem('rsb-use
 
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-view],[data-day],[data-tf],[data-sector],[data-sub],[data-mode],[data-layout],[data-isec],[data-ind],[data-team],[data-id],[data-pid],[data-goind],[data-psort],[data-period],[data-reg],[data-unreg],[data-regforce],[data-regcancel],[data-copy],[data-fill],[data-emode],[data-edit],[data-del],[data-delok],[data-delno],[data-editcancel],[data-formreset],[data-kwadd],#closeSheet,#scrim,#wkPrev,#wkNext,#logoutBtn');
+  const t=e.target.closest('[data-view],[data-day],[data-tf],[data-sector],[data-sub],[data-mode],[data-layout],[data-isec],[data-ind],[data-team],[data-id],[data-pid],[data-goind],[data-psort],[data-period],[data-reg],[data-unreg],[data-regforce],[data-regcancel],[data-copy],[data-fill],[data-emode],[data-edit],[data-del],[data-delok],[data-delno],[data-editcancel],[data-formreset],[data-kwadd],[data-addweek],#closeSheet,#scrim,#wkPrev,#wkNext,#logoutBtn');
   if(!t||t.disabled)return;
   if(e.target.closest('a[href]'))return;
   const d=t.dataset;
@@ -1801,6 +1821,7 @@ document.addEventListener('click',e=>{
   if(d.delno!=null){st.delKey=null;return renderEntry()}
   if(d.editcancel!=null){st.editKey=null;st.form=newForm();st.formMsg='';st.entryMode='edit';return renderEntry()}
   if(d.kwadd!=null)return addKw();
+  if(d.addweek){if(ME&&ME.key==='admin')addWeek(d.addweek);return}
   if(d.formreset!=null){st.form=newForm();st.formMsg='';return renderEntry()}
   if(t.id==='wkPrev')return setWeek(st.wk-1);
   if(t.id==='wkNext')return setWeek(st.wk+1);
