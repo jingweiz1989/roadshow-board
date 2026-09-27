@@ -386,24 +386,9 @@ table.tbl tr.cf td{background:#FBEFF1!important}
 @media (max-width:900px){#login{grid-template-columns:1fr}#login .lg-brand{padding:32px 24px;min-height:auto}#login .lg-title{font-size:28px}#login .lg-feats{display:none}.entry{grid-template-columns:1fr}.form{grid-template-columns:1fr}}
 
 /* ===== v7: classic login, charts, keyword add ===== */
-#login .lg-brand{padding:52px 64px 44px}
-#login .lg-art{position:absolute;right:-150px;bottom:-170px;width:620px;height:620px;pointer-events:none}
-#login .lg-top{display:flex;align-items:center;gap:14px}
-#login .lg-seal{width:46px;height:46px;border:1.5px solid #D8B660;color:#D8B660;display:grid;place-items:center;font-size:22px;font-weight:600;font-family:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",serif;box-shadow:inset 0 0 0 3px #1C4885,inset 0 0 0 4px rgba(216,182,96,.55)}
-#login .lg-top .lg-en{margin:0}
-#login .lg-mid{margin:auto 0;padding:40px 0}
-#login .lg-title{font-family:"Songti SC","STSong","Noto Serif SC","Source Han Serif SC",serif;font-size:48px;letter-spacing:.16em;font-weight:600;margin:0;line-height:1.35}
-#login .lg-rule{position:relative;width:64px;height:2px;background:#D8B660;margin:24px 0 36px}
-#login .lg-rule::after{content:"";position:absolute;left:76px;top:.5px;width:240px;height:1px;background:rgba(216,182,96,.35)}
-#login .lg-trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:620px;border-top:1px solid rgba(255,255,255,.2);border-bottom:1px solid rgba(255,255,255,.2)}
-#login .lg-trio div{padding:18px 18px 16px;display:flex;flex-direction:column;gap:6px;border-left:1px solid rgba(255,255,255,.14)}
-#login .lg-trio div:first-child{border-left:0;padding-left:0}
-#login .lg-trio i{font-style:normal;font-family:"Songti SC","STSong","Noto Serif SC",serif;color:#D8B660;font-size:19px;line-height:1}
-#login .lg-trio b{font-size:15.5px;font-weight:600;letter-spacing:.1em}
-#login .lg-trio span{font-size:10.5px;letter-spacing:.2em;color:rgba(255,255,255,.55)}
 #login .lg-en2{font-size:11px;letter-spacing:.32em;color:#B8943C;font-weight:600;margin-bottom:8px}
 #login .lg-card h2{margin-bottom:26px}
-@media (max-width:900px){#login .lg-art{display:none}#login .lg-mid{padding:24px 0 8px}#login .lg-title{font-size:30px}#login .lg-trio div{padding:12px 8px}#login .lg-trio span{display:none}#login .lg-brand{padding:28px 20px}}
+#login .lg-role{padding:12px 14px}
 /* keyword add */
 .kwadd{display:flex;gap:8px;margin-top:8px;max-width:420px}
 .kwadd input{flex:1}
@@ -1772,15 +1757,14 @@ function renderSaleStats(){
 
 /* ---------- login & shell ---------- */
 function renderLogin(){
-  $('#login').innerHTML=`<div class="lg-brand"><svg class="lg-art" viewBox="0 0 620 620" aria-hidden="true"><g fill="none" stroke="#D8B660"><circle cx="310" cy="310" r="300" stroke-opacity="0.18"/><circle cx="310" cy="310" r="262" stroke-opacity="0.26"/><circle cx="310" cy="310" r="224" stroke-opacity="0.16"/><circle cx="310" cy="310" r="186" stroke-opacity="0.28"/><circle cx="310" cy="310" r="148" stroke-opacity="0.16"/><circle cx="310" cy="310" r="110" stroke-opacity="0.24"/><circle cx="310" cy="310" r="72" stroke-opacity="0.14"/><circle cx="310" cy="310" r="281" stroke-opacity=".3" stroke-dasharray="1 7"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(0 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(10 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(20 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(30 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(40 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(50 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(60 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(70 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(80 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(90 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(100 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(110 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(120 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(130 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(140 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(150 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(160 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(170 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(180 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(190 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(200 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(210 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(220 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(230 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(240 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(250 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(260 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(270 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(280 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(290 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(300 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(310 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(320 310 310)"/><line x1="310" y1="10" x2="310" y2="58" stroke-opacity=".35" transform="rotate(330 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(340 310 310)"/><line x1="310" y1="10" x2="310" y2="40" stroke-opacity=".35" transform="rotate(350 310 310)"/></g></svg><div class="lg-top"><div class="lg-seal">研</div><div class="lg-en">${BRAND_EN}</div></div>
-      <div class="lg-mid"><div class="lg-title">${BRAND?BRAND+'<br>':''}投研日程平台</div><div class="lg-rule"></div>
-      <div class="lg-trio"><div><i>Ⅰ</i><b>卖方路演</b><span>SELL-SIDE ROADSHOW</span></div><div><i>Ⅱ</i><b>专家交流</b><span>EXPERT CALL</span></div><div><i>Ⅲ</i><b>上市公司反路演</b><span>CORPORATE ACCESS</span></div></div></div>
+  $('#login').innerHTML=`<div class="lg-brand"><div><div class="lg-en">${BRAND_EN}</div><div class="lg-title">${BRAND?BRAND+'<br>':''}投研日程平台</div>
+      <div class="lg-sub">卖方路演 · 专家交流 · 上市公司反路演</div></div>
       <div class="lg-foot">投资研究部 · 内部使用</div></div>
     <div class="lg-panel"><form class="lg-card" id="loginForm" autocomplete="off"><div class="lg-en2">SIGN IN</div><h2>账号登录</h2>
       <div class="lg-field"><label for="lgU">用户名</label><input id="lgU" name="u" type="text" placeholder="请输入用户名" autocapitalize="off"></div>
       <div class="lg-field"><label for="lgP">密码</label><input id="lgP" name="p" type="password" placeholder="请输入密码"></div>
       <button class="lg-btn" type="submit">登 录</button><div class="lg-err" id="lgErr" role="alert"></div>
-      <div class="lg-roles"><div class="t">演示账号（点击自动填入）</div><div class="lg-rolegrid">${USERS.map(u=>`<button type="button" class="lg-role" data-fill="${u.key}"><b>${u.label}</b><span>${u.u} · ${u.desc}</span></button>`).join('')}</div></div></form></div>`;
+      <div class="lg-roles"><div class="t">演示账号（点击自动填入）</div><div class="lg-rolegrid">${USERS.map(u=>`<button type="button" class="lg-role" data-fill="${u.key}"><b>${u.label}</b></button>`).join('')}</div></div></form></div>`;
 }
 function showLogin(){ME=null;$('#app').hidden=true;$('#login').hidden=false;renderLogin();setTimeout(()=>{const el=$('#lgU');if(el)el.focus()},0)}
 function enterApp(){
