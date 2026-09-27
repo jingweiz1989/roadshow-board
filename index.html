@@ -386,6 +386,9 @@ table.tbl tr.cf td{background:#FBEFF1!important}
 @media (max-width:900px){#login{grid-template-columns:1fr}#login .lg-brand{padding:32px 24px;min-height:auto}#login .lg-title{font-size:28px}#login .lg-feats{display:none}.entry{grid-template-columns:1fr}.form{grid-template-columns:1fr}}
 
 /* ===== v7: classic login, charts, keyword add ===== */
+#login .lg-sky{position:absolute;left:0;right:0;bottom:4px;width:100%;height:auto;max-height:52%;object-fit:cover;object-position:center bottom;pointer-events:none;-webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent 100%);mask-image:linear-gradient(to bottom,#000 70%,transparent 100%)}
+#login .lg-brand::before{-webkit-mask-image:radial-gradient(ellipse 70% 45% at 70% 30%,#000 25%,transparent 72%);mask-image:radial-gradient(ellipse 70% 45% at 70% 30%,#000 25%,transparent 72%)}
+#login .lg-foot{position:relative;z-index:1;text-shadow:0 1px 3px rgba(12,32,64,.8);color:rgba(255,255,255,.8)}
 #login .lg-en2{font-size:11px;letter-spacing:.32em;color:#B8943C;font-weight:600;margin-bottom:8px}
 #login .lg-card h2{margin-bottom:26px}
 #login .lg-role{padding:12px 14px}
@@ -435,6 +438,9 @@ table.tbl tr.cf td{background:#FBEFF1!important}
 .kwc{font-weight:600;cursor:default;white-space:nowrap}
 .ctip{position:fixed;z-index:90;background:#1C2A40;color:#fff;font-size:12px;padding:6px 9px;border-radius:2px;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.18);max-width:320px;line-height:1.5}
 @media (max-width:560px){.dn{grid-template-columns:1fr}.donut{margin:0 auto}.hb2,.hbhead,.hb2:has(.n2){grid-template-columns:84px minmax(0,1fr) 32px 36px}.cols{gap:3px}}
+
+.addwk{height:34px;padding:0 12px;border:1px solid var(--gold2,#D8B660);background:var(--gold,#B8943C);color:#fff;border-radius:2px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.addwk:hover{filter:brightness(1.08)}
 
 .weektools{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 16px;margin-bottom:14px;border-left:3px solid var(--gold,#B8943C)}
 .weektools>div:first-child{display:flex;flex-direction:column;gap:3px}
@@ -1536,7 +1542,7 @@ function renderEntry(){
   if(!st.form)st.form=newForm();
   const f=st.form, isAdmin=ME.key==='admin', editing=st.editKey?byKey(st.editKey):null;
   const seg=`<div class="period"><div class="seg" role="group" aria-label="录入模式"><button data-emode="add" aria-pressed="${st.entryMode==='add'}">${editing?'修改安排':'新增安排'}</button><button data-emode="edit" aria-pressed="${st.entryMode==='edit'}">修改调整</button></div>
-    <span class="scope">${isAdmin?'券联账号：可管理全部券商的安排':`卖方账号：仅可录入和修改 <b>${esc(ME.broker)}</b> 的安排`}</span></div>`+(isAdmin?weekTools():'');
+    <span class="scope">${isAdmin?'券联账号：可管理全部券商的安排':`卖方账号：仅可录入和修改 <b>${esc(ME.broker)}</b> 的安排`}</span></div>`;
   if(st.entryMode==='edit'){$('#entryBody').innerHTML=seg+entryList();return}
   const days=DAYS.filter(d=>d.d>=TODAY&&!d.hol);
   if(!days.some(d=>d.d===f.date)&&days.length)f.date=days[0].d;
@@ -1592,8 +1598,8 @@ function addWeek(mode){
   store.extraWeeks=(+store.extraWeeks||0)+1;mkWeek(WEEKS.length);const nw=WEEKS[WEEKS.length-1];let n=0;
   srcList.forEach(s=>{const k=DAYS[s.day].k, t=DAYS[nw.days[k]];if(t.hol)return;const key='n'+(++store.seq);const op={op:'add',key,data:sessData(s,t.d)};store.ops.push(op);applyOp(op);n++});
   reindex();saveStore();logAct('新增周次',`${nw.label}${mode==='copy'?` · 复制${src.label.split(' · ')[0]}安排 ${n} 场`:' · 空白周'}`);
-  st.wk=nw.i;st.day=workDays(nw.days)[0]??nw.days[0];st.form=null;st.entryMode=mode==='copy'?'edit':'add';
-  toast(mode==='copy'?`已新增${nw.label.split(' · ')[0]}，并复制 ${n} 场安排`:`已新增${nw.label.split(' · ')[0]}`);render();
+  st.wk=nw.i;st.day=workDays(nw.days)[0]??nw.days[0];st.form=null;st.editKey=null;
+  toast(mode==='copy'?`已新增${nw.label.split(' · ')[0]}，并复制 ${n} 场安排`:`已新增${nw.label}，各角色页面同步可见`);render();
 }
 function entryList(){
   const isAdmin=ME.key==='admin';
@@ -1771,6 +1777,7 @@ function enterApp(){
   $('#login').hidden=true;$('#login').innerHTML='';$('#app').hidden=false;
   $('#userbox').innerHTML=`<div class="who"><b>${esc(ME.name)}</b><span>${esc(ME.label)} · ${esc(ME.u)}</span></div><button id="logoutBtn" type="button">退出登录</button>`;
   $('#tabs').innerHTML=ROLE_TABS[ME.key].map((v,i)=>`<button class="tab" role="tab" id="tab-${v}" data-view="${v}"><span class="tn">${pad(i+1)}</span>${ME.key==='sale'&&v==='entry'?'录入与修改':TAB_LABEL[v]}</button>`).join('');
+  {const o=$('#addWeekBtn');if(o)o.remove();if(ME.key==='admin')$('.weekctl').insertAdjacentHTML('beforeend','<button id="addWeekBtn" class="addwk" type="button" data-addweek="blank">＋ 添加新一周</button>')}
   st.form=null;st.editKey=null;st.entryMode='add';st.pending=null;
   const h0=(location.hash||'').slice(1);
   setView(ROLE_TABS[ME.key].includes(h0)?h0:ROLE_TABS[ME.key][0]);
