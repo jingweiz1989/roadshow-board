@@ -96,7 +96,7 @@ h1{font-family:var(--serif);font-size:26px;font-weight:700;margin:2px 0 0;letter
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px;font-size:12px;color:var(--muted)}
 
 /* industry view */
-.secbar{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.secbar{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .secbtn{border:0;border-right:1px solid var(--line2);background:transparent;padding:12px 14px 10px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;position:relative}
 .secbtn:last-child{border-right:0}
 .secbtn:hover{background:var(--hover)}
@@ -293,6 +293,98 @@ th.sort[aria-sort]{color:var(--ink)}
 @media (max-width:560px){.wrap{padding-inline:16px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.days{gap:4px}.day{padding:6px}.day .n{display:none}h1{font-size:22px}.hbar{grid-template-columns:72px minmax(0,1fr) 40px}.dual{grid-template-columns:72px minmax(0,1fr) 72px}.isum{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
+/* ===== v6: login, roles, registration ===== */
+.userbox{display:flex;align-items:center;gap:10px;font-size:12.5px;color:rgba(255,255,255,.85)}
+.userbox .who{display:flex;flex-direction:column;line-height:1.3;text-align:right}
+.userbox .who b{color:#fff;font-weight:600;font-size:13px}
+.userbox button{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:2px;padding:5px 10px;cursor:pointer;font-size:12px}
+.userbox button:hover{border-color:var(--gold2,#D8B660);color:var(--gold2,#D8B660)}
+.topright{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:2px;padding:8px 16px;cursor:pointer;font-weight:600;font-size:13px}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.warn{background:#B23A48;border-color:#B23A48}
+.btn.sm{padding:4px 10px;font-size:12px;font-weight:500}
+.btn:disabled{opacity:.45;cursor:default;filter:none}
+.regbox{border:1px solid var(--line);border-radius:2px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:var(--surface2)}
+.regbox .row1{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.regok{color:#2E7D5B;font-weight:600;display:flex;align-items:center;gap:6px}
+.regok::before{content:"✓";display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#2E7D5B;color:#fff;font-size:11px}
+.conflict{border:1px solid #E6B7BD;background:#FBEFF1;color:#8E2A36;border-radius:2px;padding:10px 12px;font-size:13px;line-height:1.6}
+.conflict b{color:#8E2A36}
+.conflict ul{margin:6px 0 8px;padding-left:18px}
+.tm{border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--surface);padding:10px 12px;font-size:13px;display:flex;flex-direction:column;gap:6px}
+.tm .no{font-family:var(--mono);font-size:17px;font-weight:700;color:var(--accent);letter-spacing:.06em}
+.tm a{color:var(--accent);word-break:break-all}
+.tm .line{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.okt{color:#2E7D5B;font-weight:600}
+.cftag{display:inline-block;font-size:11px;padding:2px 6px;border-radius:2px;background:#FBEFF1;color:#8E2A36;border:1px solid #E6B7BD;font-weight:600}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);transform:translateX(-50%);background:#1C2A40;color:#fff;padding:10px 18px;border-radius:2px;font-size:13.5px;z-index:60;box-shadow:0 6px 24px rgba(0,0,0,.18);border-left:3px solid var(--gold,#B8943C)}
+table.tbl tr.t-expert td{background:var(--exp-bg)!important}
+table.tbl tr.t-corp td{background:var(--corp-bg)!important}
+table.tbl tr.t-expert td:first-child{box-shadow:inset 3px 0 0 var(--exp-ink)}
+table.tbl tr.t-corp td:first-child{box-shadow:inset 3px 0 0 var(--corp-ink)}
+table.tbl tr.cf td{background:#FBEFF1!important}
+.ibody.one{grid-template-columns:1fr}
+.opcell{white-space:nowrap;text-align:right}
+/* my registrations */
+.mine-day{margin-bottom:12px}
+/* entry form */
+.entry{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;padding:16px}
+.form .f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.form .f.full{grid-column:1/-1}
+.form label.l{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+.form select,.form input[type=text],.form textarea{border:1px solid var(--line);border-radius:2px;padding:8px 10px;font-size:13.5px;background:var(--surface);color:var(--ink);width:100%}
+.form textarea{min-height:72px;resize:vertical;font-family:inherit}
+.form select:focus,.form input:focus,.form textarea:focus{outline:2px solid color-mix(in srgb,var(--accent) 35%,transparent);border-color:var(--accent)}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:2px;padding:5px 9px;font-size:12.5px;cursor:pointer;background:var(--surface)}
+.checks label:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--surface));color:var(--accent);font-weight:600}
+.radios{display:flex;gap:6px;flex-wrap:wrap}
+.formbar{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--line2);padding-top:12px;flex-wrap:wrap;align-items:center}
+.formbar .msg{margin-right:auto;font-size:12.5px;color:#8E2A36}
+.hint{font-size:12px;color:var(--muted)}
+/* sale week */
+.sw-ind{margin-bottom:14px}
+.sw-ind h4{margin:0;padding:9px 14px;background:var(--surface2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;font-size:13.5px}
+.clients{display:flex;flex-wrap:wrap;gap:4px}
+.clients span{font-size:12px;padding:2px 7px;border-radius:2px;background:var(--surface2);border:1px solid var(--line2);white-space:nowrap}
+.clients span i{font-style:normal;color:var(--muted);margin-left:4px}
+/* login */
+#login{position:fixed;inset:0;z-index:80;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(360px,1fr);background:#F6F8FB;overflow:auto}
+#login .lg-brand{position:relative;background:#1C4885;color:#fff;padding:56px 64px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;min-height:100%}
+#login .lg-brand::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.2) 1.1px,transparent 1.7px);background-size:9px 9px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 70% 55%,#000 25%,transparent 72%);mask-image:radial-gradient(ellipse 70% 60% at 70% 55%,#000 25%,transparent 72%)}
+#login .lg-brand::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:#B8943C}
+#login .lg-brand>*{position:relative}
+#login .lg-en{font-size:11.5px;letter-spacing:.34em;color:#D8B660;font-weight:600}
+#login .lg-title{font-size:38px;font-weight:600;letter-spacing:.08em;margin:14px 0 10px;line-height:1.3}
+#login .lg-sub{font-size:14px;color:rgba(255,255,255,.75);letter-spacing:.06em;max-width:32em;line-height:1.8}
+#login .lg-feats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.18);margin-top:40px;max-width:640px}
+#login .lg-feats div{background:#1C4885;padding:16px 16px 14px}
+#login .lg-feats b{display:block;font-family:var(--mono);font-size:24px;color:#D8B660}
+#login .lg-feats span{font-size:12.5px;color:rgba(255,255,255,.78)}
+#login .lg-foot{font-size:12px;color:rgba(255,255,255,.55);letter-spacing:.06em}
+#login .lg-panel{display:flex;align-items:center;justify-content:center;padding:40px 32px}
+#login .lg-card{width:100%;max-width:420px}
+#login .lg-card h2{margin:0;font-size:24px;color:#1C4885;font-weight:600;letter-spacing:.06em}
+#login .lg-card .lg-hint{font-size:13px;color:#6B7280;margin:6px 0 24px}
+#login .lg-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+#login .lg-field label{font-size:12.5px;color:#4B5566;font-weight:600;letter-spacing:.04em}
+#login .lg-field input{border:1px solid #D7DDE5;border-radius:2px;padding:12px 14px;font-size:15px;background:#fff;color:#2E3A4D}
+#login .lg-field input:focus{outline:none;border-color:#1C4885;box-shadow:0 0 0 3px rgba(28,72,133,.12)}
+#login .lg-btn{width:100%;border:0;background:#1C4885;color:#fff;padding:13px;border-radius:2px;font-size:15px;font-weight:600;letter-spacing:.2em;cursor:pointer;margin-top:6px;border-bottom:3px solid #B8943C}
+#login .lg-btn:hover{background:#163A6C}
+#login .lg-err{color:#B23A48;font-size:13px;min-height:20px;margin-top:8px}
+#login .lg-roles{margin-top:26px;border-top:1px solid #D7DDE5;padding-top:16px}
+#login .lg-roles .t{font-size:12px;color:#6B7280;letter-spacing:.06em;margin-bottom:10px}
+#login .lg-rolegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#login .lg-role{border:1px solid #D7DDE5;background:#fff;border-radius:2px;padding:10px 12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+#login .lg-role:hover{border-color:#1C4885}
+#login .lg-role b{font-size:13.5px;color:#1C4885}
+#login .lg-role span{font-size:11.5px;color:#6B7280}
+@media (max-width:900px){#login{grid-template-columns:1fr}#login .lg-brand{padding:32px 24px;min-height:auto}#login .lg-title{font-size:28px}#login .lg-feats{display:none}.entry{grid-template-columns:1fr}.form{grid-template-columns:1fr}}
+
 /* ===== client identity layer ===== */
 body{background:var(--bg);color:var(--ink);letter-spacing:.01em}
 .wrap{padding-block:0 56px}
@@ -395,32 +487,43 @@ table.heat th{color:var(--sub)}
 .sheet h4{color:var(--navy);font-weight:600;border-left:3px solid var(--navy);padding-left:8px}
 .linkbtn{border-radius:2px}
 .foot{color:var(--faint);border-top:1px solid var(--line);padding-top:12px}
+
+/* v6 contrast fixes */
+table.tbl th.sort,table.tbl th.sort[aria-sort]{color:#fff}
+table.tbl th.sort:hover{color:var(--gold2)}
+.chip{color:color-mix(in srgb,var(--c) 70%,#111827);background:color-mix(in srgb,var(--c) 11%,#fff)}
+.btn{background:var(--navy);border-color:var(--navy)}
+.btn.ghost{background:transparent;color:var(--navy)}
+.okt{color:#2E7D5B}
+.tm{border-left-color:var(--gold)}
+.tm .no{color:var(--navy)}
+.userbox .who span{color:rgba(255,255,255,.7)}
 </style>
 </head>
 <body>
 
 
+<div id="login" hidden></div>
+<div id="app" hidden>
 <div class="wrap">
   <header class="top">
     <div class="brand">
       <div>
-        <div class="eyebrow"><span class="en">RESEARCH SCHEDULE BOARD</span><span class="zh">投资研究部 · 卖方路演 / 专家交流 / 上市公司反路演</span></div>
+        <div class="eyebrow"><span class="en">RESEARCH SCHEDULE PLATFORM</span><span class="zh">投资研究部 · 卖方路演 / 专家交流 / 上市公司反路演</span></div>
         <h1>投研日程排期看板</h1>
       </div>
     </div>
-    <div class="weekctl">
-      <button class="arrow" id="wkPrev" aria-label="上一周">‹</button>
-      <select id="wkSel" aria-label="选择周"></select>
-      <button class="arrow" id="wkNext" aria-label="下一周">›</button>
+    <div class="topright">
+      <div class="userbox" id="userbox"></div>
+      <div class="weekctl">
+        <button class="arrow" id="wkPrev" aria-label="上一周">‹</button>
+        <select id="wkSel" aria-label="选择周"></select>
+        <button class="arrow" id="wkNext" aria-label="下一周">›</button>
+      </div>
     </div>
   </header>
 
-  <nav class="tabs" role="tablist" aria-label="视图">
-    <button class="tab" role="tab" id="tab-date" data-view="date"><span class="tn">01</span>日期视图</button>
-    <button class="tab" role="tab" id="tab-industry" data-view="industry"><span class="tn">02</span>行业视图</button>
-    <button class="tab" role="tab" id="tab-people" data-view="people"><span class="tn">03</span>报名情况</button>
-    <button class="tab" role="tab" id="tab-stats" data-view="stats"><span class="tn">04</span>行业统计</button>
-  </nav>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="视图"></nav>
 
   <section id="view-date" hidden>
     <div class="bar"><div class="days" id="days"></div></div>
@@ -443,11 +546,16 @@ table.heat th{color:var(--sub)}
 
   <section id="view-people" hidden><div class="period" id="periodP"></div><div id="peopleBody"></div></section>
   <section id="view-stats" hidden><div class="period" id="periodS"></div><div id="statsBody"></div></section>
+  <section id="view-mine" hidden><div id="mineBody"></div></section>
+  <section id="view-entry" hidden><div id="entryBody"></div></section>
+  <section id="view-log" hidden><div id="logBody"></div></section>
+  <section id="view-saleweek" hidden><div id="swBody"></div></section>
 
-  <p class="foot">101—106 为现场会议室，线上会议按线上1—线上5依次安排；每场 1 小时（上午 8:00—12:00，下午 13:30—17:30），12:00—13:30 为午餐路演时段（现场会议室）；周六日仅安排线上专家交流与上市公司反路演。9月25日—27日中秋节放假。页面为演示用示例数据，分析师、专家与内部人员姓名均为虚构，日程安排不代表真实预约。</p>
+  <p class="foot">101—106 为现场会议室，线上会议按线上1—线上5依次安排；每场 1 小时（上午 8:00—12:00，下午 13:30—17:30），12:00—13:30 为午餐路演时段（现场会议室）；周六日仅安排线上专家交流与上市公司反路演。9月25日—27日中秋节、10月1日—7日国庆节放假。页面为演示用示例数据，腾讯会议号与链接为演示生成，报名、录入与活动日志仅保存在当前浏览器中，分析师、专家与内部人员姓名均为虚构，日程安排不代表真实预约。</p>
 </div>
 
 <div class="scrim" id="scrim" hidden></div>
+</div>
 <aside class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></aside>
 
 <script>
@@ -623,10 +731,10 @@ const TYPES={road:'卖方路演',expert:'专家交流',corp:'上市公司反路�
 
 const WD=['周一','周二','周三','周四','周五','周六','周日'];
 const pad=n=>String(n).padStart(2,'0');
-const TODAY='2026-09-24';
-const HOLIDAY={'2026-09-25':'中秋节','2026-09-26':'中秋节','2026-09-27':'中秋节'};
+const TODAY='2026-09-27';
+const HOLIDAY={'2026-09-25':'中秋节','2026-09-26':'中秋节','2026-09-27':'中秋节','2026-10-01':'国庆节','2026-10-02':'国庆节','2026-10-03':'国庆节','2026-10-04':'国庆节','2026-10-05':'国庆节','2026-10-06':'国庆节','2026-10-07':'国庆节'};
 const WEEKS=[],DAYS=[];
-for(let w=0;w<13;w++){
+for(let w=0;w<16;w++){
   const wk={i:w,no:27+w,days:[]};
   for(let k=0;k<7;k++){
     const dt=new Date(2026,5,29+w*7+k);
@@ -682,15 +790,16 @@ const weekF=WEEKS.map(()=>.88+rnd()*.12);
 function add(o){S.push({sec:indOf(o.ind).s,regs:[],done:DAYS[o.day].d<TODAY,online:isOnlineRoom(o.room),lunch:o.slot===LUNCH,...o})}
 const orgFor=ind=>wpickN(TEAMS[ind].filter(t=>t.name),1)[0]||TEAMS[ind][0];
 WEEKS.forEach(w=>{
-  const wd=workDays(w.days);
-  shuffle(CORPS).slice(0,12+ri(6)).forEach(co=>{const t=orgFor(co.ind);const p=place(wd,ONSITE,[1,2,6,7,1,2,5,6,7],t);if(p)add({type:'corp',day:p.d,slot:p.sl,room:p.r,ind:co.ind,co,team:t})});
-  shuffle(EXPERTS).slice(0,20+ri(8)).forEach(ex=>{const t=orgFor(ex.ind);const p=place(wd,rnd()<.7?ONLINE:ONSITE,REG,t);if(p)add({type:'expert',day:p.d,slot:p.sl,room:p.r,ind:ex.ind,theme:ex.theme,ex,team:t})});
+  const wd=workDays(w.days), wf=wd.length/5;
+  if(!wd.length)return;
+  shuffle(CORPS).slice(0,Math.round((12+ri(6))*wf)).forEach(co=>{const t=orgFor(co.ind);const p=place(wd,ONSITE,[1,2,6,7,1,2,5,6,7],t);if(p)add({type:'corp',day:p.d,slot:p.sl,room:p.r,ind:co.ind,co,team:t})});
+  shuffle(EXPERTS).slice(0,Math.round((20+ri(8))*wf)).forEach(ex=>{const t=orgFor(ex.ind);const p=place(wd,rnd()<.7?ONLINE:ONSITE,REG,t);if(p)add({type:'expert',day:p.d,slot:p.sl,room:p.r,ind:ex.ind,theme:ex.theme,ex,team:t})});
   wd.forEach(d=>{ // lunch roadshows
     const n=3+ri(3);
     for(let k=0;k<n;k++){const ind=INDUSTRIES[ri(INDUSTRIES.length)];const t=wpickN(TEAMS[ind.n],1)[0];const p=place([d],ONSITE,[LUNCH],t);if(p){const th=ind.th[ri(ind.th.length)];add({type:'road',day:p.d,slot:p.sl,room:p.r,ind:ind.n,theme:th.t,kw:th.k,team:t})}}
   });
   INDUSTRIES.forEach(ind=>{
-    const n=Math.min(15,Math.round((ind.w*7+rnd()*2.5)*weekF[w.i]));
+    const n=Math.min(15,Math.round((ind.w*7+rnd()*2.5)*weekF[w.i]*wf));
     const teams=wpickN(TEAMS[ind.n],Math.min(10,n)).concat(n>10?wpickN(TEAMS[ind.n],n-10):[]), themes=shuffle(ind.th);
     teams.forEach((t,k)=>{
       const p=place(wd,rnd()<.62?ONSITE:ONLINE,REG,t); if(!p)return;
@@ -792,8 +901,8 @@ function brief(s){
 }
 
 /* ---------- state ---------- */
-const DEFAULT_WK=WEEKS.findIndex(w=>DAYS[w.days[0]].d==='2026-09-14');
-const st={view:'date',wk:DEFAULT_WK,day:WEEKS[DEFAULT_WK].days[0],tf:'all',mode:'all',layout:'expand',sector:'all',sub:'all',isec:'mac',ind:'宏观经济',team:null,period:'week',month:9,pdept:'all',pq:'',psort:'reg',pdir:-1};
+const DEFAULT_WK=Math.max(0,WEEKS.findIndex(w=>w.days.some(i=>DAYS[i].d>=TODAY&&!DAYS[i].hol&&!DAYS[i].we)));
+const st={view:'date',wk:DEFAULT_WK,day:workDays(WEEKS[DEFAULT_WK].days)[0]??WEEKS[DEFAULT_WK].days[0],tf:'all',mode:'all',layout:'expand',sector:'all',sub:'all',isec:'all',ind:'all',team:null,pending:null,entryMode:'add',form:null,editKey:null,delKey:null,etf:'all',logU:'all',logA:'all',formMsg:'',period:'week',month:9,pdept:'all',pq:'',psort:'reg',pdir:-1};
 const weekOf=()=>WEEKS[st.wk];
 
 /* ---------- period scope ---------- */
@@ -811,30 +920,31 @@ function scope(){
 }
 function periodHTML(sc){
   return `<div class="seg" role="group" aria-label="统计周期">${[['week','周度'],['month','月度'],['quarter','季度']].map(([k,l])=>`<button data-period="${k}" aria-pressed="${st.period===k}">${l}</button>`).join('')}</div>`+
-    (st.period==='month'?`<select class="monthSel" aria-label="选择月份">${[7,8,9].map(m=>`<option value="${m}"${st.month===m?' selected':''}>2026年${m}月</option>`).join('')}</select>`:'')+
+    (st.period==='month'?`<select class="monthSel" aria-label="选择月份">${[7,8,9,10].map(m=>`<option value="${m}"${st.month===m?' selected':''}>2026年${m}月</option>`).join('')}</select>`:'')+
     `<span class="scope">统计区间：<b>${sc.title}</b>（${sc.first}—${sc.last}，${sc.work.length} 个工作日，周末仅线上）${sc.open?' · 含待召开日程':''}${st.period==='week'?' · 切换周请用右上角':''}</span>`;
 }
 function delta(cur,prev,l){if(prev==null)return '';const d=prev?(cur-prev)/prev*100:0;return ` · 较${l} <span class="delta ${d>=0?'up':'down'}">${d>=0?'+':''}${d.toFixed(1)}%</span>`}
 
 /* ---------- views ---------- */
 function setView(v){
+  if(!ME)return;const tabs=ROLE_TABS[ME.key];if(!tabs.includes(v))v=tabs[0];
   st.view=v;
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.view===v));
-  ['date','industry','stats','people'].forEach(k=>$('#view-'+k).hidden=k!==v);
+  VIEWS.forEach(k=>{const el=$('#view-'+k);if(el)el.hidden=k!==v});
   try{history.replaceState(null,'','#'+v)}catch(e){}
   render();
 }
 function render(){
   $('#wkSel').innerHTML=WEEKS.map(w=>`<option value="${w.i}"${w.i===st.wk?' selected':''}>${w.label}${w.current?'（本周）':''}</option>`).join('');
   $('#wkPrev').disabled=st.wk===0;$('#wkNext').disabled=st.wk===WEEKS.length-1;
-  ({date:renderDate,industry:renderIndustry,stats:renderStats,people:renderPeople})[st.view]();
+  if(!ME)return;({date:renderDate,industry:renderIndustry,stats:renderStats,people:renderPeople,mine:renderMine,entry:renderEntry,log:renderLog,saleweek:renderSaleWeek})[st.view]();
 }
 function setWeek(i){
   const k=DAYS[st.day].k;
   st.wk=Math.max(0,Math.min(WEEKS.length-1,i));
   const w=weekOf();
   st.day=w.days.find(d=>DAYS[d].k===k&&!DAYS[d].hol)??workDays(w.days)[0];
-  st.month=Math.min(9,Math.max(7,DAYS[w.days[2]].m));
+  st.month=Math.min(10,Math.max(7,DAYS[w.days[2]].m));
   render();
 }
 
@@ -842,7 +952,8 @@ function cellHTML(x,badge){
   const shown=(st.tf==='all'||x.type===st.tf)&&(st.mode==='all'||(st.mode==='online')===x.online)&&(st.sector==='all'||x.sec===st.sector)&&(st.sub==='all'||x.ind===st.sub);
   const lc=x.lunch?' lunchslot':'';
   if(!shown)return `<div class="cell blank${lc}"></div>`;
-  const foot=`<div class="rg">报名 <b>${x.regs.length}</b>${x.done?'':' · 待召开'}</div>`;
+  const mineR=ME&&x.regs.includes(ME.pid);
+  const foot=AGG()?`<div class="rg">报名 <b>${x.regs.length}</b>${mineR?' · <span class="okt">已报名</span>':''}${x.done?'':' · 待召开'}</div>`:`<div class="rg">${mineR?'<span class="okt">✓ 已报名</span>':(x.done?'已结束':'可报名')}</div>`;
   const t=x.team, org=`<div class="org"><b>${esc(t.broker)}</b> ${esc(who(t))}</div>`;
   const rb=badge?`<span class="roombadge${isOnlineRoom(x.room)?' on':''}">${isOnlineRoom(x.room)?'线上':x.room}</span>`:'', pk=badge?' packed':'';
   if(x.type==='road')return `<div class="cell booked${lc}${pk}" style="--c:${colorOf(x.ind)}" tabindex="0" data-id="${x.id}">${rb}
@@ -915,45 +1026,6 @@ function renderDate(){
   $('#grid').innerHTML=h;
 }
 
-function renderIndustry(){
-  const w=weekOf(), wAll=inDays(w.days), wl=wAll.filter(x=>x.type==='road');
-  $('#secbar').innerHTML=SECTORS.map(s=>{const l=wl.filter(x=>x.sec===s.id);return `<button class="secbtn" style="--c:var(${s.c})" aria-pressed="${st.isec===s.id}" data-isec="${s.id}"><span class="nm"><i></i>${s.name}</span><span class="ct">${INDUSTRIES.filter(i=>i.s===s.id).length} 个行业 · ${l.length} 场路演</span></button>`}).join('');
-  const sec=secOf(st.isec), inds=INDUSTRIES.filter(i=>i.s===st.isec);
-  if(!inds.some(i=>i.n===st.ind)){st.ind=inds[0].n;st.team=null}
-  $('#subbar').innerHTML=inds.map(i=>`<button class="subbtn" style="--c:var(${sec.c})" aria-pressed="${st.ind===i.n}" data-ind="${esc(i.n)}">${esc(i.n)}<b>${wl.filter(x=>x.ind===i.n).length}</b></button>`).join('');
-  const teams=TEAMS[st.ind];
-  const all=wl.filter(x=>x.ind===st.ind);
-  const list=st.team?all.filter(x=>x.team.id===st.team):all;
-  const tm=st.team?teams.find(t=>t.id===st.team):null;
-  const spec=wAll.filter(x=>x.type!=='road'&&x.ind===st.ind);
-  const activeTeams=new Set(all.map(x=>x.team.id)).size;
-  let h=`<div class="card isum">
-    <div><div class="l">研究团队</div><div class="v">${teams.length}<small>个 · 本周来访 ${activeTeams}</small></div></div>
-    <div><div class="l">${w.label.split(' · ')[0]}路演</div><div class="v">${all.length}<small>场</small></div></div>
-    <div><div class="l">专家 / 反路演</div><div class="v">${spec.filter(x=>x.type==='expert').length} / ${spec.filter(x=>x.type==='corp').length}</div></div>
-    <div><div class="l">路演报名人次</div><div class="v">${regN(all)}</div></div>
-    <div><div class="l">场均报名</div><div class="v">${all.length?(regN(all)/all.length).toFixed(1):'—'}<small>人</small></div></div>
-  </div><div class="ibody"><div class="card tscroll">
-    ${tm?`<div style="padding:10px 12px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px"><span>仅看：<b>${esc(teamLabel(tm))}</b></span><button class="linkbtn" style="padding:3px 10px" data-team="">显示全部团队</button></div>`:''}
-    <table class="tbl"><thead><tr><th>时间</th><th>会议室</th><th>卖方券商 / 分析师</th><th>交流主题</th><th class="r">报名</th></tr></thead><tbody>`;
-  w.days.filter(i=>!DAYS[i].we).forEach(i=>{
-    const d=DAYS[i], dl=list.filter(x=>x.day===i);
-    h+=`<tr class="grp"><td colspan="5">${d.w} ${d.s}<span>${d.hol?d.hol+'放假':dl.length?dl.length+' 场':'无安排'}</span></td></tr>`;
-    dl.forEach(x=>{h+=`<tr class="row" tabindex="0" data-id="${x.id}"><td class="mono">${timeTxt(x)}${x.lunch?'<div><span class="ltag" style="margin:0">午餐</span></div>':''}</td><td class="mono">${roomName(x.room)}</td>
-      <td class="nw"><b>${esc(x.team.broker)}</b><div class="sub2">${esc(whoT(x.team))}</div></td><td>${esc(x.theme)}</td><td class="r mono">${x.regs.length}${x.done?'':'<div class="sub2">待召开</div>'}</td></tr>`});
-  });
-  h+=`</tbody></table></div><div class="iside">`;
-  h+=`<div class="panel"><h3>${esc(st.ind)}研究团队</h3><div class="sub">点击查看该团队本周路演</div>`+
-    teams.map(t=>[t,all.filter(x=>x.team.id===t.id).length]).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`<div class="teamrow" tabindex="0" data-team="${esc(t.id)}" aria-pressed="${st.team===t.id}"><div class="tn"><b>${esc(t.broker)}</b> ${esc(who(t))}</div><span class="ct">${n} 场</span></div>`).join('')+`</div>`;
-  h+=`<div class="panel"><h3>本周专家交流与反路演</h3><div class="sub">同属${esc(st.ind)}，不计入路演场次</div><div class="mini">`+
-    (spec.length?spec.map(x=>`<div class="it click" tabindex="0" data-id="${x.id}"><div>${ttag(x.type)} ${esc(headline(x))}<div class="s2">${DAYS[x.day].w} ${SLOTS[x.slot][0]} · ${esc(teamLabel(x.team))}</div></div><span class="num s2">${x.regs.length}人</span></div>`).join(''):'<div class="none">本周无相关安排</div>')+`</div></div>`;
-  const pc=countBy(all.flatMap(s=>s.regs),x=>x);
-  const top=[...pc].sort((a,b)=>b[1]-a[1]).slice(0,8);
-  h+=`<div class="panel"><h3>主要报名人</h3><div class="sub">本周本行业路演报名最多的内部人员</div><div class="mini">`+
-    (top.length?top.map(([id,n])=>{const p=P[id];return `<div class="it click" tabindex="0" data-pid="${id}"><div>${esc(p.name)} <span class="s2">${esc(p.dept)} · ${esc(p.role)}</span></div><span class="num s2">${n} 场</span></div>`}).join(''):'<div class="none">暂无报名</div>')+`</div></div></div></div>`;
-  $('#ipanel').innerHTML=h;
-}
-
 function renderStats(){
   const sc=scope(), L=sc.list, Rd=L.filter(x=>x.type==='road');
   $('#periodS').innerHTML=periodHTML(sc);
@@ -1017,7 +1089,7 @@ function renderStats(){
 function personStats(L){
   const m=new Map(P.map(p=>[p.id,{p,reg:0,pend:0,ind:new Map(),types:{road:0,expert:0,corp:0}}]));
   L.forEach(s=>s.regs.forEach(pid=>{const o=m.get(pid);o.reg++;if(!s.done)o.pend++;o.types[s.type]++;o.ind.set(s.ind,(o.ind.get(s.ind)||0)+1)}));
-  return [...m.values()].map(o=>({...o,inds:[...o.ind].sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0])}));
+  return [...m.values()].filter(o=>!o.p.hide).map(o=>({...o,inds:[...o.ind].sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0])}));
 }
 function renderPeople(){
   const sc=scope(), L=sc.list, total=regN(L);
@@ -1086,30 +1158,6 @@ function orgRows(x,label){
   const t=x.team;
   return `<dt>${label}</dt><dd><b>${esc(t.broker)}</b> ${esc(who(t))}${t.name?'（'+esc(x.ind)+esc(titleOf(t))+'）':''}</dd>`;
 }
-function openDetail(id){
-  const x=S[id];
-  if(x.type==='road'){
-    openSheet(`<div>${ttag('road')} ${chip(x.ind)}</div><h2 id="sheetTitle">${esc(x.theme)}</h2>
-      <dl>${whenRows(x)}${orgRows(x,'卖方团队')}<dt>行业</dt><dd>${secOf(x.sec).name} › ${esc(x.ind)}</dd><dt>关键词</dt><dd>${x.kw.map(k=>`<span class="kw">${esc(k)}</span>`).join('')}</dd></dl>
-      <h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>
-      ${regsBlock(x)}
-      <button class="linkbtn" data-goind="${esc(x.ind)}" data-gowk="${DAYS[x.day].wk}">查看${esc(x.ind)}当周全部路演 →</button>`);
-  }else if(x.type==='expert'){
-    openSheet(`<div>${chip(x.ind)} ${ttag('expert')}</div><h2 id="sheetTitle">${esc(x.theme)}</h2>
-      <dl>${whenRows(x)}${orgRows(x,'组织券商')}<dt>出席专家</dt><dd><b>${esc(x.ex.who)}</b></dd></dl>
-      <h4><span>专家背景</span></h4><div class="bio">${esc(x.ex.bg)}</div>
-      <h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>
-      <h4><span>核心交流内容</span></h4><ol class="pts">${x.ex.pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ol>
-      ${regsBlock(x)}`);
-  }else{
-    openSheet(`<div>${chip(x.ind)} ${ttag('corp')}</div><h2 id="sheetTitle">${esc(x.co.name)}反路演</h2>
-      <dl>${whenRows(x)}<dt>公司</dt><dd><b>${esc(x.co.name)}</b> <span class="mono">${x.co.code}</span></dd>${orgRows(x,'组织券商')}</dl>
-      <h4><span>公司出席领导</span><span>以公司最终确认为准</span></h4>
-      <div class="leaders">${x.co.leaders.map(l=>`<div><b>${esc(l)}</b><span>${esc(x.co.name)}</span></div>`).join('')}</div>
-      <h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>
-      ${regsBlock(x)}`);
-  }
-}
 function openPerson(pid){
   const p=P[pid], sc=scope();
   const rs=sc.list.filter(s=>s.regs.includes(pid));
@@ -1119,16 +1167,423 @@ function openPerson(pid){
     <div class="box">${rs.length?`<table class="tbl"><thead><tr><th>时间</th><th>日程</th></tr></thead><tbody>`+
       rs.map(s=>`<tr class="row" tabindex="0" data-id="${s.id}"><td class="mono">${DAYS[s.day].s} ${DAYS[s.day].w}<div class="sub2">${SLOTS[s.slot][0]} · ${roomName(s.room)}</div></td><td>${s.type==='road'?chip(s.ind):ttag(s.type)} <b>${esc(headline(s))}</b><div class="sub2">${esc(teamLabel(s.team))}${s.done?'':' · 待召开'}</div></td></tr>`).join('')+`</tbody></table>`:'<div class="none">该区间未报名</div>'}</div>`);
 }
-function closeDetail(){$('#sheet').hidden=true;$('#scrim').hidden=true;if(lastFocus&&lastFocus.focus&&document.contains(lastFocus))lastFocus.focus()}
+function closeDetail(){st.pending=null;$('#sheet').hidden=true;$('#scrim').hidden=true;if(lastFocus&&lastFocus.focus&&document.contains(lastFocus))lastFocus.focus()}
 
 
+
+/* ---------- users, persistence & registration (v6) ---------- */
+const BRAND='';
+const BRAND_EN='RESEARCH SCHEDULE PLATFORM';
+const USERS=[
+  {key:'manager',u:'Manager',alias:['manger'],pw:'Manager',label:'公司管理人员',name:'管理层演示账号',dept:'权益投资部',title:'投资总监',desc:'日程 · 报名情况 · 行业统计'},
+  {key:'admin',u:'Admin',alias:[],pw:'Admin',label:'公司券联',name:'券联管理员',dept:'研究部',title:'券商联络',desc:'全部功能 · 录入 · 活动日志'},
+  {key:'analyst',u:'Analyst',alias:[],pw:'Analyst',label:'投研人员',name:'投研演示账号',dept:'研究部',title:'行业研究员',desc:'日程浏览 · 我的报名'},
+  {key:'sale',u:'Sale',alias:['sales'],pw:'Sale',label:'卖方销售',name:'国投证券机构销售',dept:'卖方',title:'机构销售',broker:'国投证券',desc:'录入修改 · 周度安排'}
+];
+USERS.forEach(u=>{u.pid=P.length;P.push({id:P.length,name:u.name,dept:u.dept,role:u.title,pri:[],sec:[],all:false,cover:u.broker||'—',isUser:true,hide:u.key==='sale'})});
+const ROLE_TABS={manager:['date','industry','people','stats','mine'],admin:['date','industry','people','stats','entry','log','mine'],analyst:['date','industry','mine'],sale:['entry','saleweek','mine']};
+const TAB_LABEL={date:'日期视图',industry:'行业视图',people:'报名情况',stats:'行业统计',entry:'录入管理',log:'活动日志',mine:'我的报名',saleweek:'周度安排'};
+const VIEWS=['date','industry','people','stats','entry','log','mine','saleweek'];
+const LEADERS=['董事长','总经理','董事会秘书','财务总监','投资者关系负责人','证券事务代表'];
+const ACTS=['登录','退出','报名','取消报名','新增安排','修改安排','删除安排'];
+let ME=null;
+const AGG=()=>!!ME&&ME.key!=='analyst';
+const STORE_KEY='rsb-store-v1';
+let store={regs:{},ops:[],log:[],seq:0,seeded:false};
+try{const j=JSON.parse(localStorage.getItem(STORE_KEY)||'null');if(j&&typeof j==='object')store=Object.assign(store,j)}catch(e){}
+function saveStore(){try{localStorage.setItem(STORE_KEY,JSON.stringify(store))}catch(e){}}
+S.forEach(s=>s.key='g'+s.id);
+const byKey=k=>S.find(s=>s.key===k);
+function reindex(){S.sort((a,b)=>a.day-b.day||a.slot-b.slot||a.room-b.room);S.forEach((s,i)=>s.id=i)}
+function freeOnline(day,slot,except){const used=new Set(S.filter(s=>s!==except&&s.day===day&&s.slot===slot).map(s=>s.room));return ONLINE.find(r=>!used.has(r))}
+function roomBusy(day,slot,room,except){return S.some(s=>s!==except&&s.day===day&&s.slot===slot&&s.room===room)}
+function teamFor(broker,name,ind){
+  const t=(TEAMS[ind]||[]).find(t=>t.broker===broker&&(name?t.name===name:true));
+  if(t&&(!name||t.name===name))return t;
+  return {broker,name:name||null,ind,id:'c|'+broker+'|'+ind+'|'+(name||''),aw:[]};
+}
+function buildSession(dt,key,prev){
+  const day=DAYS.findIndex(d=>d.d===dt.date);if(day<0)return null;
+  const ind=indOf(dt.ind);
+  const o={key,type:dt.type,day,slot:+dt.slot,ind:dt.ind,sec:ind.s,theme:'',kw:[],team:teamFor(dt.broker,dt.analyst,dt.ind),regs:prev?prev.regs:[],custom:true,by:dt.by};
+  if(dt.type==='road'){o.theme=dt.theme;o.kw=dt.kw||[]}
+  if(dt.type==='expert'){o.theme=dt.theme;o.ex={ind:dt.ind,theme:dt.theme,who:dt.who||'专家',bg:dt.bg||'（背景待补充）',pts:(dt.pts||[]).length?dt.pts:['（核心内容待补充）']}}
+  if(dt.type==='corp'){const c=CORPS.find(c=>c.name===dt.co)||{name:dt.co,code:'',pts:[]};o.theme=c.name+'反路演';o.co={name:c.name,code:c.code,ind:dt.ind,leaders:(dt.leaders||[]).length?dt.leaders:['董事会秘书'],pts:(dt.pts||[]).length?dt.pts:c.pts}}
+  o.online=!!dt.online||DAYS[day].we;o.lunch=o.slot===LUNCH;
+  o.room=o.online?(freeOnline(day,o.slot,prev)||ONLINE[ONLINE.length-1]):+dt.room;
+  o.done=DAYS[day].d<TODAY;
+  return o;
+}
+function applyOp(op){
+  if(op.op==='add'){const s=buildSession(op.data,op.key);if(s)S.push(s)}
+  else if(op.op==='edit'){const i=S.findIndex(s=>s.key===op.key);if(i>=0){const s=buildSession(op.data,op.key,S[i]);if(s)S[i]=s}}
+  else if(op.op==='del'){const i=S.findIndex(s=>s.key===op.key);if(i>=0)S.splice(i,1)}
+}
+store.ops.forEach(applyOp);reindex();
+Object.entries(store.regs).forEach(([uk,keys])=>{const u=USERS.find(x=>x.key===uk);if(!u)return;(keys||[]).forEach(k=>{const s=byKey(k);if(s&&!s.regs.includes(u.pid))s.regs.push(u.pid)})});
+if(!store.seeded){
+  const lr=mulberry32(2026927), seeds=[];
+  const pool=S.filter(s=>DAYS[s.day].d>='2026-09-21'&&DAYS[s.day].d<='2026-10-16');
+  for(let i=0;i<40;i++){
+    const u=USERS[Math.floor(lr()*USERS.length)], day=21+Math.floor(lr()*6), hh=8+Math.floor(lr()*10), mm=Math.floor(lr()*60);
+    const s=pool[Math.floor(lr()*pool.length)];
+    let act=u.key==='sale'?['登录','新增安排','修改安排','登录'][Math.floor(lr()*4)]:u.key==='admin'?['登录','新增安排','删除安排','报名','修改安排'][Math.floor(lr()*5)]:['登录','报名','报名','取消报名','退出'][Math.floor(lr()*5)];
+    seeds.push({t:`2026-09-${pad(day)}T${pad(hh)}:${pad(mm)}:00+08:00`,u:u.u,label:u.label,act,detail:/登录|退出/.test(act)?'':`${DAYS[s.day].s} ${SLOTS[s.slot][0]} ${headline(s)}`});
+  }
+  seeds.sort((a,b)=>a.t<b.t?-1:1);
+  store.log=seeds.concat(store.log);store.seeded=true;saveStore();
+}
+function logAct(act,detail){store.log.push({t:new Date().toISOString(),u:ME?ME.u:'—',label:ME?ME.label:'',act,detail:detail||''});if(store.log.length>2000)store.log=store.log.slice(-2000);saveStore()}
+const myRegs=()=>ME?S.filter(s=>s.regs.includes(ME.pid)):[];
+const conflictsOf=x=>ME?S.filter(s=>s!==x&&s.day===x.day&&s.slot===x.slot&&s.regs.includes(ME.pid)):[];
+function persistMine(){store.regs[ME.key]=myRegs().map(s=>s.key);saveStore()}
+let sheetId=null, toastT=null;
+function toast(m){let el=document.getElementById('toast');if(!el){el=document.createElement('div');el.id='toast';el.className='toast';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{el.hidden=true},2400)}
+function refreshAfter(id){render();if(!$('#sheet').hidden&&sheetId===id)openDetail(id)}
+function doReg(id,force){
+  const x=S[id];if(!x||!ME||x.done||x.regs.includes(ME.pid))return;
+  const c=conflictsOf(x);
+  if(c.length&&!force){st.pending=x.key;openDetail(id);return}
+  x.regs.push(ME.pid);st.pending=null;persistMine();
+  logAct('报名',`${DAYS[x.day].s} ${SLOTS[x.slot][0]} ${headline(x)}`);
+  toast(c.length?'报名成功（与同时段场次冲突，已在“我的报名”中标出）':'报名成功');refreshAfter(id);
+}
+function doUnreg(id){
+  const x=S[id];if(!x||!ME)return;const i=x.regs.indexOf(ME.pid);if(i<0)return;
+  x.regs.splice(i,1);persistMine();logAct('取消报名',`${DAYS[x.day].s} ${SLOTS[x.slot][0]} ${headline(x)}`);
+  toast('已取消报名');refreshAfter(id);
+}
+function meetingOf(s){
+  if(!s.meeting){const h=hash('tm|'+s.key+'|'+s.day+'|'+s.slot);const n=String(100000000+(h%900000000));
+    const c=(h.toString(36)+hash('x'+s.key+s.day).toString(36)).replace(/[^a-z0-9]/g,'').slice(0,11);
+    s.meeting={no:n.slice(0,3)+' '+n.slice(3,6)+' '+n.slice(6,9),url:'https://meeting.tencent.com/dm/'+c}}
+  return s.meeting;
+}
+function meetingBlock(x){
+  if(!x.online)return '';const m=meetingOf(x);
+  return `<div class="tm"><div class="line"><b>腾讯会议</b><span class="hint">线上会议 · ${rlabel(x.room)}</span></div>
+    <div class="line">会议号 <span class="no">${m.no}</span><button class="btn sm ghost" data-copy="${m.no.replace(/ /g,'')}">复制会议号</button></div>
+    <div class="line">入会链接 <a href="${m.url}" target="_blank" rel="noopener">${m.url}</a></div></div>`;
+}
+function regAction(x){
+  if(!ME)return '';
+  const mine=x.regs.includes(ME.pid);
+  if(x.done)return `<div class="regbox"><div class="row1">${mine?'<span class="regok">你已报名本场</span>':'<span>本场已结束</span>'}<span class="hint">已召开的日程不可报名或取消</span></div></div>`;
+  if(mine){const c=conflictsOf(x);return `<div class="regbox"><div class="row1"><span class="regok">报名成功</span><button class="btn warn sm" data-unreg="${x.id}">取消报名</button></div>${c.length?`<div class="conflict"><b>时间冲突提醒：</b>同一时段你还报名了：<ul>${c.map(s=>`<li>${esc(headline(s))} · ${esc(teamLabel(s.team))}（${roomName(s.room)}）</li>`).join('')}</ul></div>`:''}</div>`}
+  if(st.pending===x.key){const c=conflictsOf(x);return `<div class="regbox"><div class="conflict"><b>时间冲突：</b>${DAYS[x.day].w} ${timeTxt(x)} 你已报名以下场次：<ul>${c.map(s=>`<li>${esc(headline(s))} · ${esc(teamLabel(s.team))}（${roomName(s.room)}）</li>`).join('')}</ul>仍要报名本场吗？</div><div class="row1"><span class="hint">继续报名后，冲突会在“我的报名”中标出</span><span style="display:flex;gap:8px"><button class="btn ghost sm" data-regcancel="1">暂不报名</button><button class="btn sm" data-regforce="${x.id}">仍然报名</button></span></div></div>`}
+  return `<div class="regbox"><div class="row1"><span class="hint">${AGG()?`当前报名 ${x.regs.length} 人`:'报名后可在“我的报名”中查看与取消'}</span><button class="btn" data-reg="${x.id}">报名</button></div></div>`;
+}
+const showRegs=x=>AGG()||(ME&&ME.key==='sale'&&x.team.broker===ME.broker);
+function openDetail(id){
+  const x=S[id];if(!x)return;sheetId=id;
+  const top=meetingBlock(x)+regAction(x), rb=showRegs(x)?regsBlock(x):'';
+  if(x.type==='road'){
+    openSheet(`<div>${ttag('road')} ${chip(x.ind)}</div><h2 id="sheetTitle">${esc(x.theme)}</h2>
+      <dl>${whenRows(x)}${orgRows(x,'卖方团队')}<dt>行业</dt><dd>${secOf(x.sec).name} › ${esc(x.ind)}</dd><dt>关键词</dt><dd>${(x.kw||[]).map(k=>`<span class="kw">${esc(k)}</span>`).join('')||'—'}</dd></dl>
+      ${top}<h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>${rb}
+      ${ME&&ME.key!=='sale'?`<button class="linkbtn" data-goind="${esc(x.ind)}" data-gowk="${DAYS[x.day].wk}">查看${esc(x.ind)}当周全部日程 →</button>`:''}`);
+  }else if(x.type==='expert'){
+    openSheet(`<div>${chip(x.ind)} ${ttag('expert')}</div><h2 id="sheetTitle">${esc(x.theme)}</h2>
+      <dl>${whenRows(x)}${orgRows(x,'组织券商')}<dt>出席专家</dt><dd><b>${esc(x.ex.who)}</b></dd></dl>
+      ${top}<h4><span>专家背景</span></h4><div class="bio">${esc(x.ex.bg)}</div>
+      <h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>
+      <h4><span>核心交流内容</span></h4><ol class="pts">${x.ex.pts.map(p=>`<li>${esc(p)}</li>`).join('')}</ol>${rb}`);
+  }else{
+    openSheet(`<div>${chip(x.ind)} ${ttag('corp')}</div><h2 id="sheetTitle">${esc(x.co.name)}反路演</h2>
+      <dl>${whenRows(x)}<dt>公司</dt><dd><b>${esc(x.co.name)}</b> <span class="mono">${x.co.code}</span></dd>${orgRows(x,'组织券商')}</dl>
+      ${top}<h4><span>公司出席领导</span><span>以公司最终确认为准</span></h4>
+      <div class="leaders">${x.co.leaders.map(l=>`<div><b>${esc(l)}</b><span>${esc(x.co.name)}</span></div>`).join('')}</div>
+      <h4><span>主题简介</span></h4><div class="brief">${esc(brief(x))}</div>${rb}`);
+  }
+}
+function opBtn(x){
+  if(!ME)return '';const mine=x.regs.includes(ME.pid);
+  if(x.done)return mine?'<span class="okt">已报名</span>':'<span class="hint">已结束</span>';
+  return mine?`<span class="okt">已报名</span> <button class="btn warn sm" data-unreg="${x.id}">取消报名</button>`:`<button class="btn sm" data-reg="${x.id}">报名</button>`;
+}
+
+/* ---------- industry view (all types, register inline) ---------- */
+function renderIndustry(){
+  const w=weekOf(), wAll=inDays(w.days);
+  $('#secbar').innerHTML=[{id:'all',name:'全部行业',c:'--s6'}].concat(SECTORS).map(s=>{const l=s.id==='all'?wAll:wAll.filter(x=>x.sec===s.id);const ni=s.id==='all'?INDUSTRIES.length:INDUSTRIES.filter(i=>i.s===s.id).length;
+    return `<button class="secbtn" style="--c:var(${s.c})" aria-pressed="${st.isec===s.id}" data-isec="${s.id}"><span class="nm"><i></i>${s.name}</span><span class="ct">${ni} 个行业 · ${l.length} 场</span></button>`}).join('');
+  let list, single=false;
+  if(st.isec==='all'){$('#subbar').innerHTML='';list=wAll}
+  else{
+    const sec=secOf(st.isec), inds=INDUSTRIES.filter(i=>i.s===st.isec);
+    if(st.ind!=='all'&&!inds.some(i=>i.n===st.ind)){st.ind='all';st.team=null}
+    const inS=wAll.filter(x=>x.sec===st.isec);
+    $('#subbar').innerHTML=[`<button class="subbtn" style="--c:var(${sec.c})" aria-pressed="${st.ind==='all'}" data-ind="all">全部${esc(sec.name)}<b>${inS.length}</b></button>`]
+      .concat(inds.map(i=>`<button class="subbtn" style="--c:var(${sec.c})" aria-pressed="${st.ind===i.n}" data-ind="${esc(i.n)}">${esc(i.n)}<b>${inS.filter(x=>x.ind===i.n).length}</b></button>`)).join('');
+    list=st.ind==='all'?inS:inS.filter(x=>x.ind===st.ind);single=st.ind!=='all';
+  }
+  const teams=single?TEAMS[st.ind]:null, tm=single&&st.team?teams.find(t=>t.id===st.team):null;
+  const shown=tm?list.filter(x=>x.team.id===tm.id):list;
+  const rd=list.filter(x=>x.type==='road'), ex=list.filter(x=>x.type==='expert'), co=list.filter(x=>x.type==='corp');
+  const mineN=list.filter(x=>ME&&x.regs.includes(ME.pid)).length;
+  const cells=[
+    single?`<div><div class="l">研究团队</div><div class="v">${teams.length}<small>个 · 本周来访 ${new Set(rd.map(x=>x.team.id)).size}</small></div></div>`:`<div><div class="l">涉及行业</div><div class="v">${new Set(list.map(x=>x.ind)).size}<small>个</small></div></div>`,
+    `<div><div class="l">卖方路演</div><div class="v">${rd.length}<small>场</small></div></div>`,
+    `<div><div class="l">专家交流 / 反路演</div><div class="v">${ex.length} / ${co.length}</div></div>`,
+    AGG()?`<div><div class="l">报名人次</div><div class="v">${regN(list)}</div></div>`:`<div><div class="l">我的报名</div><div class="v">${mineN}<small>场</small></div></div>`,
+    AGG()?`<div><div class="l">场均报名</div><div class="v">${list.length?(regN(list)/list.length).toFixed(1):'—'}<small>人</small></div></div>`:`<div><div class="l">可报名（待召开）</div><div class="v">${list.filter(x=>!x.done).length}<small>场</small></div></div>`];
+  const cols=AGG()?7:6;
+  let h=`<div class="card isum">${cells.join('')}</div><div class="ibody${single?'':' one'}"><div class="card tscroll">`+
+    (tm?`<div style="padding:10px 12px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px"><span>仅看：<b>${esc(teamLabel(tm))}</b></span><button class="linkbtn" style="padding:3px 10px" data-team="">显示全部团队</button></div>`:'')+
+    `<table class="tbl"><thead><tr><th>时间</th><th>会议室</th><th>类型 / 行业</th><th>组织券商 / 分析师</th><th>交流内容</th>${AGG()?'<th class="r">报名</th>':''}<th class="r">操作</th></tr></thead><tbody>`;
+  w.days.forEach(i=>{
+    const d=DAYS[i], dl=shown.filter(x=>x.day===i);if(d.we&&!dl.length)return;
+    h+=`<tr class="grp"><td colspan="${cols}">${d.w} ${d.s}${d.we?' · 周末仅线上':''}<span>${d.hol?d.hol+'放假':dl.length?dl.length+' 场':'无安排'}</span></td></tr>`;
+    dl.forEach(x=>{
+      const mine=ME&&x.regs.includes(ME.pid), cf=mine&&conflictsOf(x).length;
+      const content=x.type==='road'?esc(x.theme):x.type==='expert'?`${esc(x.theme)}<div class="sub2">${esc(x.ex.who)} · ${esc(x.ex.bg.split('，')[0])}</div>`:`<b>${esc(x.co.name)}反路演</b> <span class="mono">${x.co.code}</span><div class="sub2">出席：${esc(x.co.leaders.join('、'))}</div>`;
+      h+=`<tr class="row t-${x.type}" tabindex="0" data-id="${x.id}"><td class="mono">${timeTxt(x)}${x.lunch?'<div><span class="ltag" style="margin:0">午餐</span></div>':''}</td><td class="mono">${roomName(x.room)}</td>
+        <td class="nw">${ttag(x.type)} ${chip(x.ind)}</td><td class="nw"><b>${esc(x.team.broker)}</b><div class="sub2">${esc(whoT(x.team))}</div></td><td>${content}</td>${AGG()?`<td class="r mono">${x.regs.length}</td>`:''}
+        <td class="opcell">${opBtn(x)}${cf?'<div style="margin-top:4px"><span class="cftag">时间冲突</span></div>':''}</td></tr>`;
+    });
+  });
+  h+=`</tbody></table></div>`;
+  if(single){
+    h+=`<div class="iside"><div class="panel"><h3>${esc(st.ind)}研究团队</h3><div class="sub">点击查看该团队本周路演</div>`+
+      teams.map(t=>[t,rd.filter(x=>x.team.id===t.id).length]).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`<div class="teamrow" tabindex="0" data-team="${esc(t.id)}" aria-pressed="${st.team===t.id}"><div class="tn"><b>${esc(t.broker)}</b> ${esc(who(t))}</div><span class="ct">${n} 场</span></div>`).join('')+`</div>`;
+    if(AGG()){const pc=countBy(list.flatMap(s=>s.regs).filter(pid=>!P[pid].hide),x=>x);const top=[...pc].sort((a,b)=>b[1]-a[1]).slice(0,8);
+      h+=`<div class="panel"><h3>主要报名人</h3><div class="sub">本周本行业报名最多的内部人员</div><div class="mini">`+
+        (top.length?top.map(([id,n])=>{const p=P[id];return `<div class="it click" tabindex="0" data-pid="${id}"><div>${esc(p.name)} <span class="s2">${esc(p.dept)} · ${esc(p.role)}</span></div><span class="num s2">${n} 场</span></div>`}).join(''):'<div class="none">暂无报名</div>')+`</div></div>`}
+    h+=`</div>`;
+  }
+  $('#ipanel').innerHTML=h+`</div>`;
+}
+
+/* ---------- my registrations ---------- */
+function renderMine(){
+  const w=weekOf(), all=myRegs(), wk=all.filter(s=>DAYS[s.day].wk===st.wk);
+  const cfIds=new Set(all.filter(s=>conflictsOf(s).length).map(s=>s.id));
+  const up=all.filter(s=>!s.done);
+  let h=`<div class="card isum" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+    <div><div class="l">${w.label.split(' · ')[0]}已报名</div><div class="v">${wk.length}<small>场</small></div></div>
+    <div><div class="l">本周时间冲突</div><div class="v" style="${wk.some(s=>cfIds.has(s.id))?'color:#B23A48':''}">${wk.filter(s=>cfIds.has(s.id)).length}<small>场</small></div></div>
+    <div><div class="l">待召开（全部）</div><div class="v">${up.length}<small>场</small></div></div>
+    <div><div class="l">累计报名</div><div class="v">${all.length}<small>场</small></div></div></div>`;
+  h+=`<div class="card tscroll"><table class="tbl"><thead><tr><th>时间</th><th>类型 / 行业</th><th>日程</th><th>组织券商</th><th>地点 / 会议</th><th class="r">操作</th></tr></thead><tbody>`;
+  w.days.forEach(i=>{
+    const d=DAYS[i], dl=wk.filter(s=>s.day===i);if(d.we&&!dl.length)return;
+    h+=`<tr class="grp"><td colspan="6">${d.w} ${d.s}<span>${d.hol?d.hol+'放假':dl.length?dl.length+' 场':'暂无报名'}</span></td></tr>`;
+    dl.forEach(s=>{const cf=cfIds.has(s.id), m=s.online?meetingOf(s):null;
+      h+=`<tr class="row${cf?' cf':''}" tabindex="0" data-id="${s.id}"><td class="mono">${timeTxt(s)}${cf?'<div style="margin-top:4px"><span class="cftag">时间冲突</span></div>':''}</td>
+        <td class="nw">${ttag(s.type)} ${chip(s.ind)}</td><td><b>${esc(headline(s))}</b>${cf?`<div class="sub2" style="color:#8E2A36">同时段还报名了：${conflictsOf(s).map(c=>esc(headline(c))).join('；')}</div>`:''}</td>
+        <td class="nw">${esc(teamLabel(s.team))}</td><td>${s.online?`线上 · 腾讯会议 <span class="mono">${m.no}</span>`:`${s.room} 现场会议室`}</td>
+        <td class="opcell">${s.done?'<span class="hint">已结束</span>':`<button class="btn warn sm" data-unreg="${s.id}">取消报名</button>`}</td></tr>`});
+  });
+  h+=`</tbody></table></div>`;
+  if(!all.length)h+=`<p class="hint" style="margin-top:12px">还没有报名。${ME.key==='sale'?'可在“周度安排”点开日程报名。':'可在“日期视图”或“行业视图”点开日程报名。'}</p>`;
+  $('#mineBody').innerHTML=h;
+}
+
+/* ---------- entry: add / edit / delete ---------- */
+function defaultInd(broker){const hit=INDUSTRIES.find(i=>(TEAMS[i.n]||[]).some(t=>t.broker===broker&&t.name));return hit?hit.n:'电子'}
+function newForm(){
+  const d=DAYS.find(d=>d.d>=TODAY&&!d.hol&&!d.we);const broker=ME&&ME.broker?ME.broker:'中信证券';const ind=defaultInd(broker);
+  const t=(TEAMS[ind]||[]).find(t=>t.broker===broker&&t.name);const day=d?d.i:DAYS.length-1;
+  const slot=[1,2,5,6,7,0,3,8].find(sl=>ONSITE.some(r=>!roomBusy(day,sl,r)))??1;const room=ONSITE.find(r=>!roomBusy(day,slot,r))||101;
+  return {type:'road',date:d?d.d:DAYS[DAYS.length-1].d,slot,online:false,room,ind,broker,analyst:t?t.name:'',autoAn:true,theme:'',themeSel:'',kw:[],who:'',bg:'',ptsText:'',co:'',leaders:['董事会秘书','投资者关系负责人']};
+}
+function sessionToForm(s){
+  return {type:s.type,date:DAYS[s.day].d,slot:s.slot,online:s.online,room:s.online?101:s.room,ind:s.ind,broker:s.team.broker,analyst:s.team.name||'',autoAn:false,
+    theme:s.type==='corp'?'':s.theme,themeSel:s.type==='road'?(indOf(s.ind).th.some(t=>t.t===s.theme)?s.theme:'__c'):'',kw:(s.kw||[]).slice(),
+    who:s.ex?s.ex.who:'',bg:s.ex?s.ex.bg:'',ptsText:(s.ex?s.ex.pts:s.co?s.co.pts:[]).join('\n'),co:s.co?s.co.name:'',leaders:s.co?s.co.leaders.slice():['董事会秘书']};
+}
+function readForm(){
+  const form=$('#entryForm');if(!form)return;const f=st.form, fd=new FormData(form);
+  const prevInd=f.ind, prevBroker=f.broker, prevType=f.type;
+  ['type','date','slot','room','ind','broker','analyst','theme','themeSel','who','bg','ptsText','co'].forEach(k=>{const el=form.elements[k];if(el&&!el.disabled){const v=fd.get(k);if(v!=null)f[k]=v}});
+  if(form.querySelector('input[name=online]:not(:disabled)'))f.online=fd.get('online')==='1';
+  if(form.querySelector('input[name=kw]'))f.kw=fd.getAll('kw');
+  if(form.querySelector('input[name=leaders]'))f.leaders=fd.getAll('leaders');
+  f.slot=+f.slot;f.room=+f.room;
+  if(document.activeElement&&document.activeElement.name==='analyst')f.autoAn=false;
+  if(f.ind!==prevInd){f.themeSel='';f.theme='';f.kw=[];f.co=''}
+  if(f.type!==prevType){f.themeSel='';if(prevType==='expert'||f.type==='expert')f.theme=''}
+  if((f.ind!==prevInd||f.broker!==prevBroker)&&f.autoAn){const t=(TEAMS[f.ind]||[]).find(t=>t.broker===f.broker&&t.name);f.analyst=t?t.name:''}
+}
+function renderEntry(){
+  if(!st.form)st.form=newForm();
+  const f=st.form, isAdmin=ME.key==='admin', editing=st.editKey?byKey(st.editKey):null;
+  const seg=`<div class="period"><div class="seg" role="group" aria-label="录入模式"><button data-emode="add" aria-pressed="${st.entryMode==='add'}">${editing?'修改安排':'新增安排'}</button><button data-emode="edit" aria-pressed="${st.entryMode==='edit'}">修改调整</button></div>
+    <span class="scope">${isAdmin?'券联账号：可管理全部券商的安排':`卖方账号：仅可录入和修改 <b>${esc(ME.broker)}</b> 的安排`}</span></div>`;
+  if(st.entryMode==='edit'){$('#entryBody').innerHTML=seg+entryList();return}
+  const days=DAYS.filter(d=>d.d>=TODAY&&!d.hol);
+  if(!days.some(d=>d.d===f.date)&&days.length)f.date=days[0].d;
+  const dayIdx=DAYS.findIndex(d=>d.d===f.date), we=dayIdx>=0&&DAYS[dayIdx].we;
+  if(we)f.online=true;
+  if((f.type!=='road'||f.online)&&+f.slot===LUNCH)f.slot=1;
+  const opt=(v,l,sel,dis)=>`<option value="${esc(v)}"${sel?' selected':''}${dis?' disabled':''}>${esc(l)}</option>`;
+  const ind=indOf(f.ind), kws=[...new Set(ind.th.flatMap(t=>t.k).concat(f.kw))];
+  const brokers=[...new Set(Object.values(TEAMS).flat().map(t=>t.broker))].sort((a,b)=>a.localeCompare(b,'zh'));
+  if(!f.online&&roomBusy(dayIdx,+f.slot,+f.room,editing)){const fr=ONSITE.find(r=>!roomBusy(dayIdx,+f.slot,r,editing));if(fr)f.room=fr}
+  const rooms=ONSITE.map(r=>{const b=roomBusy(dayIdx,+f.slot,r,editing);return opt(r,`${r} 室${b?'（已占用）':''}`,+f.room===r,b)}).join('');
+  const sugg=(TEAMS[f.ind]||[]).filter(t=>t.broker===f.broker&&t.name).map(t=>t.name);
+  const olFree=dayIdx>=0?ONLINE.filter(r=>!roomBusy(dayIdx,+f.slot,r,editing)).length:0;
+  let h=`<form class="form" id="entryForm" autocomplete="off">
+    <div class="f"><label class="l" for="ef-broker">组织券商</label>${isAdmin?`<select id="ef-broker" name="broker">${brokers.map(b=>opt(b,b,b===f.broker)).join('')}</select>`:`<input id="ef-broker" type="text" value="${esc(f.broker)}" disabled>`}</div>
+    <div class="f"><label class="l" for="ef-type">日程类型</label><select id="ef-type" name="type">${Object.entries(TYPES).map(([k,l])=>opt(k,l,k===f.type)).join('')}</select></div>
+    <div class="f"><label class="l" for="ef-date">日期</label><select id="ef-date" name="date">${days.map(d=>opt(d.d,`${d.s} ${d.w}${d.we?'（周末 · 仅线上）':''}`,d.d===f.date)).join('')}</select></div>
+    <div class="f"><label class="l" for="ef-slot">时段</label><select id="ef-slot" name="slot">${SLOTS.map((s,i)=>(i===LUNCH&&(f.type!=='road'||f.online))?'':opt(i,`${s[0]}–${s[1]}${i===LUNCH?'（午餐路演）':''}`,i===+f.slot)).join('')}</select></div>
+    <div class="f"><label class="l">形式</label><div class="checks radios"><label><input type="radio" name="online" value="0"${!f.online?' checked':''}${we?' disabled':''}> 线下</label><label><input type="radio" name="online" value="1"${f.online?' checked':''}> 线上（腾讯会议）</label></div></div>
+    <div class="f"><label class="l" for="ef-room">会议室</label>${f.online?`<input id="ef-room" type="text" value="系统自动分配（从线上1起，本时段剩余 ${olFree} 个）" disabled>`:(ONSITE.some(r=>!roomBusy(dayIdx,+f.slot,r,editing))?`<select id="ef-room" name="room">${rooms}</select>`:`<input id="ef-room" type="text" value="本时段现场会议室已满，请换时段或改为线上" disabled>`)}</div>
+    <div class="f"><label class="l" for="ef-ind">行业</label><select id="ef-ind" name="ind">${SECTORS.map(s=>`<optgroup label="${s.name}">${INDUSTRIES.filter(i=>i.s===s.id).map(i=>opt(i.n,i.n,i.n===f.ind)).join('')}</optgroup>`).join('')}</select></div>
+    <div class="f"><label class="l" for="ef-an">分析师</label><input id="ef-an" type="text" name="analyst" value="${esc(f.analyst)}" list="anlist" placeholder="${sugg[0]?'如：'+esc(sugg[0]):'分析师姓名（可留空）'}"><datalist id="anlist">${sugg.map(n=>`<option value="${esc(n)}">`).join('')}</datalist></div>`;
+  if(f.type==='road')h+=`<div class="f full"><label class="l" for="ef-ts">路演主题</label><select id="ef-ts" name="themeSel">${opt('','— 选择常用主题 —',!f.themeSel)}${ind.th.map(t=>opt(t.t,t.t,t.t===f.themeSel)).join('')}${opt('__c','自定义主题…',f.themeSel==='__c')}</select>${f.themeSel==='__c'?`<input type="text" name="theme" value="${esc(f.theme)}" placeholder="输入路演主题" aria-label="自定义路演主题">`:''}</div>
+    <div class="f full"><label class="l">关键词（可多选）</label><div class="checks">${kws.map(k=>`<label><input type="checkbox" name="kw" value="${esc(k)}"${f.kw.includes(k)?' checked':''}> ${esc(k)}</label>`).join('')}</div></div>`;
+  if(f.type==='expert')h+=`<div class="f full"><label class="l" for="ef-th">交流主题</label><input id="ef-th" type="text" name="theme" value="${esc(f.theme)}" placeholder="如：1.6T光模块供需与硅光方案渗透"></div>
+    <div class="f"><label class="l" for="ef-who">专家称呼</label><input id="ef-who" type="text" name="who" value="${esc(f.who)}" placeholder="如：陈先生"></div>
+    <div class="f"><label class="l" for="ef-bg">专家背景</label><input id="ef-bg" type="text" name="bg" value="${esc(f.bg)}" placeholder="如：某头部厂商前产品线总监，从业15年"></div>
+    <div class="f full"><label class="l" for="ef-pts">核心交流内容（每行一条）</label><textarea id="ef-pts" name="ptsText">${esc(f.ptsText)}</textarea></div>`;
+  if(f.type==='corp'){const cs=CORPS.filter(c=>c.ind===f.ind), pool=cs.length?cs:CORPS;
+    h+=`<div class="f"><label class="l" for="ef-co">上市公司</label><select id="ef-co" name="co">${opt('','— 选择公司 —',!f.co)}${pool.map(c=>opt(c.name,`${c.name}（${c.code}）`,c.name===f.co)).join('')}</select></div>
+    <div class="f"><label class="l">&nbsp;</label><span class="hint" style="padding-top:8px">${cs.length?'已按所选行业筛选公司':'该行业暂无预置公司，显示全部公司'}</span></div>
+    <div class="f full"><label class="l">出席领导（可多选）</label><div class="checks">${LEADERS.map(l=>`<label><input type="checkbox" name="leaders" value="${l}"${f.leaders.includes(l)?' checked':''}> ${l}</label>`).join('')}</div></div>
+    <div class="f full"><label class="l" for="ef-cpts">交流要点（每行一条，可留空使用公司默认要点）</label><textarea id="ef-cpts" name="ptsText">${esc(f.ptsText)}</textarea></div>`}
+  h+=`<div class="formbar"><span class="msg" id="formMsg">${esc(st.formMsg||'')}</span>${editing?'<button type="button" class="btn ghost" data-editcancel="1">取消修改</button>':'<button type="button" class="btn ghost" data-formreset="1">清空</button>'}<button type="submit" class="btn">${editing?'保存修改':'提交安排'}</button></div></form>`;
+  const wkList=inDays(weekOf().days).filter(s=>isAdmin||s.team.broker===ME.broker);
+  const side=`<div class="panel"><h3>${editing?'正在修改':'录入说明'}</h3><div class="sub">${editing?esc(DAYS[editing.day].s+' '+SLOTS[editing.slot][0]+' · '+headline(editing)):'提交后立即出现在日期视图与行业视图中'}</div>
+    <div class="mini"><div class="it"><div>线上会议<div class="s2">自动分配线上1—线上5，并生成腾讯会议号与入会链接</div></div></div>
+    <div class="it"><div>周末日程<div class="s2">周六日仅可安排线上专家交流与上市公司反路演</div></div></div>
+    <div class="it"><div>午餐路演<div class="s2">12:00—13:30，仅限线下卖方路演</div></div></div>
+    <div class="it"><div>${isAdmin?'本周全部安排':'本周本券商安排'}<div class="s2">${weekOf().label}</div></div><span class="num s2">${wkList.length} 场</span></div></div></div>`;
+  $('#entryBody').innerHTML=seg+`<div class="entry"><div class="card">${h}</div>${side}</div>`;
+}
+function entryList(){
+  const isAdmin=ME.key==='admin';
+  const pool=inDays(weekOf().days).filter(s=>(isAdmin||s.team.broker===ME.broker)&&(st.etf==='all'||s.type===st.etf));
+  let h=`<div class="period"><span class="scope">${weekOf().label} · ${isAdmin?'全部券商':esc(ME.broker)} · 共 <b>${pool.length}</b> 场（切换周请用右上角）</span>
+    <select id="etf" aria-label="按类型筛选">${[['all','全部类型']].concat(Object.entries(TYPES)).map(([k,l])=>`<option value="${k}"${st.etf===k?' selected':''}>${l}</option>`).join('')}</select></div>
+    <div class="card tscroll"><table class="tbl"><thead><tr><th>日期 / 时间</th><th>类型 / 行业</th><th>内容</th><th>券商 / 分析师</th><th>形式</th>${isAdmin||ME.key==='sale'?'<th class="r">报名</th>':''}<th class="r">操作</th></tr></thead><tbody>`;
+  if(!pool.length)h+=`<tr><td colspan="7" class="none">本周暂无可管理的安排</td></tr>`;
+  pool.forEach(s=>{
+    const ops=s.done?'<span class="hint">已结束</span>':st.delKey===s.key?`<span class="hint">确认删除？</span> <button class="btn warn sm" data-delok="${s.key}">删除</button> <button class="btn ghost sm" data-delno="1">取消</button>`:`<button class="btn ghost sm" data-edit="${s.key}">修改</button> <button class="btn warn sm" data-del="${s.key}">删除</button>`;
+    h+=`<tr class="t-${s.type}"><td class="mono">${DAYS[s.day].s} ${DAYS[s.day].w}<div class="sub2">${timeTxt(s)}</div></td><td class="nw">${ttag(s.type)} ${chip(s.ind)}</td><td>${esc(headline(s))}${s.custom?' <span class="kw">新录入</span>':''}</td>
+      <td class="nw"><b>${esc(s.team.broker)}</b><div class="sub2">${esc(whoT(s.team))}</div></td><td class="nw">${s.online?'线上':s.room+' 室'}</td><td class="r mono">${s.regs.length}</td><td class="opcell">${ops}</td></tr>`;
+  });
+  return h+`</tbody></table></div>`;
+}
+function submitEntry(){
+  readForm();const f=st.form, editing=st.editKey?byKey(st.editKey):null, dayIdx=DAYS.findIndex(d=>d.d===f.date);
+  const err=m=>{st.formMsg=m;renderEntry()};
+  if(dayIdx<0)return err('请选择日期');
+  let theme='';
+  if(f.type==='road'){theme=f.themeSel==='__c'?String(f.theme||'').trim():f.themeSel;if(!theme)return err('请选择或填写路演主题')}
+  if(f.type==='expert'){theme=String(f.theme||'').trim();if(!theme)return err('请填写交流主题');if(!String(f.who||'').trim())return err('请填写专家称呼')}
+  if(f.type==='corp'&&!f.co)return err('请选择上市公司');
+  const online=f.online||DAYS[dayIdx].we;
+  if(!online&&f.slot===LUNCH&&f.type!=='road')return err('午餐时段仅安排卖方路演');
+  if(!online&&!ONSITE.some(r=>!roomBusy(dayIdx,f.slot,r,editing)))return err('本时段 6 间现场会议室均已占用，请换时段或改为线上');
+  if(!online&&roomBusy(dayIdx,f.slot,f.room,editing))return err('该会议室此时段已被占用，请换一个会议室');
+  if(online&&!freeOnline(dayIdx,f.slot,editing))return err('该时段 5 个线上会议位已满，请换一个时段');
+  const data={type:f.type,date:f.date,slot:f.slot,online,room:f.room,ind:f.ind,broker:ME.key==='sale'?ME.broker:f.broker,analyst:String(f.analyst||'').trim(),theme,kw:f.kw,who:String(f.who||'').trim(),bg:String(f.bg||'').trim(),
+    pts:String(f.ptsText||'').split('\n').map(x=>x.trim()).filter(Boolean),co:f.co,leaders:f.leaders,by:ME.u};
+  const key=editing?editing.key:'n'+(++store.seq);
+  const op={op:editing?'edit':'add',key,data};store.ops.push(op);applyOp(op);reindex();saveStore();
+  const s=byKey(key);logAct(editing?'修改安排':'新增安排',`${DAYS[dayIdx].s} ${SLOTS[f.slot][0]} ${TYPES[f.type]} · ${headline(s)}`);
+  toast(editing?'已保存修改':'已新增安排');
+  const wasEdit=!!editing;st.formMsg='';st.editKey=null;st.form=newForm();st.entryMode=wasEdit?'edit':'add';
+  st.wk=DAYS[dayIdx].wk;render();
+}
+function loadEdit(key){const s=byKey(key);if(!s)return;st.editKey=key;st.form=sessionToForm(s);st.formMsg='';st.entryMode='add';renderEntry();window.scrollTo({top:0,behavior:'smooth'})}
+function doDelete(key){const s=byKey(key);if(!s)return;const desc=`${DAYS[s.day].s} ${SLOTS[s.slot][0]} ${TYPES[s.type]} · ${headline(s)}`;
+  const op={op:'del',key};store.ops.push(op);applyOp(op);reindex();saveStore();logAct('删除安排',desc);st.delKey=null;toast('已删除安排');render()}
+
+/* ---------- activity log (admin) ---------- */
+function fmtT(t){const d=new Date(t);if(isNaN(d))return t;return `${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
+function renderLog(){
+  const L=store.log, users=USERS.map(u=>u.u);
+  const cnt=(u,a)=>L.filter(x=>x.u===u&&(!a||x.act===a)).length;
+  const last=u=>{const l=L.filter(x=>x.u===u);return l.length?fmtT(l[l.length-1].t):'—'};
+  let h=`<div class="kpis">${USERS.map(u=>`<div class="kpi"><div class="l">${u.label} · ${u.u}</div><div class="v">${cnt(u.u)}<small>次</small></div><div class="s">最近活动 ${last(u.u)}</div></div>`).join('')}
+    <div class="kpi"><div class="l">报名 / 取消</div><div class="v">${L.filter(x=>x.act==='报名').length} / ${L.filter(x=>x.act==='取消报名').length}</div><div class="s">全部用户</div></div>
+    <div class="kpi"><div class="l">录入变更</div><div class="v">${L.filter(x=>/安排/.test(x.act)).length}<small>次</small></div><div class="s">新增 / 修改 / 删除</div></div></div>`;
+  h+=`<div class="panels"><div class="panel c12"><h3>各用户活动统计</h3><div class="sub">按操作类型汇总（数据保存在本浏览器）</div><div class="tscroll"><table class="tbl"><thead><tr><th>用户</th>${ACTS.map(a=>`<th class="r">${a}</th>`).join('')}<th class="r">合计</th></tr></thead><tbody>`+
+    USERS.map(u=>`<tr><td class="nw"><b>${u.u}</b><div class="sub2">${u.label}</div></td>${ACTS.map(a=>`<td class="r mono">${cnt(u.u,a)||'·'}</td>`).join('')}<td class="r mono"><b>${cnt(u.u)}</b></td></tr>`).join('')+`</tbody></table></div></div>`;
+  const F=L.filter(x=>(st.logU==='all'||x.u===st.logU)&&(st.logA==='all'||x.act===st.logA)).slice().reverse().slice(0,300);
+  h+=`<div class="panel c12"><h3>活动明细</h3><div class="sub">最近 ${F.length} 条</div>
+    <div class="ptools"><select id="logU" aria-label="按用户筛选"><option value="all">全部用户</option>${users.map(u=>`<option value="${u}"${st.logU===u?' selected':''}>${u}</option>`).join('')}</select>
+    <select id="logA" aria-label="按操作筛选"><option value="all">全部操作</option>${ACTS.map(a=>`<option value="${a}"${st.logA===a?' selected':''}>${a}</option>`).join('')}</select></div>
+    <div class="tscroll"><table class="tbl"><thead><tr><th>时间</th><th>用户</th><th>角色</th><th>操作</th><th>详情</th></tr></thead><tbody>`+
+    (F.length?F.map(x=>`<tr><td class="mono">${fmtT(x.t)}</td><td class="nw"><b>${esc(x.u)}</b></td><td class="nw">${esc(x.label)}</td><td class="nw">${esc(x.act)}</td><td>${esc(x.detail||'—')}</td></tr>`).join(''):'<tr><td colspan="5" class="none">暂无记录</td></tr>')+
+    `</tbody></table></div></div></div>`;
+  $('#logBody').innerHTML=h;
+}
+
+/* ---------- sell-side weekly view ---------- */
+function renderSaleWeek(){
+  const w=weekOf(), mine=inDays(w.days).filter(s=>s.team.broker===ME.broker);
+  const tc=countBy(mine,x=>x.type);
+  let h=`<div class="period"><span class="scope"><b>${esc(ME.broker)}</b> · ${w.label} · 按行业从上到下展示本券商组织的全部安排（切换周请用右上角）</span></div>
+    <div class="kpis" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+    <div class="kpi"><div class="l">本周安排</div><div class="v">${mine.length}<small>场</small></div><div class="s">路演 ${tc.get('road')||0} · 专家 ${tc.get('expert')||0} · 反路演 ${tc.get('corp')||0}</div></div>
+    <div class="kpi"><div class="l">报名客户人次</div><div class="v">${regN(mine)}</div><div class="s">场均 ${(regN(mine)/(mine.length||1)).toFixed(1)} 人</div></div>
+    <div class="kpi"><div class="l">覆盖行业</div><div class="v">${new Set(mine.map(s=>s.ind)).size}<small>个</small></div><div class="s">本周</div></div>
+    <div class="kpi"><div class="l">待召开</div><div class="v">${mine.filter(s=>!s.done).length}<small>场</small></div><div class="s">可继续邀约客户</div></div></div>`;
+  let any=false;
+  SECTORS.forEach(sec=>INDUSTRIES.filter(i=>i.s===sec.id).forEach(ind=>{
+    const l=mine.filter(s=>s.ind===ind.n);if(!l.length)return;any=true;
+    h+=`<div class="card sw-ind"><h4>${chip(ind.n)}<span class="hint">${sec.name} · ${l.length} 场 · 报名 ${regN(l)} 人次</span></h4><div class="tscroll"><table class="tbl"><thead><tr><th>日期 / 时间</th><th>类型</th><th>内容</th><th>分析师</th><th>地点 / 会议</th><th>报名客户</th></tr></thead><tbody>`+
+      l.map(s=>{const m=s.online?meetingOf(s):null;return `<tr class="row t-${s.type}" tabindex="0" data-id="${s.id}"><td class="mono">${DAYS[s.day].s} ${DAYS[s.day].w}<div class="sub2">${timeTxt(s)}</div></td><td class="nw">${ttag(s.type)}</td><td>${esc(headline(s))}</td><td class="nw">${esc(whoT(s.team))}</td>
+        <td class="nw">${s.online?`线上 · <span class="mono">${m.no}</span>`:s.room+' 室'}</td><td><div class="clients">${s.regs.length?s.regs.map(pid=>{const p=P[pid];return `<span>${esc(p.name)}<i>${esc(p.dept)} · ${esc(p.role)}</i></span>`}).join(''):'<span class="hint" style="border:0;background:none">暂无报名</span>'}</div></td></tr>`}).join('')+`</tbody></table></div></div>`;
+  }));
+  if(!any)h+=`<div class="card"><div class="none">本周暂无 ${esc(ME.broker)} 组织的安排，可在“录入与修改”中新增。</div></div>`;
+  $('#swBody').innerHTML=h;
+}
+
+/* ---------- login & shell ---------- */
+function renderLogin(){
+  $('#login').innerHTML=`<div class="lg-brand"><div><div class="lg-en">${BRAND_EN}</div><div class="lg-title">${BRAND?BRAND+'<br>':''}投研日程平台</div>
+      <div class="lg-sub">卖方路演 · 专家交流 · 上市公司反路演<br>统一排期 · 在线报名 · 统计分析</div>
+      <div class="lg-feats"><div><b>${INDUSTRIES.length}</b><span>研究领域</span></div><div><b>${INDUSTRIES.length*10}</b><span>卖方研究团队</span></div><div><b>${ROOMS.length}</b><span>现场 + 线上会议位</span></div></div></div>
+      <div class="lg-foot">投资研究部 · 内部使用</div></div>
+    <div class="lg-panel"><form class="lg-card" id="loginForm" autocomplete="off"><h2>账号登录</h2><div class="lg-hint">请使用分配的账号登录，不同角色可见的功能不同</div>
+      <div class="lg-field"><label for="lgU">用户名</label><input id="lgU" name="u" type="text" placeholder="请输入用户名" autocapitalize="off"></div>
+      <div class="lg-field"><label for="lgP">密码</label><input id="lgP" name="p" type="password" placeholder="请输入密码"></div>
+      <button class="lg-btn" type="submit">登 录</button><div class="lg-err" id="lgErr" role="alert"></div>
+      <div class="lg-roles"><div class="t">演示账号（点击自动填入）</div><div class="lg-rolegrid">${USERS.map(u=>`<button type="button" class="lg-role" data-fill="${u.key}"><b>${u.label}</b><span>${u.u} · ${u.desc}</span></button>`).join('')}</div></div></form></div>`;
+}
+function showLogin(){ME=null;$('#app').hidden=true;$('#login').hidden=false;renderLogin();setTimeout(()=>{const el=$('#lgU');if(el)el.focus()},0)}
+function enterApp(){
+  $('#login').hidden=true;$('#login').innerHTML='';$('#app').hidden=false;
+  $('#userbox').innerHTML=`<div class="who"><b>${esc(ME.name)}</b><span>${esc(ME.label)} · ${esc(ME.u)}</span></div><button id="logoutBtn" type="button">退出登录</button>`;
+  $('#tabs').innerHTML=ROLE_TABS[ME.key].map((v,i)=>`<button class="tab" role="tab" id="tab-${v}" data-view="${v}"><span class="tn">${pad(i+1)}</span>${ME.key==='sale'&&v==='entry'?'录入与修改':TAB_LABEL[v]}</button>`).join('');
+  st.form=null;st.editKey=null;st.entryMode='add';st.pending=null;
+  const h0=(location.hash||'').slice(1);
+  setView(ROLE_TABS[ME.key].includes(h0)?h0:ROLE_TABS[ME.key][0]);
+}
+function doLogin(){
+  const u=String($('#lgU').value||'').trim().toLowerCase(), p=String($('#lgP').value||'');
+  const user=USERS.find(x=>x.u.toLowerCase()===u||x.alias.includes(u));
+  if(!user||p.toLowerCase()!==user.pw.toLowerCase()){$('#lgErr').textContent='用户名或密码不正确，请重试';return}
+  ME=user;try{localStorage.setItem('rsb-user',user.key)}catch(e){}
+  logAct('登录','');enterApp();
+}
+function logout(){if(ME)logAct('退出','');try{localStorage.removeItem('rsb-user')}catch(e){}closeDetail();showLogin()}
 
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-view],[data-day],[data-tf],[data-sector],[data-sub],[data-mode],[data-layout],[data-isec],[data-ind],[data-team],[data-id],[data-pid],[data-goind],[data-psort],[data-period],#closeSheet,#scrim,#wkPrev,#wkNext');
+  const t=e.target.closest('[data-view],[data-day],[data-tf],[data-sector],[data-sub],[data-mode],[data-layout],[data-isec],[data-ind],[data-team],[data-id],[data-pid],[data-goind],[data-psort],[data-period],[data-reg],[data-unreg],[data-regforce],[data-regcancel],[data-copy],[data-fill],[data-emode],[data-edit],[data-del],[data-delok],[data-delno],[data-editcancel],[data-formreset],#closeSheet,#scrim,#wkPrev,#wkNext,#logoutBtn');
   if(!t||t.disabled)return;
   const d=t.dataset;
+  if(t.id==='logoutBtn')return logout();
+  if(d.fill!=null){const u=USERS.find(x=>x.key===d.fill);$('#lgU').value=u.u;$('#lgP').value=u.pw;$('#lgErr').textContent='';return}
   if(t.id==='closeSheet'||t.id==='scrim')return closeDetail();
+  if(d.copy!=null){const v=d.copy;try{navigator.clipboard.writeText(v).then(()=>toast('已复制会议号 '+v),()=>toast('会议号：'+v))}catch(err){toast('会议号：'+v)}return}
+  if(d.reg!=null)return doReg(+d.reg,false);
+  if(d.regforce!=null)return doReg(+d.regforce,true);
+  if(d.regcancel!=null){st.pending=null;return openDetail(sheetId)}
+  if(d.unreg!=null)return doUnreg(+d.unreg);
+  if(d.emode){st.entryMode=d.emode;st.delKey=null;return renderEntry()}
+  if(d.edit!=null)return loadEdit(d.edit);
+  if(d.delok!=null)return doDelete(d.delok);
+  if(d.del!=null){st.delKey=d.del;return renderEntry()}
+  if(d.delno!=null){st.delKey=null;return renderEntry()}
+  if(d.editcancel!=null){st.editKey=null;st.form=newForm();st.formMsg='';st.entryMode='edit';return renderEntry()}
+  if(d.formreset!=null){st.form=newForm();st.formMsg='';return renderEntry()}
   if(t.id==='wkPrev')return setWeek(st.wk-1);
   if(t.id==='wkNext')return setWeek(st.wk+1);
   if(d.view)return setView(d.view);
@@ -1139,16 +1594,28 @@ document.addEventListener('click',e=>{
   if(d.sub){st.sub=d.sub;return renderDate()}
   if(d.mode){st.mode=d.mode;return renderDate()}
   if(d.layout){st.layout=d.layout;return renderDate()}
-  if(d.isec){st.isec=d.isec;st.team=null;return renderIndustry()}
+  if(d.isec){st.isec=d.isec;st.ind='all';st.team=null;return renderIndustry()}
   if(d.ind){st.ind=d.ind;st.team=null;return renderIndustry()}
   if(d.team!=null){st.team=d.team&&st.team!==d.team?d.team:null;return renderIndustry()}
-  if(d.goind){st.ind=d.goind;st.isec=indOf(d.goind).s;st.team=null;if(d.gowk!=null&&+d.gowk!==st.wk){st.wk=+d.gowk;st.day=workDays(weekOf().days)[0]}closeDetail();return setView('industry')}
+  if(d.goind){st.ind=d.goind;st.isec=indOf(d.goind).s;st.team=null;if(d.gowk!=null&&+d.gowk!==st.wk){st.wk=+d.gowk;st.day=workDays(weekOf().days)[0]??weekOf().days[0]}closeDetail();return setView('industry')}
   if(d.psort){if(st.psort===d.psort)st.pdir*=-1;else{st.psort=d.psort;st.pdir=d.psort==='name'?1:-1}return renderPTable()}
   if(d.pid!=null)return openPerson(+d.pid);
   if(d.id!=null)return openDetail(+d.id);
 });
+document.addEventListener('submit',e=>{
+  if(e.target.id==='loginForm'){e.preventDefault();doLogin()}
+  else if(e.target.id==='entryForm'){e.preventDefault();submitEntry()}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.form&&t.form.id==='entryForm'&&!(t.type==='text'||t.tagName==='TEXTAREA')){readForm();st.formMsg='';renderEntry();return}
+  if(t.id==='etf'){st.etf=t.value;return renderEntry()}
+  if(t.id==='logU'){st.logU=t.value;return renderLog()}
+  if(t.id==='logA'){st.logA=t.value;return renderLog()}
+});
 document.addEventListener('input',e=>{
   const t=e.target;
+  if(t.form&&t.form.id==='entryForm'){if(t.type==='text'||t.tagName==='TEXTAREA')readForm();return}
   if(t.id==='pq'){st.pq=t.value.trim();renderPTable()}
   else if(t.id==='pdept'){st.pdept=t.value;renderPTable()}
   else if(t.id==='wkSel'){setWeek(+t.value)}
@@ -1156,10 +1623,10 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&!$('#sheet').hidden)return closeDetail();
-  if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-id],[data-pid],[data-team],.hbar[data-goind]')){e.preventDefault();e.target.click()}
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches('tr[data-id],div[data-id],[data-pid]:not(button),[data-team]:not(button),.hbar[data-goind]')){e.preventDefault();e.target.click()}
 });
-const h0=(location.hash||'').slice(1);
-setView(['date','industry','stats','people'].includes(h0)?h0:'date');
+{let k=null;try{k=localStorage.getItem('rsb-user')}catch(e){}
+ const u=USERS.find(x=>x.key===k);if(u){ME=u;enterApp()}else showLogin();}
 })();
 </script>
 
