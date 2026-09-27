@@ -3,34 +3,124 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>body{margin:0}img{max-width:100%}</style>
+<style>body{margin:0}img{max-width:100%}
+/* ===== client identity layer ===== */
+body{background:var(--bg);color:var(--ink);letter-spacing:.01em}
+.wrap{padding-block:0 56px}
+.top{position:relative;background:var(--navy);color:#fff;border-bottom:0;padding:26px 0 24px;margin-bottom:0;
+  box-shadow:0 0 0 100vmax var(--navy);clip-path:inset(0 -100vmax);align-items:center}
+.top::after{content:"";position:absolute;right:-4vw;top:0;bottom:0;width:min(62%,760px);pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.22) 1.1px,transparent 1.6px);background-size:8px 8px;
+  -webkit-mask-image:radial-gradient(ellipse 60% 70% at 60% 50%,#000 30%,transparent 75%);mask-image:radial-gradient(ellipse 60% 70% at 60% 50%,#000 30%,transparent 75%)}
+.top::before{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--gold);box-shadow:0 0 0 0;}
+.top>*{position:relative;z-index:1}
+.eyebrow{display:flex;flex-direction:column;gap:4px;letter-spacing:.08em}
+.eyebrow .en{font-size:11px;letter-spacing:.32em;color:var(--gold2);font-weight:600}
+.eyebrow .zh{font-size:12px;color:rgba(255,255,255,.72)}
+h1{font-family:var(--sans);font-size:28px;font-weight:600;letter-spacing:.08em;color:#fff;margin-top:6px}
+.weekctl .arrow{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:2px}
+.weekctl .arrow:hover:not(:disabled){border-color:var(--gold2);color:var(--gold2)}
+.weekctl select{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:2px;font-family:var(--mono);letter-spacing:.04em}
+.weekctl select option{color:var(--ink)}
+.nowtag{background:var(--gold);color:#fff;border-radius:2px}
+
+.tabs{background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:0;margin:18px 0 20px;width:100%;gap:28px}
+.tab{background:transparent!important;border-radius:0;padding:12px 2px 11px;color:var(--muted);font-size:15px;font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:baseline;gap:8px}
+.tab .tn{font-family:var(--mono);font-size:13px;color:var(--faint);letter-spacing:.05em}
+.tab:hover{color:var(--navy)}
+.tab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--gold);font-weight:600}
+.tab[aria-selected="true"] .tn{color:var(--gold)}
+
+/* cards & panels: squared, hairline */
+.card,.panel,.kpi,.gridbox,.secbar,.day,.subbtn,.seg{border-radius:2px}
+.panel{padding:0 0 14px;overflow:hidden}
+.panel>h3,.panel h3{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--navy);letter-spacing:.04em}
+.panel>h3:first-child{margin:0;padding:11px 16px;background:var(--tint2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.panel>h3:first-child::before{content:"";width:4px;height:14px;background:var(--navy)}
+.panel>.sub:nth-child(2){padding:8px 16px 0}
+.panel>*:not(h3:first-child):not(.sub:nth-child(2)){margin-left:16px;margin-right:16px}
+.panel h3:not(:first-child){display:flex;align-items:center;gap:8px}
+.panel h3:not(:first-child)::before{content:"";width:8px;height:8px;background:var(--gold)}
+.kpi{border:1px solid var(--line);border-top:3px solid var(--navy);padding:12px 16px}
+.kpi:nth-child(2n){border-top-color:var(--gold)}
+.kpi .l{color:var(--muted);letter-spacing:.04em}
+.kpi .v{font-family:var(--mono);color:var(--navy);font-weight:700}
+.isum{border-top:3px solid var(--navy)}
+.isum .v{font-family:var(--mono);color:var(--navy);font-weight:700}
+
+/* day picker */
+.day{border-color:var(--line)}
+.day .d,.day .n{color:var(--muted)}
+.day[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);box-shadow:none}
+.day[aria-pressed="true"] .w,.day[aria-pressed="true"] .d,.day[aria-pressed="true"] .n{color:#fff}
+.day[aria-pressed="true"] .w{color:#fff}
+.day[aria-pressed="true"]::after{content:"";display:block;height:2px;background:var(--gold2);margin:6px -10px -8px}
+
+/* filters */
+.frow .flabel{color:var(--navy);font-weight:600;letter-spacing:.06em}
+.fbtn{border-radius:2px;border-color:var(--line);color:var(--sub);background:var(--surface)}
+.fbtn:hover{border-color:var(--navy);color:var(--navy)}
+.fbtn[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.fbtn[aria-pressed="true"] .num{color:rgba(255,255,255,.75)!important}
+
+/* schedule grid */
+.gridbox{border-color:var(--line)}
+.gh{background:var(--navy);color:#fff;font-family:var(--mono);letter-spacing:.04em}
+.gh small{color:rgba(255,255,255,.65)}
+.gh.online{background:var(--navy2)}
+.gh.corner{background:var(--navy2);color:rgba(255,255,255,.8)}
+.gt{background:var(--surface2);color:var(--navy);font-family:var(--mono);font-weight:600}
+.gt span{color:var(--faint);font-weight:400}
+.gt.lunchrow{color:var(--gold)}
+.cell .br{color:var(--ink)}
+.cell .th{color:var(--sub)}
+.cell .rg{font-family:var(--mono);color:var(--muted)}
+.cell .rg b{color:var(--navy)}
+.roombadge{font-family:var(--mono);color:var(--navy);opacity:.9}
+.roombadge.on{color:var(--gold)}
+.chip{border-radius:2px}
+.ltag{border-radius:2px}
+.ttag{border-radius:2px}
+
+/* industry view */
+.secbar{border-color:var(--line)}
+.secbtn[aria-pressed="true"]{background:var(--tint2)}
+.secbtn[aria-pressed="true"]::after{background:var(--gold)}
+.subbtn{border-radius:2px}
+table.tbl th{background:var(--navy);color:#fff;border-bottom:0;letter-spacing:.04em}
+table.tbl tr.grp td{background:var(--tint2);color:var(--navy)}
+table.tbl tr:nth-child(even):not(.grp) td{background:#FAFBFD}
+table.tbl tr.row:hover td{background:var(--hover)}
+table.heat th{color:var(--sub)}
+.teamrow[aria-pressed="true"]{background:var(--tint2);box-shadow:inset 3px 0 0 var(--gold)}
+
+/* period switch */
+.seg{border-color:var(--line)}
+.seg button{border-radius:2px}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.period .scope b{font-family:var(--mono);color:var(--navy)}
+
+/* sheet */
+.sheet{border-left:3px solid var(--gold)}
+.sheet h2{font-family:var(--sans);font-weight:600;color:var(--navy)}
+.sheet h4{color:var(--navy);font-weight:600;border-left:3px solid var(--navy);padding-left:8px}
+.linkbtn{border-radius:2px}
+.foot{color:var(--faint);border-top:1px solid var(--line);padding-top:12px}
+</style>
 <title>投研日程排期看板</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@600;700&display=swap">
 <style>
 :root{
-  --bg:#F2F4F6; --surface:#FFFFFF; --surface2:#F7F8FA; --ink:#141D2B; --muted:#5B6676; --faint:#98A1AE;
-  --line:#DCE1E7; --line2:#EAEDF1; --accent:#1D4A7A; --accent-ink:#FFFFFF; --hover:#EEF2F7;
-  --s1:#2C68D6; --s2:#16936A; --s3:#D07A22; --s4:#A0673A; --s5:#7B4DC6; --s6:#56677B; --s7:#0E8791; --s8:#6F7F1E; --exp-bg:#FCEBEA; --exp-ink:#B4332B; --corp-bg:#EEF0F2; --corp-ink:#4A5462;
-  --ok:#1E8A5A; --warn:#B7791F; --off:#A3ACB8;
-  --mix:15%;
-  --serif:"Noto Serif SC","Songti SC","STSong",serif;
-  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  color-scheme:dark;
-  --bg:#0F141B; --surface:#171D26; --surface2:#1C232E; --ink:#E6EAF0; --muted:#9AA4B2; --faint:#687384;
-  --line:#2A3340; --line2:#222A35; --accent:#6FA3DA; --accent-ink:#0F141B; --hover:#1F2835;
-  --s1:#6E9BEE; --s2:#4FC49A; --s3:#EBA05A; --s4:#C99466; --s5:#A988E6; --s6:#95A5B8; --s7:#4CC3C9; --s8:#B3C45F; --exp-bg:#3A2224; --exp-ink:#F2A29B; --corp-bg:#252C36; --corp-ink:#B7C0CC;
-  --ok:#52C58D; --warn:#E3AE55; --off:#5E6978; --mix:22%;
-}}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#0F141B; --surface:#171D26; --surface2:#1C232E; --ink:#E6EAF0; --muted:#9AA4B2; --faint:#687384;
-  --line:#2A3340; --line2:#222A35; --accent:#6FA3DA; --accent-ink:#0F141B; --hover:#1F2835;
-  --s1:#6E9BEE; --s2:#4FC49A; --s3:#EBA05A; --s4:#C99466; --s5:#A988E6; --s6:#95A5B8; --s7:#4CC3C9; --s8:#B3C45F; --exp-bg:#3A2224; --exp-ink:#F2A29B; --corp-bg:#252C36; --corp-ink:#B7C0CC;
-  --ok:#52C58D; --warn:#E3AE55; --off:#5E6978; --mix:22%;
+  color-scheme:light;
+  --navy:#1C4885; --navy2:#163A6C; --gold:#B8943C; --gold2:#D8B660;
+  --bg:#F6F8FB; --surface:#FFFFFF; --surface2:#F6F8FB; --tint:#E8ECF1; --tint2:#EEF2F7;
+  --ink:#2E3A4D; --muted:#6B7280; --faint:#9AA3AF; --sub:#4B5566;
+  --line:#D7DDE5; --line2:#E8ECF1; --accent:#1C4885; --accent-ink:#FFFFFF; --hover:#EEF2F7;
+  --s1:#1C4885; --s2:#2E7D5B; --s3:#B8943C; --s4:#8A6A3F; --s5:#6A4C93; --s6:#4B5566; --s7:#2A6FB9; --s8:#5E7A2E;
+  --exp-bg:#F8ECEE; --exp-ink:#B23A48; --corp-bg:#EEF1F5; --corp-ink:#4B5566;
+  --ok:#2E7D5B; --warn:#B8943C; --off:#9AA3AF; --mix:13%;
+  --serif:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:"DIN Alternate","Bahnschrift","Helvetica Neue",Arial,"PingFang SC",sans-serif;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -312,7 +402,7 @@ th.sort[aria-sort]{color:var(--ink)}
   <header class="top">
     <div class="brand">
       <div>
-        <div class="eyebrow">投资研究部 · 卖方路演 / 专家交流 / 上市公司反路演</div>
+        <div class="eyebrow"><span class="en">RESEARCH SCHEDULE BOARD</span><span class="zh">投资研究部 · 卖方路演 / 专家交流 / 上市公司反路演</span></div>
         <h1>投研日程排期看板</h1>
       </div>
     </div>
@@ -324,10 +414,10 @@ th.sort[aria-sort]{color:var(--ink)}
   </header>
 
   <nav class="tabs" role="tablist" aria-label="视图">
-    <button class="tab" role="tab" id="tab-date" data-view="date">日期视图</button>
-    <button class="tab" role="tab" id="tab-industry" data-view="industry">行业视图</button>
-    <button class="tab" role="tab" id="tab-people" data-view="people">报名情况</button>
-    <button class="tab" role="tab" id="tab-stats" data-view="stats">行业统计</button>
+    <button class="tab" role="tab" id="tab-date" data-view="date"><span class="tn">01</span>日期视图</button>
+    <button class="tab" role="tab" id="tab-industry" data-view="industry"><span class="tn">02</span>行业视图</button>
+    <button class="tab" role="tab" id="tab-people" data-view="people"><span class="tn">03</span>报名情况</button>
+    <button class="tab" role="tab" id="tab-stats" data-view="stats"><span class="tn">04</span>行业统计</button>
   </nav>
 
   <section id="view-date" hidden>
